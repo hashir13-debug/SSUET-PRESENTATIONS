@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Virtual Enterprise Lab — Project Report</title>
+<style>
+/* ═══════════════════════════════════
+   PROFESSIONAL REPORT DOCUMENT STYLE
+═══════════════════════════════════ */
+:root {
+  --ink:#1a2035; --ink2:#2a3555; --ink3:#3d4f75;
+  --paper:#ffffff; --paper2:#f4f6fb; --paper3:#eef1f8;
+  --accent:#1e40af; --accent2:#0891b2; --accent3:#059669;
+  --danger:#dc2626; --warn:#d97706;
+  --border:#dde3ef; --border2:#c5cedf;
+  --text:#1e293b; --text2:#475569; --text3:#64748b;
+  --code-bg:#f1f5f9; --code-text:#0f172a;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --shadow2:0 4px 20px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Georgia,sans-serif;background:#e8ecf4;color:var(--text);line-height:1.75;font-size:15px}
+
+/* ── PRINT/DOWNLOAD BUTTON (fixed) ── */
+.btn-print{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  background:var(--accent);color:#fff;border:none;
+  padding:13px 22px;border-radius:8px;cursor:pointer;
+  font-size:.88em;font-weight:600;box-shadow:var(--shadow2);
+  display:flex;align-items:center;gap:8px;transition:all .25s;
+  text-decoration:none;
+}
+.btn-print:hover{background:#1e3a8a;transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,64,175,.3)}
+.btn-ppt{bottom:78px;background:var(--accent3)}
+.btn-ppt:hover{background:#047857}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;background:var(--ink);z-index:100;
+  border-bottom:3px solid var(--accent);
+  padding:0 40px;
+}
+.nav-inner{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding:12px 0}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-logo{font-weight:800;font-size:.95em;color:#fff;white-space:nowrap;margin-right:10px;padding-right:14px;border-right:1px solid rgba(255,255,255,.2)}
+nav a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.78em;white-space:nowrap;padding:5px 10px;border-radius:5px;transition:all .2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* ── DOCUMENT WRAPPER ── */
+.doc{max-width:920px;margin:0 auto}
+
+/* ══════════════════════════
+   COVER PAGE
+══════════════════════════ */
+.cover{
+  background:var(--ink);
+  min-height:100vh;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.cover-stripe{
+  height:8px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+}
+.cover-body{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:60px 50px;text-align:center;
+}
+.cover-institute{
+  color:rgba(255,255,255,.5);font-size:.82em;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.cover-course{
+  color:var(--accent2);font-size:.9em;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:50px;
+}
+.cover-title-wrap{
+  border:1px solid rgba(255,255,255,.15);border-radius:4px;
+  padding:40px 50px;max-width:680px;margin-bottom:50px;
+  background:rgba(255,255,255,.04);
+}
+.cover-label{
+  font-size:.72em;color:rgba(255,255,255,.4);text-transform:uppercase;
+  letter-spacing:2px;margin-bottom:16px;
+}
+.cover h1{
+  font-size:clamp(2.2em,4.5vw,3.5em);font-weight:900;
+  color:#ffffff;line-height:1.15;margin-bottom:16px;
+}
+.cover h1 span{
+  display:block;font-size:.45em;font-weight:400;
+  color:var(--accent2);letter-spacing:1px;margin-top:8px;
+}
+.cover-divider{width:60px;height:3px;background:var(--accent);margin:20px auto}
+.cover-sub{
+  color:rgba(255,255,255,.55);font-size:.95em;max-width:480px;margin:0 auto;
+}
+.cover-meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:1px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);
+  border-radius:4px;overflow:hidden;max-width:700px;width:100%;margin-bottom:40px;
+}
+.meta-cell{
+  background:rgba(255,255,255,.04);padding:18px 20px;text-align:left;
+}
+.meta-cell .mlabel{font-size:.68em;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+.meta-cell .mvalue{font-size:.88em;color:#fff;font-weight:500;line-height:1.4}
+.cover-members{
+  border:1px solid rgba(255,255,255,.12);border-radius:4px;
+  overflow:hidden;max-width:480px;width:100%;
+}
+.cm-header{
+  background:rgba(30,64,175,.4);padding:10px 20px;
+  font-size:.72em;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:2px;
+}
+.cm-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.cm-row:last-child{border-bottom:none}
+.cm-name{color:#fff;font-size:.88em;font-weight:500}
+.cm-roll{color:var(--accent2);font-size:.8em;font-family:monospace}
+.cover-footer{
+  background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.08);
+  padding:18px 50px;display:flex;justify-content:space-between;
+  font-size:.75em;color:rgba(255,255,255,.35);
+}
+
+/* ══════════════════════════
+   STATS ROW
+══════════════════════════ */
+.stats-row{
+  background:var(--accent);
+  padding:0;
+}
+.stats-inner{
+  max-width:920px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(6,1fr);
+}
+.stat-box{
+  padding:22px 16px;text-align:center;
+  border-right:1px solid rgba(255,255,255,.15);
+}
+.stat-box:last-child{border-right:none}
+.stat-box .sn{font-size:1.9em;font-weight:900;color:#fff;line-height:1}
+.stat-box .sl{font-size:.68em;color:rgba(255,255,255,.7);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ══════════════════════════
+   TABLE OF CONTENTS
+══════════════════════════ */
+.toc-page{
+  background:var(--paper);
+  border-bottom:1px solid var(--border);
+  padding:50px;max-width:920px;margin:0 auto;
+}
+.toc-title{
+  font-size:1em;font-weight:700;color:var(--ink);
+  text-transform:uppercase;letter-spacing:2px;
+  padding-bottom:14px;border-bottom:2px solid var(--accent);
+  margin-bottom:24px;
+}
+.toc-list{list-style:none}
+.toc-list li{
+  display:flex;align-items:center;padding:6px 0;
+  border-bottom:1px dotted var(--border);
+}
+.toc-list li a{
+  color:var(--text);text-decoration:none;font-size:.9em;
+  flex:1;transition:color .2s;
+}
+.toc-list li a:hover{color:var(--accent)}
+.toc-list li .toc-num{
+  font-size:.78em;color:var(--accent);font-weight:700;
+  min-width:30px;font-family:monospace;
+}
+.toc-list li .toc-dots{flex:1;border-bottom:1px dotted var(--border2);margin:0 8px;height:1px;margin-top:10px}
+.toc-list li .toc-page-num{font-size:.78em;color:var(--text3);font-family:monospace;min-width:20px;text-align:right}
+
+/* ══════════════════════════
+   REPORT SECTIONS
+══════════════════════════ */
+.report-body{max-width:920px;margin:0 auto;background:var(--paper)}
+
+/* section */
+.rpt-sec{
+  padding:48px 50px;border-bottom:1px solid var(--border);
+  scroll-margin-top:60px;
+}
+.rpt-sec:last-child{border-bottom:none}
+
+/* section heading */
+.sec-heading{
+  display:flex;align-items:flex-start;gap:0;
+  margin-bottom:28px;padding-bottom:16px;
+  border-bottom:2px solid var(--paper3);
+}
+.sec-num-badge{
+  background:var(--accent);color:#fff;
+  font-size:.82em;font-weight:800;font-family:monospace;
+  padding:4px 12px;border-radius:4px 0 0 4px;
+  min-width:42px;text-align:center;line-height:1.8;
+  flex-shrink:0;
+}
+.sec-title-text{
+  background:var(--ink);color:#fff;
+  font-size:1.15em;font-weight:700;
+  padding:4px 18px;flex:1;line-height:1.8;
+  border-radius:0 4px 4px 0;
+}
+
+.rpt-sec h3{
+  font-size:1em;font-weight:700;color:var(--accent);
+  margin:28px 0 12px;text-transform:uppercase;letter-spacing:.8px;
+  font-size:.88em;
+}
+.rpt-sec p{color:var(--text2);margin-bottom:14px;font-size:.95em}
+.rpt-sec ul,.rpt-sec ol{color:var(--text2);padding-left:24px;margin:10px 0 16px;font-size:.93em}
+.rpt-sec li{margin-bottom:6px}
+.rpt-sec li strong{color:var(--text)}
+.rpt-sec strong{color:var(--text)}
+
+/* highlight box */
+.highlight{
+  border-left:4px solid var(--accent);background:var(--paper3);
+  border-radius:0 6px 6px 0;padding:16px 20px;margin:18px 0;font-size:.93em;
+}
+.highlight.green{border-color:var(--accent3);background:#f0fdf4}
+.highlight.red{border-color:var(--danger);background:#fef2f2}
+.highlight.warn{border-color:var(--warn);background:#fffbeb}
+.highlight p{margin:0;color:var(--text2)}
+.highlight strong{color:var(--text)}
+
+/* info grid */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:18px 0}
+.ig-cell{background:var(--paper);padding:16px}
+.ig-cell .ig-label{font-size:.7em;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.ig-cell .ig-value{font-size:.92em;color:var(--text);font-weight:600}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--border);border-radius:6px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--ink)}
+th{padding:12px 16px;text-align:left;color:#fff;font-size:.78em;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+td{padding:11px 16px;border-bottom:1px solid var(--border);font-size:.88em;color:var(--text2);vertical-align:top}
+td:first-child{color:var(--text);font-weight:500}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--paper2)}
+tbody tr:hover{background:var(--paper3)}
+
+/* ── NETWORK DIAGRAM (SVG) ── */
+.diagram-wrap{
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--paper2);padding:32px;margin:20px 0;
+  overflow-x:auto;
+}
+.diagram-title{
+  font-size:.78em;color:var(--text3);text-transform:uppercase;
+  letter-spacing:1.5px;margin-bottom:20px;font-weight:600;
+}
+.net-svg{width:100%;max-width:760px;display:block;margin:0 auto;height:auto}
+
+/* ── SCREENSHOTS ── */
+.fig-wrap{margin:24px 0}
+.fig-wrap.fig-2col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fig-wrap.fig-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.fig{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+
+/* window chrome */
+.fig-chrome{
+  background:#e8e8e8;border-bottom:1px solid var(--border);
+  padding:8px 14px;display:flex;align-items:center;gap:8px;
+}
+.fig-dots{display:flex;gap:5px}
+.fdot{width:10px;height:10px;border-radius:50%}
+.fdot.r{background:#ff5f57}
+.fdot.y{background:#febc2e}
+.fdot.g{background:#28c840}
+.fig-chrome-title{font-size:.72em;color:#666;font-family:monospace;flex:1;text-align:center}
+
+/* image */
+.fig-img{
+  width:100%;
+  /* IMPORTANT: contain so full screenshot visible */
+  background:#1a1a2e;
+  display:flex;align-items:center;justify-content:center;
+  min-height:220px;
+  overflow:hidden;
+}
+.fig-img img{
+  width:100%;height:100%;
+  object-fit:contain;
+  max-height:320px;
+  display:block;
+}
+
+/* caption */
+.fig-caption{
+  padding:10px 14px;background:var(--paper3);
+  border-top:1px solid var(--border);
+}
+.fig-caption .fig-num{
+  font-size:.72em;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;
+}
+.fig-caption .fig-desc{font-size:.8em;color:var(--text3)}
+
+/* ── CODE BLOCKS ── */
+.code-block{
+  background:var(--ink);border-radius:6px;
+  padding:20px 22px;margin:14px 0;overflow-x:auto;
+  position:relative;border:1px solid var(--ink2);
+}
+.code-block .lang-tag{
+  position:absolute;top:10px;right:14px;
+  background:var(--accent);color:#fff;
+  font-size:.7em;padding:2px 8px;border-radius:3px;font-family:monospace;
+}
+.code-block pre{
+  font-family:'Consolas','Courier New',monospace;
+  font-size:.82em;color:#a8d8a8;white-space:pre-wrap;word-break:break-word;
+  line-height:1.65;
+}
+.cc{color:#6b7280} /* comment */
+.ck{color:#60a5fa} /* keyword */
+.cs{color:#f9a8d4} /* string */
+
+/* ── FIREWALL RULES TABLE ── */
+.fw-rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:18px 0}
+.fwr{border-radius:6px;padding:14px 16px;border:1px solid}
+.fwr.allow{background:#f0fdf4;border-color:#86efac}
+.fwr.block{background:#fef2f2;border-color:#fca5a5}
+.fwr .badge{display:inline-block;padding:2px 10px;border-radius:4px;font-size:.7em;font-weight:700;margin-bottom:8px;letter-spacing:.5px}
+.fwr.allow .badge{background:#16a34a;color:#fff}
+.fwr.block .badge{background:#dc2626;color:#fff}
+.fwr .rule{font-size:.9em;color:var(--text);font-weight:600;margin-bottom:3px}
+.fwr .desc{font-size:.78em;color:var(--text3)}
+
+/* ── CHALLENGE CARDS ── */
+.challenge-list{display:flex;flex-direction:column;gap:16px;margin:18px 0}
+.chlg{border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.chlg-hdr{
+  background:var(--warn);padding:12px 18px;
+  display:flex;align-items:center;gap:10px;
+}
+.chlg-hdr .cnum{background:rgba(0,0,0,.2);color:#fff;font-size:.7em;font-weight:700;padding:2px 8px;border-radius:3px;font-family:monospace}
+.chlg-hdr h4{font-size:.88em;font-weight:700;color:#fff}
+.chlg-body{padding:16px 18px;background:#fffbeb}
+.chlg-body .prob{color:var(--text2);font-size:.88em;margin-bottom:12px}
+.chlg-body .sol{
+  background:#f0fdf4;border:1px solid #86efac;border-radius:4px;
+  padding:10px 14px;font-size:.85em;color:#15803d;
+}
+.chlg-body .sol::before{content:'✓  Solution: ';font-weight:700}
+
+/* ── TEST RESULTS ── */
+.test-list{display:flex;flex-direction:column;gap:4px;margin:16px 0}
+.test-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border:1px solid var(--border);border-radius:4px;background:var(--paper2)}
+.test-badge{padding:3px 10px;border-radius:3px;font-size:.7em;font-weight:700;min-width:50px;text-align:center;font-family:monospace}
+.test-badge.pass{background:#16a34a;color:#fff}
+.test-badge.fail{background:#dc2626;color:#fff}
+.test-name{font-size:.88em;color:var(--text);flex:1}
+.test-detail{font-size:.78em;color:var(--text3)}
+
+/* ── PROGRESS ── */
+.prog-row{margin:12px 0}
+.prog-labels{display:flex;justify-content:space-between;font-size:.82em;margin-bottom:5px}
+.prog-labels span{color:var(--text2)}
+.prog-labels .pct{color:var(--accent);font-weight:600}
+.prog-track{height:8px;background:var(--paper3);border-radius:100px;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px}
+
+/* ── CONCLUSION ── */
+.conclusion-box{
+  background:var(--ink);border-radius:8px;padding:36px;
+  color:#fff;text-align:center;margin-top:20px;
+}
+.conclusion-box h3{font-size:1.3em;margin-bottom:14px;color:#fff}
+.conclusion-box p{color:rgba(255,255,255,.7);font-size:.92em;max-width:620px;margin:0 auto 14px;line-height:1.75}
+
+/* ── LEARNING GRID ── */
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.lcard{background:var(--paper3);border:1px solid var(--border);border-radius:6px;padding:18px;text-align:center}
+.lcard .li{font-size:1.8em;margin-bottom:10px}
+.lcard h4{color:var(--accent);font-size:.82em;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.lcard p{font-size:.78em;color:var(--text3);margin:0}
+
+/* ── FOOTER ── */
+.report-footer{
+  background:var(--ink);color:rgba(255,255,255,.5);
+  padding:28px 50px;text-align:center;font-size:.8em;
+  line-height:2;max-width:920px;margin:0 auto;
+}
+.report-footer .hlt{color:rgba(255,255,255,.85)}
+
+/* ── LIGHTBOX ── */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:92vw;max-height:90vh;border-radius:4px;border:1px solid #333}
+.lb-x{position:absolute;top:18px;right:24px;background:none;border:none;color:#fff;font-size:2.2em;cursor:pointer;line-height:1;opacity:.7;transition:opacity .2s}
+.lb-x:hover{opacity:1}
+
+/* ── PRINT STYLES ── */
+@media print{
+  .btn-print,.btn-ppt,nav,.lb{display:none!important}
+  body{background:#fff;font-size:12pt}
+  .cover{background:var(--ink)!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .report-body{max-width:100%}
+  .rpt-sec{padding:30px 40px;page-break-inside:avoid}
+  .fig-img img{max-height:250px}
+  .code-block{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+
+@media(max-width:768px){
+  .rpt-sec{padding:30px 24px}
+  .cover-body{padding:40px 24px}
+  .cover-title-wrap{padding:28px 24px}
+  .stats-inner{grid-template-columns:repeat(3,1fr)}
+  .fig-wrap.fig-2col,.fig-wrap.fig-3col{grid-template-columns:1fr}
+  .toc-page{padding:30px 24px}
+  nav{padding:0 16px}
+  .report-footer{padding:24px}
+  .fw-rules-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb-x" onclick="closeLB()">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- Download Buttons -->
+<a class="btn-print btn-ppt" href="presentation.html" style="bottom:80px">▶ View Presentation</a>
+<button class="btn-print" onclick="window.print()">⬇ Download PDF</button>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">PROJECT REPORT</span>
+    <a href="#intro">1. Introduction</a>
+    <a href="#problem">2. Problem</a>
+    <a href="#tools">3. Tools</a>
+    <a href="#arch">4. Architecture</a>
+    <a href="#impl">5. Implementation</a>
+    <a href="#security">6. Security</a>
+    <a href="#hurdles">7. Hurdles</a>
+    <a href="#testing">8. Testing</a>
+    <a href="#monitoring">9. Monitoring</a>
+    <a href="#conclusion">10. Conclusion</a>
+  </div>
+</nav>
+
+<div class="doc">
+
+<!-- ══════════════════════════════
+     COVER PAGE
+══════════════════════════════ -->
+<div class="cover">
+  <div class="cover-stripe"></div>
+  <div class="cover-body">
+    <div class="cover-institute">Sir Syed University of Engineering &amp; Technology</div>
+    <div class="cover-course">Information Security (IS) &nbsp;·&nbsp; BCS-2023F</div>
+
+    <div class="cover-title-wrap">
+      <div class="cover-label">Final Project Report</div>
+      <h1>Secure Virtual<br>Enterprise Lab<span>Using VMware ESXi</span></h1>
+      <div class="cover-divider"></div>
+      <p class="cover-sub">Design and implementation of a complete corporate IT infrastructure using virtualisation — featuring network segmentation, Active Directory, pfSense firewall, Ubuntu web server, and penetration testing.</p>
+    </div>
+
+    <div class="cover-meta">
+      <div class="meta-cell"><div class="mlabel">Institute</div><div class="mvalue">Sir Syed University of Engg &amp; Tech (SSUET)</div></div>
+      <div class="meta-cell"><div class="mlabel">Program / Batch</div><div class="mvalue">BCS — 2023F</div></div>
+      <div class="meta-cell"><div class="mlabel">Course</div><div class="mvalue">Information Security (IS)</div></div>
+      <div class="meta-cell"><div class="mlabel">Submission Date</div><div class="mvalue">May 2026</div></div>
+    </div>
+
+    <div class="cover-members">
+      <div class="cm-header">Group Members</div>
+      <div class="cm-row"><span class="cm-name">Hashir Junaid</span><span class="cm-roll">2023F-BCS-358</span></div>
+      <div class="cm-row"><span class="cm-name">Taha Haider</span><span class="cm-roll">2023F-BCS-079</span></div>
+      <div class="cm-row"><span class="cm-name">Abdul Rahman Baig</span><span class="cm-roll">2023F-BCS-100</span></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <span>Confidential — For Academic Evaluation Only</span>
+    <span>Version 1.0 · May 2026</span>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-row">
+  <div class="stats-inner">
+    <div class="stat-box"><div class="sn">6</div><div class="sl">Virtual Machines</div></div>
+    <div class="stat-box"><div class="sn">3</div><div class="sl">Network Zones</div></div>
+    <div class="stat-box"><div class="sn">8+</div><div class="sl">Firewall Rules</div></div>
+    <div class="stat-box"><div class="sn">1</div><div class="sl">AD Domain</div></div>
+    <div class="stat-box"><div class="sn">ESXi 8</div><div class="sl">Hypervisor</div></div>
+    <div class="stat-box"><div class="sn">100%</div><div class="sl">Tests Passed</div></div>
+  </div>
+</div>
+
+<!-- Table of Contents -->
+<div class="toc-page">
+  <div class="toc-title">Table of Contents</div>
+  <ul class="toc-list">
+    <li><span class="toc-num">1.</span><a href="#intro">Introduction</a><span class="toc-dots"></span><span class="toc-page-num">§1</span></li>
+    <li><span class="toc-num">2.</span><a href="#problem">Problem Statement</a><span class="toc-dots"></span><span class="toc-page-num">§2</span></li>
+    <li><span class="toc-num">3.</span><a href="#tools">Tools &amp; Technologies Used</a><span class="toc-dots"></span><span class="toc-page-num">§3</span></li>
+    <li><span class="toc-num">4.</span><a href="#arch">System Architecture &amp; Network Design</a><span class="toc-dots"></span><span class="toc-page-num">§4</span></li>
+    <li><span class="toc-num">5.</span><a href="#impl">Implementation Details</a><span class="toc-dots"></span><span class="toc-page-num">§5</span></li>
+    <li><span class="toc-num">6.</span><a href="#security">Security Features Implemented</a><span class="toc-dots"></span><span class="toc-page-num">§6</span></li>
+    <li><span class="toc-num">7.</span><a href="#hurdles">Challenges &amp; Hurdles Faced</a><span class="toc-dots"></span><span class="toc-page-num">§7</span></li>
+    <li><span class="toc-num">8.</span><a href="#testing">Testing &amp; Results</a><span class="toc-dots"></span><span class="toc-page-num">§8</span></li>
+    <li><span class="toc-num">9.</span><a href="#monitoring">Monitoring &amp; Logging</a><span class="toc-dots"></span><span class="toc-page-num">§9</span></li>
+    <li><span class="toc-num">10.</span><a href="#conclusion">Conclusion &amp; Learnings</a><span class="toc-dots"></span><span class="toc-page-num">§10</span></li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════
+     REPORT BODY
+══════════════════════════ -->
+<div class="report-body">
+
+<!-- ── EXECUTIVE SUMMARY ── -->
+<div class="rpt-sec">
+  <div class="sec-heading">
+    <div class="sec-num-badge">★</div>
+    <div class="sec-title-text">Executive Summary</div>
+  </div>
+  <p>This report documents the complete design, configuration, and testing of a <strong>Secure Virtual Enterprise Lab</strong> built using VMware ESXi 8.0 Update 3 as the hypervisor platform. The project was developed as the final submission for the Information Security (IS) course at Sir Syed University of Engineering &amp; Technology (SSUET).</p>
+  <p>The lab simulates a real corporate IT environment consisting of five virtual machines distributed across three isolated network zones — LAN, DMZ, and Management — connected through a pfSense firewall/router. The infrastructure includes Windows Server 2022 configured as an Active Directory Domain Controller, a hardened Ubuntu web server, a domain-joined Windows client, and a Kali Linux penetration testing machine.</p>
+  <div class="highlight green">
+    <p><strong>Key Achievement:</strong> All virtual machines were successfully deployed and tested. Every firewall rule, authentication mechanism, and security hardening measure performed exactly as designed — with 100% of planned tests passing.</p>
+  </div>
+  <div class="info-grid">
+    <div class="ig-cell"><div class="ig-label">Domain</div><div class="ig-value">cyberlab.local (CYBERLAB)</div></div>
+    <div class="ig-cell"><div class="ig-label">Hypervisor</div><div class="ig-value">VMware ESXi 8.0 Update 3</div></div>
+    <div class="ig-cell"><div class="ig-label">Firewall</div><div class="ig-value">pfSense CE 2.7</div></div>
+    <div class="ig-cell"><div class="ig-label">Platform</div><div class="ig-value">Nested VM in Workstation Pro 26H1</div></div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: INTRODUCTION ── -->
+<div class="rpt-sec" id="intro">
+  <div class="sec-heading">
+    <div class="sec-num-badge">1</div>
+    <div class="sec-title-text">Introduction</div>
+  </div>
+
+  <h3>1.1 What is Virtualisation?</h3>
+  <p>Virtualisation is the technology that allows multiple virtual computers — each running their own operating system — to share the physical resources of a single machine. Instead of buying ten separate physical servers, a company can run all ten as virtual machines (VMs) on one powerful host. This reduces cost, simplifies management, and enables rapid deployment of new systems.</p>
+
+  <h3>1.2 What is VMware ESXi?</h3>
+  <p>VMware ESXi (Elastic Sky X Integrated) is a <strong>Type-1 bare-metal hypervisor</strong>. Unlike Type-2 hypervisors such as VMware Workstation which run on top of an existing operating system, ESXi installs directly on hardware with no OS underneath — giving it direct access to CPU, RAM, storage, and network resources. ESXi is the industry standard for enterprise server virtualisation and is used by organisations worldwide to host their entire IT infrastructure.</p>
+
+  <h3>1.3 Purpose of This Project</h3>
+  <p>The objective of this project is to demonstrate, in a completely virtual environment, how a secure enterprise IT network is designed and operated. Rather than spending thousands on physical hardware, we used VMware ESXi — installed as a nested virtual machine inside VMware Workstation Pro — to host all components of a realistic corporate network.</p>
+
+  <div class="highlight">
+    <p><strong>Scope:</strong> The lab covers virtualisation, enterprise networking (VLANs, NAT, firewall rules), Active Directory identity management, Linux server administration, security hardening, and penetration testing — all skills directly applicable to real-world IT and cybersecurity roles.</p>
+  </div>
+</div>
+
+<!-- ── SECTION 2: PROBLEM STATEMENT ── -->
+<div class="rpt-sec" id="problem">
+  <div class="sec-heading">
+    <div class="sec-num-badge">2</div>
+    <div class="sec-title-text">Problem Statement</div>
+  </div>
+
+  <p>Learning enterprise networking and cybersecurity in an academic environment presents significant practical challenges:</p>
+  <ul>
+    <li><strong>Hardware Cost:</strong> A real enterprise lab with physical servers, managed switches, and firewalls can cost hundreds of thousands of rupees. This is outside the reach of most students.</li>
+    <li><strong>Skill Gap:</strong> Employers expect graduates to have hands-on experience with tools like VMware ESXi, pfSense, Active Directory, and Linux servers. These are rarely taught with real lab access in university.</li>
+    <li><strong>Safety Risk:</strong> Experimenting with firewall misconfigurations, penetration testing, or Active Directory changes on a live or shared network can cause real damage — downtime, data loss, or security breaches.</li>
+    <li><strong>Access Limitations:</strong> Shared university labs have fixed hours, no persistent configuration, and many students competing for the same equipment.</li>
+  </ul>
+  <div class="highlight green">
+    <p><strong>Our Solution:</strong> By leveraging nested virtualisation — running VMware ESXi inside VMware Workstation Pro on a standard laptop — we created a complete, persistent, isolated enterprise lab environment at zero hardware cost. Any experiment can be run safely because the entire network exists only as software.</p>
+  </div>
+</div>
+
+<!-- ── SECTION 3: TOOLS ── -->
+<div class="rpt-sec" id="tools">
+  <div class="sec-heading">
+    <div class="sec-num-badge">3</div>
+    <div class="sec-title-text">Tools &amp; Technologies Used</div>
+  </div>
+
+  <h3>3.1 Software Stack</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Technology</th><th>Version</th><th>Role in Project</th><th>Justification</th></tr></thead>
+      <tbody>
+        <tr><td>VMware ESXi</td><td>8.0 Update 3</td><td>Bare-metal hypervisor hosting all VMs</td><td>Industry-standard Type-1 hypervisor; used in most enterprises</td></tr>
+        <tr><td>VMware Workstation Pro</td><td>26H1</td><td>Host for nested ESXi on our laptops</td><td>Enables ESXi to run as a VM — essential for laptop-based lab</td></tr>
+        <tr><td>pfSense CE</td><td>2.7</td><td>Firewall, router, NAT, DHCP, DNS</td><td>Open-source, enterprise-grade; widely deployed in real environments</td></tr>
+        <tr><td>Windows Server 2022</td><td>Evaluation</td><td>Active Directory Domain Controller + DNS</td><td>Industry standard for enterprise identity management</td></tr>
+        <tr><td>Ubuntu Server</td><td>22.04 LTS</td><td>Web server (Nginx) — hardened, in DMZ</td><td>Most widely deployed Linux server OS; LTS ensures long-term stability</td></tr>
+        <tr><td>Windows 10/11</td><td>Client</td><td>Domain-joined Windows workstation</td><td>Simulates real employee machine authenticating via Active Directory</td></tr>
+        <tr><td>Red Hat Enterprise Linux</td><td>9.x</td><td>RHEL 9 domain-joined Linux client (rhel-client)</td><td>Demonstrates cross-platform AD integration — Linux joining Windows domain via SSSD</td></tr>
+        <tr><td>Kali Linux</td><td>2026.1</td><td>Penetration testing and rule validation</td><td>Industry-standard pentesting OS with comprehensive built-in tools</td></tr>
+        <tr><td>Nmap</td><td>Latest</td><td>Network scanning and port discovery</td><td>Most versatile scanner for validating firewall rules</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.2 Hardware (Per Team Member's Machine)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Attribute</th><th>Machine 1 (Hashir)</th><th>Machine 2 (Taha / Abdul Rahman)</th></tr></thead>
+      <tbody>
+        <tr><td>Laptop Brand</td><td>HP</td><td>HP</td></tr>
+        <tr><td>CPU</td><td>Intel Core i7-1255U (12th Gen, 10 cores)</td><td>Intel Core i5 (2 cores visible to ESXi)</td></tr>
+        <tr><td>RAM</td><td>12.12 GB</td><td>4 GB</td></tr>
+        <tr><td>ESXi Host IP</td><td>192.168.0.121</td><td>192.168.146.129</td></tr>
+        <tr><td>ESXi Version</td><td>8.0 Update 3</td><td>8.0 Update 3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── SECTION 4: ARCHITECTURE ── -->
+<div class="rpt-sec" id="arch">
+  <div class="sec-heading">
+    <div class="sec-num-badge">4</div>
+    <div class="sec-title-text">System Architecture &amp; Network Design</div>
+  </div>
+
+  <h3>4.1 Three-Zone Network Architecture</h3>
+  <p>The lab uses a <strong>three-zone segmented network</strong> — the same architecture used in real enterprise environments. All traffic between zones passes through the pfSense firewall, which enforces strict rules about what can communicate with what. This design follows the principle of <strong>network segmentation</strong>: containing the blast radius of any security incident.</p>
+
+  <!-- SVG Network Diagram -->
+  <div class="diagram-wrap">
+    <div class="diagram-title">Figure 0.1 — Network Topology Diagram</div>
+    <svg class="net-svg" viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background zones -->
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+        </marker>
+        <marker id="arr-c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1e40af"/>
+        </marker>
+      </defs>
+
+      <!-- Internet cloud -->
+      <rect x="270" y="10" width="220" height="52" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="380" y="32" font-family="Segoe UI,sans-serif" font-size="11" fill="#dc2626" font-weight="700" text-anchor="middle">🌐 INTERNET</text>
+      <text x="380" y="50" font-family="monospace" font-size="9" fill="#dc2626" text-anchor="middle">Public Network</text>
+
+      <!-- Arrow Internet → pfSense -->
+      <line x1="380" y1="62" x2="380" y2="96" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="4,2"/>
+
+      <!-- pfSense Box -->
+      <rect x="230" y="96" width="300" height="70" rx="8" fill="#1e40af" stroke="#1e3a8a" stroke-width="1.5"/>
+      <text x="380" y="118" font-family="Segoe UI,sans-serif" font-size="12" fill="#fff" font-weight="700" text-anchor="middle">🛡️  PF-FW01 — pfSense 2.7</text>
+      <text x="380" y="132" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">Firewall · Router · NAT · DHCP · DNS</text>
+      <!-- Interface labels -->
+      <rect x="242" y="148" width="55" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
+      <text x="269" y="158" font-family="monospace" font-size="8" fill="#fff" text-anchor="middle">WAN</text>
+      <rect x="304" y="148" width="55" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
+      <text x="331" y="158" font-family="monospace" font-size="8" fill="#fff" text-anchor="middle">LAN .10.1</text>
+      <rect x="366" y="148" width="55" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
+      <text x="393" y="158" font-family="monospace" font-size="8" fill="#fff" text-anchor="middle">DMZ .20.1</text>
+      <rect x="428" y="148" width="60" height="14" rx="3" fill="rgba(255,255,255,0.15)"/>
+      <text x="458" y="158" font-family="monospace" font-size="8" fill="#fff" text-anchor="middle">MGMT .30.1</text>
+
+      <!-- Vertical lines from pfSense -->
+      <line x1="150" y1="166" x2="150" y2="200" stroke="#1e40af" stroke-width="1.5"/>
+      <line x1="380" y1="166" x2="380" y2="200" stroke="#1e40af" stroke-width="1.5"/>
+      <line x1="610" y1="166" x2="610" y2="200" stroke="#1e40af" stroke-width="1.5"/>
+      <!-- Horizontal connector -->
+      <line x1="150" y1="183" x2="610" y2="183" stroke="#1e40af" stroke-width="1.5"/>
+
+      <!-- Arrows down to zones -->
+      <line x1="150" y1="183" x2="150" y2="200" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr-c)"/>
+      <line x1="380" y1="183" x2="380" y2="200" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr-c)"/>
+      <line x1="610" y1="183" x2="610" y2="200" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr-c)"/>
+
+      <!-- ZONE: LAN -->
+      <rect x="30" y="200" width="240" height="175" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+      <rect x="30" y="200" width="240" height="28" rx="8" fill="#1e40af"/>
+      <rect x="30" y="215" width="240" height="13" fill="#1e40af"/>
+      <text x="150" y="219" font-family="Segoe UI,sans-serif" font-size="11" fill="#fff" font-weight="700" text-anchor="middle">🔵  LAN Network</text>
+      <text x="150" y="242" font-family="monospace" font-size="8.5" fill="#3b82f6" text-anchor="middle">VLAN 10 · 192.168.10.0/24</text>
+
+      <!-- DC-SRV01 -->
+      <rect x="48" y="252" width="200" height="48" rx="5" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+      <text x="58" y="267" font-family="Segoe UI,sans-serif" font-size="9" fill="#1e40af" font-weight="700">🖥  DC-SRV01</text>
+      <text x="58" y="280" font-family="monospace" font-size="8" fill="#64748b">192.168.10.10</text>
+      <text x="58" y="292" font-family="Segoe UI,sans-serif" font-size="8" fill="#475569">Domain Controller · AD · DNS</text>
+
+      <!-- WIN-CLI01 -->
+      <rect x="48" y="308" width="200" height="48" rx="5" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+      <text x="58" y="323" font-family="Segoe UI,sans-serif" font-size="9" fill="#1e40af" font-weight="700">💻  WIN-CLI01</text>
+      <text x="58" y="336" font-family="monospace" font-size="8" fill="#64748b">192.168.10.20</text>
+      <text x="58" y="348" font-family="Segoe UI,sans-serif" font-size="8" fill="#475569">Windows Client · Domain Joined</text>
+
+      <!-- ZONE: DMZ -->
+      <rect x="260" y="200" width="240" height="175" rx="8" fill="#fff1f2" stroke="#f87171" stroke-width="1.5"/>
+      <rect x="260" y="200" width="240" height="28" rx="8" fill="#dc2626"/>
+      <rect x="260" y="215" width="240" height="13" fill="#dc2626"/>
+      <text x="380" y="219" font-family="Segoe UI,sans-serif" font-size="11" fill="#fff" font-weight="700" text-anchor="middle">🔴  DMZ Network</text>
+      <text x="380" y="242" font-family="monospace" font-size="8.5" fill="#dc2626" text-anchor="middle">VLAN 20 · 192.168.20.0/24</text>
+
+      <!-- LN-SRV01 -->
+      <rect x="278" y="252" width="204" height="48" rx="5" fill="#fff" stroke="#fca5a5" stroke-width="1"/>
+      <text x="288" y="267" font-family="Segoe UI,sans-serif" font-size="9" fill="#dc2626" font-weight="700">🐧  LN-SRV01</text>
+      <text x="288" y="280" font-family="monospace" font-size="8" fill="#64748b">192.168.20.10</text>
+      <text x="288" y="292" font-family="Segoe UI,sans-serif" font-size="8" fill="#475569">Ubuntu 22.04 · Nginx Web Server</text>
+
+      <!-- ZONE: MGMT -->
+      <rect x="490" y="200" width="240" height="175" rx="8" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5"/>
+      <rect x="490" y="200" width="240" height="28" rx="8" fill="#059669"/>
+      <rect x="490" y="215" width="240" height="13" fill="#059669"/>
+      <text x="610" y="219" font-family="Segoe UI,sans-serif" font-size="11" fill="#fff" font-weight="700" text-anchor="middle">🟢  Management Network</text>
+      <text x="610" y="242" font-family="monospace" font-size="8.5" fill="#059669" text-anchor="middle">VLAN 30 · 192.168.30.0/24</text>
+
+      <!-- KL-TEST01 -->
+      <rect x="508" y="252" width="204" height="48" rx="5" fill="#fff" stroke="#86efac" stroke-width="1"/>
+      <text x="518" y="267" font-family="Segoe UI,sans-serif" font-size="9" fill="#059669" font-weight="700">🐉  KL-TEST01</text>
+      <text x="518" y="280" font-family="monospace" font-size="8" fill="#64748b">192.168.30.10</text>
+      <text x="518" y="292" font-family="Segoe UI,sans-serif" font-size="8" fill="#475569">Kali Linux 2026.1 · Pentesting</text>
+
+      <!-- ESXi MGMT -->
+      <rect x="508" y="308" width="204" height="48" rx="5" fill="#fff" stroke="#86efac" stroke-width="1"/>
+      <text x="518" y="323" font-family="Segoe UI,sans-serif" font-size="9" fill="#059669" font-weight="700">⚙  ESXi-MGMT</text>
+      <text x="518" y="336" font-family="monospace" font-size="8" fill="#64748b">192.168.30.100</text>
+      <text x="518" y="348" font-family="Segoe UI,sans-serif" font-size="8" fill="#475569">ESXi Hypervisor Management</text>
+
+      <!-- Block label DMZ→LAN -->
+      <text x="380" y="196" font-family="Segoe UI,sans-serif" font-size="8" fill="#dc2626" text-anchor="middle" font-weight="600">✕ DMZ→LAN BLOCKED</text>
+    </svg>
+  </div>
+
+  <h3>4.2 IP Addressing Scheme</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Hostname</th><th>IP Address</th><th>Zone</th><th>Gateway</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>PF-FW01</td><td>10.1 / 20.1 / 30.1</td><td>All Zones</td><td>—</td><td>pfSense Firewall / Router</td></tr>
+        <tr><td>DC-SRV01</td><td>192.168.10.10</td><td>LAN</td><td>192.168.10.1</td><td>Active Directory Domain Controller</td></tr>
+        <tr><td>WIN-CLI01</td><td>192.168.10.20</td><td>LAN</td><td>192.168.10.1</td><td>Windows Client Workstation</td></tr>
+        <tr><td>LN-SRV01</td><td>192.168.20.10</td><td>DMZ</td><td>192.168.20.1</td><td>Ubuntu Nginx Web Server</td></tr>
+        <tr><td>KL-TEST01</td><td>192.168.30.10</td><td>MGMT</td><td>192.168.30.1</td><td>Kali Linux Pen-Testing Machine</td></tr>
+        <tr><td>ESXi-MGMT</td><td>192.168.30.100</td><td>MGMT</td><td>192.168.30.1</td><td>ESXi Hypervisor Management Interface</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── SECTION 5: IMPLEMENTATION ── -->
+<div class="rpt-sec" id="impl">
+  <div class="sec-heading">
+    <div class="sec-num-badge">5</div>
+    <div class="sec-title-text">Implementation Details</div>
+  </div>
+  <p>Implementation was carried out in six sequential phases. Each phase depended on the previous one being stable. We followed a top-down approach: infrastructure first, services second, security testing last.</p>
+
+  <!-- Phase 1 -->
+  <h3>5.1 Phase 1 — ESXi 8.0.3 Installation (Nested Virtualisation)</h3>
+  <p>Since we do not have physical server hardware, we used <strong>VMware Workstation Pro 26H1</strong> on HP laptops to host ESXi as a nested virtual machine. This required enabling hardware virtualisation passthrough (VT-x/AMD-V) in Workstation settings so ESXi could access the CPU's virtualisation extensions.</p>
+  <ul>
+    <li>Downloaded VMware ESXi 8.0 Update 3 ISO from VMware website</li>
+    <li>Created a new VM in Workstation: Type = VMware ESXi, 4 CPUs, 8 GB RAM, 100 GB disk</li>
+    <li>Enabled <strong>"Virtualise Intel VT-x/EPT or AMD-V/RVI"</strong> in VM Advanced Settings</li>
+    <li>Booted from ESXi ISO — accepted EULA — selected disk — set root password</li>
+    <li>After reboot, ESXi showed its management IP — accessed ESXi Host Client via browser</li>
+  </ul>
+
+  <div class="fig-wrap fig-2col">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">VMware Workstation Pro 26H1</div></div>
+      <div class="fig-img"><img src="WhatsApp Image 2026-05-23 at 6.25.35 PM.jpeg" alt="VMware Workstation Pro 26H1" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.1a</div><div class="fig-desc">VMware Workstation Pro 26H1 — the host environment used to run ESXi as a nested VM on our HP laptops</div></div>
+    </div>
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">VMware ESXi 8.0.3 Installer</div></div>
+      <div class="fig-img"><img src="WhatsApp Image 2026-05-23 at 6.25.25 PM.jpeg" alt="ESXi Installer" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.1b</div><div class="fig-desc">ESXi 8.0.3 installer running inside VMware Workstation. Browser tab shows Gemini open — used to resolve hypervisor conflict (see Section 7)</div></div>
+    </div>
+  </div>
+
+  <div class="fig-wrap fig-2col">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">ESXi 8.0.3 — Root Password Setup</div></div>
+      <div class="fig-img"><img src="WhatsApp Image 2026-05-23 at 6.25.38 PM.jpeg" alt="ESXi Root Password" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.1c</div><div class="fig-desc">Setting the administrator root password during ESXi installation — a critical security step</div></div>
+    </div>
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">ESXi Host Client — localhost.localdomain</div></div>
+      <div class="fig-img"><img src="WhatsApp Image 2026-05-23 at 6.25.32 PM.jpeg" alt="ESXi Host Client" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.1d</div><div class="fig-desc">ESXi 8.0 Update 3 Host Client dashboard — CPU 1% used, Memory 14% used. i7-1255U, 12.12 GB RAM. Successfully accessible via browser.</div></div>
+    </div>
+  </div>
+
+  <div class="fig-wrap">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">ESXi Host Client — Team Member 2 Machine (192.168.146.129)</div></div>
+      <div class="fig-img" style="min-height:280px"><img src="WhatsApp Image 2026-05-23 at 6.25.39 PM.jpeg" alt="ESXi Host Client Second Machine" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.1e</div><div class="fig-desc">ESXi running on the second team member's machine at 192.168.146.129. Shows i5 CPU with 4 GB total RAM — Memory at 40%. Each team member ran ESXi independently on their own hardware.</div></div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <h3>5.2 Phase 2 — pfSense Firewall Configuration</h3>
+  <p>The first VM created was <strong>PF-FW01</strong> (pfSense 2.7). This is the network backbone — it serves as the router, firewall, DHCP server, and DNS resolver for all three zones simultaneously.</p>
+  <ul>
+    <li>Uploaded pfSense 2.7 CE ISO to the ESXi datastore</li>
+    <li>Created VM: 2 vCPU, 2 GB RAM, 20 GB disk, 4 network adapters (WAN + LAN + DMZ + MGMT)</li>
+    <li>Used pfSense console Option 1 to assign interfaces and Option 2 to set static IPs</li>
+    <li>Enabled DHCP on all internal interfaces (LAN, DMZ, MGMT)</li>
+    <li>Configured outbound NAT so all internal VMs can reach internet via the WAN interface</li>
+    <li>Applied firewall rules per zone (detailed in Section 6)</li>
+    <li>Verified internet connectivity using console Option 7 (ping 8.8.8.8) — <strong>Success</strong></li>
+  </ul>
+
+  <div class="fig-wrap fig-2col">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">pfSense Gateway Console — ESXi Host Client · 192.168.0.64</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="WhatsApp Image 2026-05-23 at 6.27.00 PM.jpeg" alt="pfSense Console" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.2a</div><div class="fig-desc">pfSense Gateway VM in ESXi. Console shows a successful ping to 8.8.8.8 — 23ms average, 0% packet loss. Internet confirmed.</div></div>
+    </div>
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">pfSense 2.8.1 Dashboard — Live (Jun 6)</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="sc_pfsense_dashboard.jpg" alt="pfSense Dashboard Live" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.2b</div><div class="fig-desc">pfSense 2.8.1-RELEASE Gateway dashboard on Jun 6 — WAN and LAN interfaces up, internet active. Memory 20% of 1991 MiB used. System uptime 11 minutes. Confirms fully operational firewall gateway.</div></div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <h3>5.3 Phase 3 — Windows Server 2022 &amp; Active Directory</h3>
+  <p>We deployed <strong>DC-SRV01</strong> — a Windows Server 2022 VM — in the LAN zone and promoted it to a Domain Controller for the <strong>cyberlab.local</strong> domain. This provides centralised authentication for all machines in the domain.</p>
+
+  <div class="code-block">
+    <div class="lang-tag">PowerShell</div>
+    <pre><span class="cc"># Install Active Directory Domain Services</span>
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+<span class="cc"># Promote server to Domain Controller</span>
+Install-ADDSForest `
+  -DomainName <span class="cs">"cyberlab.local"</span> `
+  -DomainNetbiosName <span class="cs">"CYBERLAB"</span> `
+  -ForestMode <span class="cs">"WinThreshold"</span> `
+  -InstallDns:$true `
+  -SafeModeAdministratorPassword (ConvertTo-SecureString <span class="cs">"P@ssw0rd!"</span> -AsPlainText -Force)
+
+<span class="cc"># Create Organisational Units</span>
+New-ADOrganizationalUnit -Name <span class="cs">"Admin_Users"</span> -Path <span class="cs">"DC=cyberlab,DC=local"</span>
+New-ADOrganizationalUnit -Name <span class="cs">"Standard_Users"</span> -Path <span class="cs">"DC=cyberlab,DC=local"</span>
+
+<span class="cc"># Create domain users</span>
+New-ADUser -Name <span class="cs">"Abdul Rahman Baig"</span> -SamAccountName abaig `
+  -UserPrincipalName <span class="cs">"abaig@cyberlab.local"</span> `
+  -Path <span class="cs">"OU=Standard_Users,DC=cyberlab,DC=local"</span> `
+  -AccountPassword (ConvertTo-SecureString <span class="cs">"Admin@CYBERLAB2026!"</span> -AsPlainText -Force) `
+  -Enabled $true</pre>
+  </div>
+
+  <div class="fig-wrap fig-2col">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">WinServer-2022 — ESXi Console · 192.168.0.66</div></div>
+      <div class="fig-img" style="min-height:280px"><img src="WhatsApp Image 2026-05-23 at 6.27.03 PM.jpeg" alt="Windows Server Installing" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.3a</div><div class="fig-desc">Windows Server 2022 installation at 47% inside ESXi. Accessed via browser console at 192.168.0.66. Step 2 of installation — copying files and getting ready.</div></div>
+    </div>
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">WinServer-2022 — Fully Booted</div></div>
+      <div class="fig-img" style="min-height:280px"><img src="WhatsApp Image 2026-05-23 at 6.27.06 PM.jpeg" alt="Windows Server Live" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.3b</div><div class="fig-desc">Windows Server 2022 fully installed and running — lock screen visible. "Press Ctrl+Alt+Delete to unlock." Server is live and operational as Domain Controller.</div></div>
+    </div>
+  </div>
+
+  <div class="fig-wrap">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">Active Directory Users and Computers — cyberlab.local</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="sc_ad_users.jpg" alt="Active Directory" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.3c</div><div class="fig-desc">Active Directory Users and Computers console showing the cyberlab.local domain. Abdul Rahman Baig listed as a domain user. Domain groups visible: Domain Admins, Domain Controllers, Domain Users, Enterprise Admins, and others.</div></div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:16px">
+    <table>
+      <thead><tr><th>AD Setting</th><th>Value</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Domain Name</td><td>cyberlab.local</td><td>Internal DNS domain for all clients (Windows + RHEL)</td></tr>
+        <tr><td>NetBIOS Name</td><td>CYBERLAB</td><td>Legacy Windows network name (shown on login screens)</td></tr>
+        <tr><td>Forest Level</td><td>Windows Server 2016</td><td>Maximum compatibility</td></tr>
+        <tr><td>DNS Server</td><td>192.168.10.10 (self)</td><td>AD requires its own DNS</td></tr>
+        <tr><td>Min Password Length</td><td>12 characters</td><td>Prevent weak passwords</td></tr>
+        <tr><td>Complexity Required</td><td>Enabled</td><td>Uppercase + digit + special char</td></tr>
+        <tr><td>Max Password Age</td><td>90 days</td><td>Force regular rotation</td></tr>
+        <tr><td>Account Lockout</td><td>5 failed attempts</td><td>Prevent brute-force attacks</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 4 -->
+  <h3>5.4 Phase 4 — Ubuntu Server (Hardened Web Server in DMZ)</h3>
+  <p>We deployed <strong>LN-SRV01</strong> — Ubuntu Server 22.04 LTS — in the DMZ zone running Nginx. Being in the DMZ means the internet can reach it on ports 80/443, but it cannot initiate connections into the LAN. Even if this server were compromised, the attacker cannot reach internal machines.</p>
+
+  <div class="code-block">
+    <div class="lang-tag">Bash</div>
+    <pre><span class="cc"># System update + set hostname</span>
+sudo apt update && sudo apt upgrade -y
+sudo hostnamectl set-hostname lnsrv01
+
+<span class="cc"># Install and enable Nginx web server</span>
+sudo apt install -y nginx
+sudo systemctl enable --now nginx
+
+<span class="cc"># UFW Firewall — deny by default, allow only needed ports</span>
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 80/tcp   <span class="cc"># HTTP</span>
+sudo ufw allow 443/tcp  <span class="cc"># HTTPS</span>
+sudo ufw allow 22/tcp   <span class="cc"># SSH (from MGMT zone only)</span>
+sudo ufw enable
+
+<span class="cc"># SSH hardening — disable root login and password auth</span>
+sudo sed -i <span class="cs">'s/^PermitRootLogin.*/PermitRootLogin no/'</span> /etc/ssh/sshd_config
+sudo sed -i <span class="cs">'s/^PasswordAuthentication.*/PasswordAuthentication no/'</span> /etc/ssh/sshd_config
+sudo systemctl restart ssh
+
+<span class="cc"># Fail2Ban — auto-ban IPs after 5 failed SSH attempts</span>
+sudo apt install -y fail2ban
+sudo systemctl enable --now fail2ban</pre>
+  </div>
+
+  <!-- Phase 5 -->
+  <h3>5.5 Phase 5 — Domain Clients: Windows &amp; RHEL 9</h3>
+  <p>We deployed <strong>WIN-CLI01</strong> (Windows 10/11) in the LAN zone and joined it to <strong>cyberlab.local</strong>. The login screen confirmed <strong>CYBERLAB\Administrator</strong> — domain fully operational. Additionally, we deployed <strong>RHEL-CLIENT</strong> — a Red Hat Enterprise Linux 9 machine — and successfully joined it to the same domain using SSSD (System Security Services Daemon), demonstrating cross-platform Active Directory integration.</p>
+
+  <div class="fig-wrap fig-2col">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">CYBERLAB\Administrator — Domain Login</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="sc_cyberlab_login.jpg" alt="CYBERLAB Domain Login" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.5a</div><div class="fig-desc">Windows login screen showing CYBERLAB\Administrator — confirms the Active Directory domain cyberlab.local is operational and accepting domain authentication</div></div>
+    </div>
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">RHEL 9 — Joined to cyberlab.local</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="sc_rhel_domain_joined.jpg" alt="RHEL Domain Joined" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.5b</div><div class="fig-desc">RHEL-CLIENT terminal prompt shows abaig@cyberlab.local@rhel-client. The 'id' command confirms uid=1001104(abaig@cyberlab.local) with domain users@cyberlab.local membership — Linux successfully authenticated via Active Directory</div></div>
+    </div>
+  </div>
+
+  <div class="fig-wrap">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">RHEL 9 — Red Hat Subscription Registration</div></div>
+      <div class="fig-img" style="min-height:280px"><img src="sc_rhel_registration.jpg" alt="RHEL Registration" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.5c</div><div class="fig-desc">RHEL 9 requires subscription-manager registration before software updates work. After resolving network connectivity, 'sudo subscription-manager register' succeeded — "Registration Successful. The system has been registered and software updates have been enabled." ESXi Host Client visible in background at root@192.168.0.64.</div></div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Cross-Platform Achievement:</strong> Joining a RHEL 9 machine to a Windows Active Directory domain (cyberlab.local) demonstrates enterprise-level Linux-Windows integration using SSSD. In real production environments, this is how organisations manage Linux servers alongside Windows infrastructure using a single identity system.</p>
+  </div>
+
+  <!-- Phase 6 -->
+  <h3>5.6 Phase 6 — Kali Linux Penetration Testing</h3>
+  <p>We set up <strong>KL-TEST01</strong> — Kali Linux 2026.1 — in the Management zone to serve as the attacker/tester machine. From here we ran Nmap scans to validate every firewall rule.</p>
+
+  <div class="fig-wrap">
+    <div class="fig">
+      <div class="fig-chrome"><div class="fig-dots"><span class="fdot r"></span><span class="fdot y"></span><span class="fdot g"></span></div><div class="fig-chrome-title">Kali Linux 2026.1 — Download Page</div></div>
+      <div class="fig-img" style="min-height:260px"><img src="WhatsApp Image 2026-05-23 at 6.27.12 PM.jpeg" alt="Kali Linux 2026.1" onclick="openLB(this.src)"></div>
+      <div class="fig-caption"><div class="fig-num">Figure 5.6a</div><div class="fig-desc">Kali Linux 2026.1 official download page — x86_64 installer version (4.4 GB). Kali Linux is the industry-standard penetration testing operating system used to validate our security controls.</div></div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="lang-tag">Bash — Kali Linux</div>
+    <pre><span class="cc"># Network discovery — find all hosts per zone</span>
+nmap -sn 192.168.10.0/24   <span class="cc"># LAN hosts</span>
+nmap -sn 192.168.20.0/24   <span class="cc"># DMZ hosts</span>
+
+<span class="cc"># Service and version detection on specific targets</span>
+nmap -sV -p- 192.168.10.10  <span class="cc"># Domain Controller — all ports</span>
+nmap -sV 192.168.20.10       <span class="cc"># Web server — check open ports</span>
+
+<span class="cc"># Test cross-zone firewall rules</span>
+nmap -sT 192.168.10.10 -p 80,443,22,445  <span class="cc"># From DMZ — should be BLOCKED</span>
+ping 192.168.10.10 -c 4                   <span class="cc"># From DMZ — should be BLOCKED</span></pre>
+  </div>
+</div>
+
+<!-- ── SECTION 6: SECURITY ── -->
+<div class="rpt-sec" id="security">
+  <div class="sec-heading">
+    <div class="sec-num-badge">6</div>
+    <div class="sec-title-text">Security Features Implemented</div>
+  </div>
+
+  <h3>6.1 Firewall Rules — Zone Traffic Matrix</h3>
+  <div class="fw-rules-grid">
+    <div class="fwr allow"><span class="badge">ALLOW</span><div class="rule">LAN → Internet</div><div class="desc">Users can browse internet via NAT</div></div>
+    <div class="fwr allow"><span class="badge">ALLOW</span><div class="rule">LAN → DMZ (80, 443)</div><div class="desc">Employees can access internal web server</div></div>
+    <div class="fwr block"><span class="badge">BLOCK</span><div class="rule">LAN → Management</div><div class="desc">Users cannot access ESXi or Kali tools</div></div>
+    <div class="fwr block"><span class="badge">BLOCK</span><div class="rule">DMZ → LAN</div><div class="desc">Critical: compromised web server cannot attack employees</div></div>
+    <div class="fwr allow"><span class="badge">ALLOW</span><div class="rule">DMZ → Internet</div><div class="desc">Web server can download security updates</div></div>
+    <div class="fwr allow"><span class="badge">ALLOW</span><div class="rule">MGMT → All Zones</div><div class="desc">Administrators can reach all zones for management</div></div>
+    <div class="fwr block"><span class="badge">BLOCK</span><div class="rule">Internet → LAN</div><div class="desc">No unsolicited inbound traffic to internal network</div></div>
+    <div class="fwr allow"><span class="badge">ALLOW</span><div class="rule">Internet → DMZ (80, 443)</div><div class="desc">Web server publicly accessible on HTTP/HTTPS</div></div>
+  </div>
+
+  <h3>6.2 Security Features Summary</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Security Layer</th><th>Technology</th><th>What It Protects Against</th></tr></thead>
+      <tbody>
+        <tr><td>Network Segmentation</td><td>pfSense VLANs (LAN/DMZ/MGMT)</td><td>Lateral movement — attacker cannot move between zones freely</td></tr>
+        <tr><td>Perimeter Firewall</td><td>pfSense CE 2.7 with rule sets</td><td>Unauthorised traffic entering or leaving zones</td></tr>
+        <tr><td>Authentication</td><td>Active Directory Domain Controller</td><td>Unauthorised users accessing domain resources</td></tr>
+        <tr><td>Access Control</td><td>Group Policy Objects (GPO)</td><td>Weak passwords, policy violations, unauthorised software</td></tr>
+        <tr><td>NAT</td><td>pfSense outbound NAT</td><td>Internal IP addresses exposed to internet (reconnaissance)</td></tr>
+        <tr><td>SSH Hardening</td><td>Key-based auth, root disabled</td><td>SSH brute-force and root login attacks</td></tr>
+        <tr><td>Intrusion Prevention</td><td>Fail2Ban on Ubuntu Server</td><td>Automated brute-force attacks via SSH</td></tr>
+        <tr><td>Monitoring</td><td>Centralised log collection</td><td>Undetected intrusions and policy violations</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── SECTION 7: HURDLES ── -->
+<div class="rpt-sec" id="hurdles">
+  <div class="sec-heading">
+    <div class="sec-num-badge">7</div>
+    <div class="sec-title-text">Challenges &amp; Hurdles Faced</div>
+  </div>
+  <p>This section documents the significant technical obstacles encountered during this project and explains precisely how each was resolved. These challenges represent the most valuable learning experiences of the entire project.</p>
+
+  <div class="challenge-list">
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 01</span><h4>VMware Hypervisor Conflict — Hyper-V vs VMware (Most Critical)</h4></div>
+      <div class="chlg-body">
+        <p class="prob">When attempting to start the ESXi VM inside VMware Workstation on Windows 11, we received an error preventing launch. The root cause: Windows 11 runs Microsoft Hyper-V internally to support WSL2, Windows Sandbox, and virtualisation-based security. Hyper-V grabs exclusive control of the CPU's hardware virtualisation extensions (VT-x/AMD-V). When Hyper-V holds these extensions, VMware cannot use them — so ESXi, which itself requires VT-x, cannot start. The Gemini browser tab visible in Figure 5.1b shows we were actively searching for this fix during installation.</p>
+        <div class="sol">Executed <code>bcdedit /set hypervisorlaunchtype off</code> in an elevated Command Prompt and restarted Windows. This disables Hyper-V at boot. Alternatively, in VMware Workstation VM Settings → Processors → enable "Virtualise Intel VT-x/EPT" with Windows Hypervisor Platform compatibility mode. After this change, ESXi booted successfully.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 02</span><h4>ESXi Datastore Not Configured — Cannot Create VMs</h4></div>
+      <div class="chlg-body">
+        <p class="prob">After ESXi was running, every attempt to upload ISOs or create virtual machines resulted in the error: <em>"No datastores have been configured on the host."</em> ESXi requires a VMFS-formatted datastore before it can store any VM files or ISOs. On a fresh install, the disk is recognised but not yet formatted or designated as a datastore.</p>
+        <div class="sol">Navigated to ESXi Host Client → Storage → New Datastore → selected the virtual hard disk → named it "Main-Storage" → formatted as VMFS6. This took under 2 minutes. After creation, all ISO uploads and VM creation proceeded without issues.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 03</span><h4>Windows Client Could Not Join Domain</h4></div>
+      <div class="chlg-body">
+        <p class="prob">When attempting to join WIN-CLI01 to <code>cyberlab.local</code> via System Properties → Change domain, Windows returned: <em>"The specified domain either does not exist or could not be contacted."</em> — despite the Domain Controller being online and pingable at 192.168.10.10.</p>
+        <div class="sol">The DNS server on the client was set to pfSense (192.168.10.1) instead of the Domain Controller. Active Directory uses DNS to locate domain controllers — so the client must use AD's own DNS server. Changed Primary DNS to 192.168.10.10 (DC-SRV01). Domain join succeeded within seconds after this change.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 04</span><h4>Limited RAM on Team Members' Machines</h4></div>
+      <div class="chlg-body">
+        <p class="prob">One team member's HP laptop has only 4 GB of physical RAM. Running VMware Workstation on Windows 11 consumes ~2 GB, leaving only ~2 GB for the entire ESXi environment. Running multiple VMs simultaneously inside ESXi (pfSense + Windows Server + Client) is impossible at this memory level — VMs would not power on or would crash.</p>
+        <div class="sol">Worked on VMs sequentially on the constrained machine — configuring pfSense, then shutting it down before starting Windows Server. Split work across team members — heavier VMs ran on the i7 machine (12 GB RAM). This collaborative approach let us complete all tasks within the hardware limits.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 05</span><h4>pfSense Network Interface Assignment Confusion</h4></div>
+      <div class="chlg-body">
+        <p class="prob">pfSense detected multiple virtual NICs on first boot but we had to correctly identify which vmxnet adapter corresponded to which virtual switch (WAN, LAN, DMZ, MGMT). Getting this wrong caused internet to not work, or traffic to be forwarded to the wrong zone.</p>
+        <div class="sol">Used pfSense console Option 1 (Assign Interfaces) to map each adapter by MAC address to its correct role. Used Option 2 (Set IP addresses) to configure static IPs per interface. Used Option 7 (Ping host) to ping 8.8.8.8 and verify internet via WAN after each change. This systematic approach confirmed correct assignment.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 06</span><h4>RHEL 9 Subscription Registration &amp; Domain Join</h4></div>
+      <div class="chlg-body">
+        <p class="prob">Red Hat Enterprise Linux 9 requires active subscription registration before package updates or additional software can be installed. On first boot, <code>sudo subscription-manager register</code> failed with <em>"Network error: Name or service not known (error code -2)"</em> — the RHEL VM could not reach Red Hat's subscription servers. Additionally, joining RHEL 9 to a Windows Active Directory domain requires configuring SSSD, realmd, and Kerberos — significantly more complex than Windows domain join.</p>
+        <div class="sol">Resolved the network error by verifying DNS settings and internet connectivity via pfSense (ping google.com → 0% packet loss confirmed). Registered with: sudo subscription-manager register — System ID b380c0af assigned, "Registration Successful" confirmed. For domain join: installed realmd + sssd + krb5-workstation → realm join cyberlab.local → domain login verified: abaig@cyberlab.local@rhel-client confirms Linux-Windows AD integration.</div>
+      </div>
+    </div>
+
+    <div class="chlg">
+      <div class="chlg-hdr"><span class="cnum">CHALLENGE 07</span><h4>Windows Server 2022 Installation Extremely Slow</h4></div>
+      <div class="chlg-body">
+        <p class="prob">Windows Server 2022 installation inside a nested ESXi VM took over 45 minutes compared to ~10 minutes on physical hardware. Nested virtualisation adds significant CPU and I/O overhead. With limited RAM, disk operations were also bottlenecked.</p>
+        <div class="sol">Pre-staged all ISO files on the ESXi datastore before beginning installation so we did not have to wait for file uploads during setup. Worked on other VMs (pfSense configuration, Ubuntu setup) on other team members' machines simultaneously to maximise parallel progress. Once Windows was installed, subsequent reboots were much faster.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 8: TESTING ── -->
+<div class="rpt-sec" id="testing">
+  <div class="sec-heading">
+    <div class="sec-num-badge">8</div>
+    <div class="sec-title-text">Testing &amp; Results</div>
+  </div>
+  <p>Comprehensive testing was conducted after all VMs were deployed and configured. Tests were performed from Kali Linux (MGMT zone) and from WIN-CLI01 (LAN zone) to validate all security controls.</p>
+
+  <h3>8.1 Firewall Rule Validation</h3>
+  <div class="test-list">
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">LAN → Internet (HTTP/HTTPS)</span><span class="test-detail">curl ifconfig.me from WIN-CLI01 returned public IP</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">LAN → DMZ Web Server (Port 80)</span><span class="test-detail">Browser on WIN-CLI01 loaded Nginx page at 192.168.20.10</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">LAN → MGMT (BLOCKED) ✓</span><span class="test-detail">Ping and nmap to 192.168.30.0/24 timed out — correctly blocked</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">DMZ → LAN (BLOCKED) ✓</span><span class="test-detail">From LN-SRV01: ping 192.168.10.10 — no response. Critical rule confirmed.</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">DMZ → Internet</span><span class="test-detail">apt update on LN-SRV01 completed — server can reach internet for updates</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">MGMT → All Zones</span><span class="test-detail">Kali Linux can ping and scan all zones for administration and testing</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">pfSense WAN Internet</span><span class="test-detail">Ping 8.8.8.8 — 23ms average, 0% packet loss (see Figure 5.2a)</span></div>
+  </div>
+
+  <h3>8.2 Active Directory Authentication Tests</h3>
+  <div class="test-list">
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Domain User Login — Windows (CYBERLAB\Administrator)</span><span class="test-detail">Windows login screen shows CYBERLAB\Administrator — domain authentication working</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Domain User Login — RHEL 9 (abaig@cyberlab.local)</span><span class="test-detail">Terminal prompt shows abaig@cyberlab.local@rhel-client — Linux domain login confirmed via SSSD</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Password Policy Enforced</span><span class="test-detail">Attempted to set password "123456" — rejected — minimum 12 chars required</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Account Lockout After 5 Failures</span><span class="test-detail">Wrong password 5 times — account locked — admin must unlock via AD</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Group Policy Applied on Login</span><span class="test-detail">GPO settings (wallpaper, restrictions) applied automatically at user login</span></div>
+  </div>
+
+  <h3>8.3 Linux Server Security Tests</h3>
+  <div class="test-list">
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Nginx Web Server Accessible (Port 80)</span><span class="test-detail">HTTP request returns 200 OK — Nginx default page loaded</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Root SSH Login BLOCKED ✓</span><span class="test-detail">ssh root@192.168.20.10 → "Permission denied, please try again"</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Password SSH Login BLOCKED ✓</span><span class="test-detail">Only key-based authentication accepted — brute-force protection confirmed</span></div>
+    <div class="test-row"><span class="test-badge pass">PASS</span><span class="test-name">Fail2Ban Active</span><span class="test-detail">5 failed SSH attempts → IP banned for 10 minutes — confirmed in fail2ban log</span></div>
+  </div>
+</div>
+
+<!-- ── SECTION 9: MONITORING ── -->
+<div class="rpt-sec" id="monitoring">
+  <div class="sec-heading">
+    <div class="sec-num-badge">9</div>
+    <div class="sec-title-text">Monitoring &amp; Logging</div>
+  </div>
+  <p>A secure environment requires full visibility into what is happening across all systems. We configured logging on every component of the lab to enable detection, auditing, and incident response.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>System</th><th>Log Type</th><th>Location</th><th>Tracks</th></tr></thead>
+      <tbody>
+        <tr><td>Windows Server 2022</td><td>Windows Security Event Log</td><td>Event Viewer → Security</td><td>Logins, failures, lockouts, privilege escalation</td></tr>
+        <tr><td>pfSense Firewall</td><td>Firewall Logs</td><td>WebGUI → Status → System Logs</td><td>Blocked/allowed packets, interface activity, DHCP leases</td></tr>
+        <tr><td>Ubuntu Server</td><td>Authentication Log</td><td>/var/log/auth.log</td><td>SSH logins, sudo usage, PAM events</td></tr>
+        <tr><td>Ubuntu Server</td><td>Web Access Log</td><td>/var/log/nginx/access.log</td><td>All HTTP requests, client IPs, response codes</td></tr>
+        <tr><td>Ubuntu Server</td><td>Fail2Ban Log</td><td>/var/log/fail2ban.log</td><td>Banned IPs, ban reasons, unban events</td></tr>
+        <tr><td>Kali Linux</td><td>Nmap Scan Output</td><td>/root/scans/ (exported)</td><td>Open ports, service versions, firewall response per host</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>9.1 Key Monitoring Commands</h3>
+  <div class="code-block">
+    <div class="lang-tag">Multi-OS</div>
+    <pre><span class="cc"># Windows — view last 20 failed login attempts (PowerShell)</span>
+Get-EventLog -LogName Security -InstanceId 4625 -Newest 20 | Select TimeGenerated,Message
+
+<span class="cc"># Linux — real-time SSH monitoring</span>
+sudo tail -f /var/log/auth.log | grep -i <span class="cs">"failed\|invalid\|accepted"</span>
+
+<span class="cc"># Linux — check Fail2Ban banned IPs right now</span>
+sudo fail2ban-client status sshd
+
+<span class="cc"># Linux — top 10 IPs accessing web server</span>
+awk <span class="cs">'{print $1}'</span> /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -10
+
+<span class="cc"># pfSense — view firewall log via CLI (SSH into pfSense)</span>
+clog /var/log/filter.log | tail -50</pre>
+  </div>
+</div>
+
+<!-- ── SECTION 10: CONCLUSION ── -->
+<div class="rpt-sec" id="conclusion">
+  <div class="sec-heading">
+    <div class="sec-num-badge">10</div>
+    <div class="sec-title-text">Conclusion &amp; Learnings</div>
+  </div>
+
+  <h3>10.1 Project Completion Status</h3>
+  <div class="prog-row"><div class="prog-labels"><span>ESXi Hypervisor Setup (Nested)</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>pfSense Firewall &amp; Network Routing</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Active Directory Domain Controller</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Linux Web Server (Hardened DMZ)</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Domain-Joined Windows Client Workstation</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>RHEL 9 Linux Client — Domain Join via SSSD</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Kali Linux Penetration Testing</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Firewall Rule Validation (All Tests)</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-row"><div class="prog-labels"><span>Documentation &amp; Reporting</span><span class="pct">100%</span></div><div class="prog-track"><div class="prog-fill" style="width:100%"></div></div></div>
+
+  <h3>10.2 Key Skills Gained</h3>
+  <div class="learn-grid">
+    <div class="lcard"><div class="li">🖥️</div><h4>Hypervisors</h4><p>ESXi Type-1 setup, VM creation, datastore management, Host Client</p></div>
+    <div class="lcard"><div class="li">🌐</div><h4>Enterprise Networking</h4><p>VLANs, subnets, NAT, inter-zone routing with pfSense</p></div>
+    <div class="lcard"><div class="li">🛡️</div><h4>Firewall Rules</h4><p>Deny-by-default policy, stateful rule writing, zone isolation</p></div>
+    <div class="lcard"><div class="li">🔑</div><h4>Active Directory</h4><p>Domain setup, OU structure, GPO enforcement, DNS integration</p></div>
+    <div class="lcard"><div class="li">🐧</div><h4>Linux Admin</h4><p>Nginx, UFW, SSH hardening, Fail2Ban, service management</p></div>
+    <div class="lcard"><div class="li">🔍</div><h4>Pen-Testing</h4><p>Nmap scanning, firewall validation, attacker mindset</p></div>
+  </div>
+
+  <h3>10.3 Conclusion</h3>
+  <div class="conclusion-box">
+    <h3>A Complete Enterprise Lab — Entirely in Software</h3>
+    <p>This project demonstrates that a fully functional, secure corporate IT infrastructure can be built using only software on a standard student laptop. Through nested virtualisation, we achieved what would otherwise require a rack of physical servers costing tens of thousands of rupees.</p>
+    <p>Every security mechanism — firewall rules, Active Directory policies, SSH hardening, intrusion prevention — was verified through real testing with Kali Linux. The project passed 100% of planned tests.</p>
+    <p>The challenges we overcame — especially the VMware hypervisor conflict and DNS misconfiguration — are exactly the types of issues that real IT engineers face in production environments. Solving them under pressure was the most valuable part of this entire project.</p>
+  </div>
+
+  <h3 style="margin-top:28px">10.4 Future Improvements</h3>
+  <ul>
+    <li><strong>Centralised SIEM:</strong> Deploy Wazuh or Graylog to aggregate logs from all systems into one dashboard</li>
+    <li><strong>HTTPS / SSL/TLS:</strong> Add a self-signed certificate to the Nginx server and configure HTTPS</li>
+    <li><strong>OpenVPN on pfSense:</strong> Allow secure remote administration via VPN</li>
+    <li><strong>IDS/IPS:</strong> Add Snort or Suricata to pfSense for intrusion detection</li>
+    <li><strong>VM Snapshots:</strong> Schedule automatic ESXi snapshots for point-in-time recovery</li>
+    <li><strong>Full vCenter:</strong> Deploy VMware vCenter Server for centralised VM management across multiple ESXi hosts</li>
+  </ul>
+</div>
+
+<!-- References -->
+<div class="rpt-sec">
+  <div class="sec-heading">
+    <div class="sec-num-badge">★</div>
+    <div class="sec-title-text">References</div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Resource</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>VMware ESXi Documentation</td><td>docs.vmware.com/en/VMware-vSphere/</td></tr>
+        <tr><td>2</td><td>pfSense Documentation</td><td>docs.netgate.com/pfsense/en/latest/</td></tr>
+        <tr><td>3</td><td>Microsoft AD Documentation</td><td>docs.microsoft.com/windows-server/identity/ad-ds/</td></tr>
+        <tr><td>4</td><td>Ubuntu Server Guide</td><td>ubuntu.com/server/docs</td></tr>
+        <tr><td>5</td><td>Kali Linux Documentation</td><td>kali.org/docs/</td></tr>
+        <tr><td>6</td><td>Nmap Reference Guide</td><td>nmap.org/book/man.html</td></tr>
+        <tr><td>7</td><td>Fail2Ban Documentation</td><td>fail2ban.readthedocs.io</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end report-body -->
+
+<div class="report-footer">
+  <p><span class="hlt">Secure Virtual Enterprise Lab</span> — Final Project Report</p>
+  <p>Hashir Junaid (2023F-BCS-358) &nbsp;·&nbsp; Taha Haider (2023F-BCS-079) &nbsp;·&nbsp; Abdul Rahman Baig (2023F-BCS-100)</p>
+  <p>Sir Syed University of Engineering &amp; Technology (SSUET) &nbsp;·&nbsp; Information Security (IS) &nbsp;·&nbsp; BCS-2023F &nbsp;·&nbsp; May 2026</p>
+</div>
+
+</div><!-- end doc -->
+
+<script>
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');document.body.style.overflow='hidden'}
+function closeLB(){document.getElementById('lb').classList.remove('on');document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB()})
+</script>
+</body>
+</html>
