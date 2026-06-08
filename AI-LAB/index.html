@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MedCore AI — AI Lab Project | SSUET</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    color: #2b2f3a;
+    background: linear-gradient(160deg, #f1ecfc 0%, #e8f3ff 45%, #eafaf1 100%);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 60px 28px 40px; }
+
+  /* HERO */
+  .hero { text-align: center; margin-bottom: 50px; }
+  .badge-course {
+    display: inline-block;
+    background: linear-gradient(135deg, #8a6fe0, #4f8fe0);
+    color: #fff; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    font-size: 13px; padding: 9px 26px; border-radius: 24px; margin-bottom: 22px;
+    box-shadow: 0 10px 28px rgba(90,80,200,0.28);
+  }
+  h1 { font-size: 48px; font-weight: 800; letter-spacing: -1px; color: #2c2750; margin-bottom: 8px; }
+  .subtitle { font-size: 17px; color: #5b6372; margin-bottom: 14px; }
+  .lead { max-width: 700px; margin: 0 auto; font-size: 17px; color: #5b6372; line-height: 1.7; }
+
+  /* BUTTONS */
+  .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 32px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; font-weight: 700; font-size: 15px;
+    padding: 13px 26px; border-radius: 30px;
+    transition: transform 0.15s ease;
+    box-shadow: 0 10px 26px rgba(80,70,150,0.12);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: linear-gradient(135deg, #8a6fe0, #4f8fe0); color: #fff; }
+  .btn-secondary { background: linear-gradient(135deg, #36b37e, #2c9a6c); color: #fff; }
+  .btn-ghost { background: rgba(255,255,255,0.85); color: #3c3470; border: 1px solid rgba(255,255,255,0.95); font-size: 14px; padding: 11px 22px; }
+
+  /* STATS */
+  .stats {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;
+    margin: 56px 0;
+  }
+  .stat {
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 18px; padding: 24px 12px;
+    box-shadow: 0 10px 28px rgba(80,70,150,0.08);
+  }
+  .stat .num { font-size: 30px; font-weight: 800; background: linear-gradient(135deg,#8a6fe0,#3f86d6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stat .label { font-size: 12.5px; color: #6b7286; font-weight: 600; margin-top: 6px; }
+
+  /* SECTION TITLES */
+  .section-title { text-align: center; margin: 60px 0 28px; }
+  .section-title .kicker {
+    display: inline-block; font-size: 12.5px; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; color: #8a6fe0; margin-bottom: 8px;
+  }
+  .section-title h2 { font-size: 30px; font-weight: 800; color: #2c2750; }
+
+  /* TEAM */
+  .team-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+  .member {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 16px; padding: 20px 30px; text-align: center; min-width: 220px;
+    box-shadow: 0 10px 26px rgba(80,70,150,0.08);
+  }
+  .member .name { font-size: 17px; font-weight: 800; color: #2c2750; }
+  .member .roll {
+    display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 700;
+    background: linear-gradient(135deg, #efe7fd, #e3eefb); color: #5b3fae;
+    border-radius: 10px; padding: 4px 12px;
+  }
+
+  /* FEATURE GRID */
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  .card {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 18px; padding: 24px 26px;
+    box-shadow: 0 10px 28px rgba(80,70,150,0.08);
+  }
+  .card .icon {
+    font-size: 28px; width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; margin-bottom: 14px;
+    background: linear-gradient(135deg, #efe7fd, #e3eefb);
+  }
+  .card h3 { font-size: 17px; font-weight: 800; color: #2c2750; margin-bottom: 6px; }
+  .card p { font-size: 14.5px; color: #5b6372; line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; margin-top: 64px; padding-top: 26px;
+    border-top: 1px solid rgba(150,150,180,0.2);
+    color: #8b93a7; font-size: 13.5px; line-height: 1.8;
+  }
+  footer strong { color: #5b6372; }
+
+  @media (max-width: 880px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="badge-course">Artificial Intelligence Lab · SSUET 2026</span>
+    <h1>MedCore AI</h1>
+    <p class="subtitle">Universal Health Diagnostic Platform</p>
+    <p class="lead">A fully functional, localized AI diagnostic web app — built inside Next.js and powered by a 72-billion-parameter open-source model. Describe your symptoms and city, and it returns a preliminary diagnosis, the right local specialist to see, and an estimated medicine cost in your own currency.</p>
+
+    <div class="btn-row">
+      <a class="btn btn-primary" href="report.html">📄 View Full Report</a>
+      <a class="btn btn-secondary" href="presentation.html">▶ View Presentation</a>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="report.html" onclick="window.print ? null : null">⬇ Download Report (PDF)</a>
+      <a class="btn btn-ghost" href="presentation.html">⬇ Download Presentation (PDF)</a>
+      <a class="btn btn-ghost" href="report.html" download>⬇ Save Report (.html)</a>
+      <a class="btn btn-ghost" href="presentation.html" download>⬇ Save Presentation (.html)</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="num">72B</div><div class="label">Parameter AI Model</div></div>
+    <div class="stat"><div class="num">4</div><div class="label">Major Problems Solved</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">Core Tech Components</div></div>
+    <div class="stat"><div class="num">$0</div><div class="label">Total Cost to Build</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">Open-Source Stack</div></div>
+  </div>
+
+  <!-- TEAM -->
+  <div class="section-title">
+    <span class="kicker">Group Members</span>
+    <h2>Built By</h2>
+  </div>
+  <div class="team-row">
+    <div class="member"><div class="name">Hashir Junaid</div><div class="roll">2023F-BCS-358</div></div>
+    <div class="member"><div class="name">Taha Haider</div><div class="roll">2023F-BCS-079</div></div>
+    <div class="member"><div class="name">Abdul Rahman Baig</div><div class="roll">2023F-BCS-100</div></div>
+  </div>
+
+  <!-- WHAT'S INSIDE -->
+  <div class="section-title">
+    <span class="kicker">What's Inside</span>
+    <h2>Everything We Built</h2>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <span class="icon">⚛️</span>
+      <h3>Next.js &amp; React Frontend</h3>
+      <p>A TypeScript-based UI styled with hand-written Glassmorphism CSS — frosted-glass panels, gradients, and micro-animations.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🛰️</span>
+      <h3>Serverless Backend</h3>
+      <p>Next.js API routes securely relay user input to the AI provider — no API keys ever reach the browser.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🤗</span>
+      <h3>Hugging Face Inference</h3>
+      <p>Connected via the official <code>@huggingface/inference</code> SDK, auto-routed through <code>router.huggingface.co</code> to free-tier providers.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🧠</span>
+      <h3>Qwen2.5-72B-Instruct</h3>
+      <p>A massive open-source reasoning model acting as the "medical expert" core — far more capable than typical 7B models.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🌍</span>
+      <h3>Localization Engine</h3>
+      <p>Strict prompt engineering forces the AI to localize: real specialist types, city-relevant guidance, and prices in local currency.</p>
+    </div>
+    <div class="card">
+      <span class="icon">💊</span>
+      <h3>Medicine Cost Estimator</h3>
+      <p>Estimates the cost of over-the-counter relief medicines based on the user's location and reported symptoms.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🗂️</span>
+      <h3>Dynamic Tabbed UI</h3>
+      <p>Parses the AI's structured JSON response and renders it live into a clean, organized, tabbed results interface.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🛡️</span>
+      <h3>Resilient JSON Rendering</h3>
+      <p>A recursive <code>renderContent</code> function safely converts deeply nested AI output into readable "Diagnostic Cards" instead of crashing.</p>
+    </div>
+    <div class="card">
+      <span class="icon">⚡</span>
+      <h3>Real Challenges Solved</h3>
+      <p>DNS blackouts, model rejection errors, React rendering crashes, and terminal encoding bugs — all diagnosed and fixed.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div><strong>MedCore AI</strong> — Universal Health Diagnostic Platform · AI Lab Project</div>
+    <div>Hashir Junaid &middot; Taha Haider &middot; Abdul Rahman Baig</div>
+    <div>SSUET &nbsp;|&nbsp; BCS-2023F &nbsp;|&nbsp; June 2026</div>
+    <div style="margin-top:10px;">
+      <a href="report.html" style="color:#8a6fe0; text-decoration:none; font-weight:700; margin: 0 10px;">📄 Full Report</a>
+      <a href="presentation.html" style="color:#36b37e; text-decoration:none; font-weight:700; margin: 0 10px;">▶ Presentation</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

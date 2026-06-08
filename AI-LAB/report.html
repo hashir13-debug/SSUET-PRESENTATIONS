@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MedCore AI — Lab Report</title>
+<style>
+  @page { size: A4; margin: 2.2cm; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #e7ebf2;
+    color: #2e3340;
+    font-family: Georgia, 'Times New Roman', Cambria, serif;
+    line-height: 1.7;
+  }
+
+  /* ===== floating nav (screen only) ===== */
+  .topnav {
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 50;
+    display: flex; gap: 10px; align-items: center;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #d8dfeb;
+    border-radius: 30px;
+    padding: 8px 14px;
+    box-shadow: 0 10px 28px rgba(40,55,90,0.12);
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+  }
+  .topnav a {
+    text-decoration: none; font-size: 13px; font-weight: 700;
+    color: #3b5380; padding: 8px 16px; border-radius: 20px;
+  }
+  .topnav a:hover { background: #eaf0fb; }
+  .topnav a.primary { background: linear-gradient(135deg, #3b5380, #5b7bb0); color: #fff; }
+  .topnav .navsep { width: 1px; height: 20px; background: rgba(91,123,176,0.25); margin: 0 2px; }
+  .topnav a#dlPdfBtn { font-size: 12px; color: #5b7bb0; }
+  .topnav a#dlPdfBtn:hover { background: #eaf0fb; }
+
+  /* ===== "paper" page ===== */
+  .page {
+    max-width: 840px;
+    margin: 100px auto 60px;
+    background: #ffffff;
+    border: 1px solid #dde3ee;
+    border-radius: 4px;
+    box-shadow: 0 18px 50px rgba(40,55,90,0.10);
+    padding: 70px 80px 60px;
+  }
+
+  /* cover */
+  .cover { text-align: center; padding-bottom: 40px; border-bottom: 1px solid #e3e8f1; margin-bottom: 44px; }
+  .cover .kicker {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: #5b7bb0;
+    border: 1px solid #c9d6ec; border-radius: 20px; padding: 7px 20px; margin-bottom: 22px;
+  }
+  .cover h1 { font-size: 36px; color: #1f2c44; margin: 0 0 6px 0; font-weight: 700; letter-spacing: -0.5px; }
+  .cover .subtitle { font-size: 17px; color: #6b7589; font-style: italic; margin-bottom: 26px; }
+  .cover .meta-line { font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 13.5px; color: #8a93a8; letter-spacing: 0.5px; }
+
+  .authors {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    display: flex; justify-content: center; gap: 30px; margin: 28px 0 6px;
+    flex-wrap: wrap;
+  }
+  .author { text-align: center; }
+  .author .name { font-size: 15px; font-weight: 700; color: #1f2c44; }
+  .author .roll { font-size: 12.5px; color: #5b7bb0; font-weight: 600; }
+
+  /* table of contents */
+  .toc {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    background: #f6f8fc;
+    border: 1px solid #e3e8f1;
+    border-radius: 8px;
+    padding: 22px 28px;
+    margin-bottom: 50px;
+  }
+  .toc .toc-title { font-size: 12px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #5b7bb0; margin-bottom: 14px; }
+  .toc ol { margin: 0; padding-left: 20px; }
+  .toc li { margin-bottom: 7px; font-size: 14.5px; }
+  .toc a { color: #2e3340; text-decoration: none; }
+  .toc a:hover { color: #3b5380; text-decoration: underline; }
+  .toc .pg { color: #a6aebd; float: right; }
+
+  /* section styling */
+  h2 {
+    font-size: 21px; color: #1f2c44; font-weight: 700;
+    margin: 46px 0 16px; padding-bottom: 8px;
+    border-bottom: 1.5px solid #e3e8f1;
+  }
+  h2 .num {
+    display: inline-block; font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 13px; font-weight: 800; color: #5b7bb0;
+    background: #eaf0fb; border-radius: 6px; padding: 2px 10px; margin-right: 10px;
+  }
+  h3 { font-size: 16.5px; color: #3b5380; font-weight: 700; margin: 24px 0 6px; font-style: italic; }
+  p { margin: 10px 0; text-align: justify; font-size: 15.5px; color: #3a4154; }
+  ul { margin: 10px 0; padding-left: 26px; }
+  li { margin: 6px 0; font-size: 15.5px; color: #3a4154; }
+  strong { color: #1f2c44; }
+  em { color: #5b7bb0; font-style: italic; }
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    background: #f0f3f9; border: 1px solid #dde3ee; border-radius: 4px;
+    padding: 1px 6px; font-size: 0.85em; color: #3b5380;
+  }
+
+  .disclaimer {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    background: #fbf6e8; border: 1px solid #ecdfb8; border-left: 4px solid #d8b35a;
+    padding: 14px 20px; border-radius: 4px; margin: 20px 0; font-size: 14px; color: #6b5a23;
+  }
+
+  .problem-box {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    background: #f8f9fc; border: 1px solid #e3e8f1; border-radius: 8px;
+    padding: 18px 24px; margin: 18px 0;
+  }
+  .problem-box .label, .solution-label {
+    display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+    padding: 3px 12px; border-radius: 12px; margin-bottom: 8px;
+  }
+  .problem-box .label { background: #fbe3e8; color: #a8425a; }
+  .solution-label { background: #e1f3e8; color: #2e8b57; margin-top: 10px; }
+  .problem-box h3 { margin-top: 4px; font-style: normal; }
+  .problem-box p { font-size: 14.5px; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px;
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+  }
+  th, td { border: 1px solid #e3e8f1; padding: 9px 14px; text-align: left; vertical-align: top; }
+  th { background: #eaf0fb; color: #1f2c44; font-weight: 700; }
+  tr:nth-child(even) td { background: #f8f9fc; }
+
+  ol.steps { counter-reset: step; list-style: none; padding-left: 0; font-family: 'Segoe UI', Calibri, Arial, sans-serif; }
+  ol.steps li {
+    counter-increment: step; position: relative; padding: 10px 16px 10px 50px;
+    margin-bottom: 8px; background: #f8f9fc; border-radius: 6px; font-size: 14.5px;
+  }
+  ol.steps li::before {
+    content: counter(step); position: absolute; left: 12px; top: 9px;
+    width: 26px; height: 26px; background: #3b5380; color: #fff; border-radius: 50%;
+    text-align: center; line-height: 26px; font-size: 13px; font-weight: 700;
+  }
+
+  .talking-points {
+    background: #eef7f0; border: 1px solid #cdead4; border-radius: 8px; padding: 16px 22px;
+  }
+
+  .page-footer {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    text-align: center; color: #a6aebd; font-size: 12px;
+    margin-top: 60px; padding-top: 20px; border-top: 1px solid #e3e8f1;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .topnav { display: none; }
+    .page { box-shadow: none; border: none; margin: 0 auto; padding: 0; max-width: 100%; }
+    h2 { page-break-after: avoid; }
+    .problem-box, table, .talking-points { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">🏠 Hub</a>
+  <a class="primary" href="report.html">📄 Report</a>
+  <a href="presentation.html">▶ Presentation</a>
+  <span class="navsep"></span>
+  <a href="#" id="dlPdfBtn" title="Print this report to PDF">⬇ PDF</a>
+</nav>
+
+<div class="page">
+
+  <!-- Cover -->
+  <div class="cover">
+    <span class="kicker">Artificial Intelligence Lab &middot; SSUET</span>
+    <h1>MedCore AI</h1>
+    <div class="subtitle">Universal Health Diagnostic Platform — Lab Report</div>
+    <div class="authors">
+      <div class="author"><div class="name">Hashir Junaid</div><div class="roll">2023F-BCS-358</div></div>
+      <div class="author"><div class="name">Taha Haider</div><div class="roll">2023F-BCS-079</div></div>
+      <div class="author"><div class="name">Abdul Rahman Baig</div><div class="roll">2023F-BCS-100</div></div>
+    </div>
+    <div class="meta-line">SSUET &nbsp;&middot;&nbsp; BCS&ndash;2023F &nbsp;&middot;&nbsp; AI Lab &nbsp;&middot;&nbsp; June 2026</div>
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <ol>
+      <li><a href="#sec1">Project Overview</a><span class="pg">01</span></li>
+      <li><a href="#sec2">Target Audience</a><span class="pg">02</span></li>
+      <li><a href="#sec3">Technology Stack</a><span class="pg">02</span></li>
+      <li><a href="#sec4">System Architecture</a><span class="pg">03</span></li>
+      <li><a href="#sec5">Major Problems Faced &amp; Technical Solutions</a><span class="pg">04</span></li>
+      <li><a href="#sec6">Exhibition Talking Points</a><span class="pg">06</span></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <h2 id="sec1"><span class="num">01</span>Project Overview</h2>
+  <p><strong>MedCore AI</strong> is a fully functional, localized, AI-powered health diagnostic web application. It serves as an accessible first step for users experiencing medical symptoms: by simply describing how they feel and where they live, the system returns a preliminary diagnosis, recommends the precise type of specialist to consult in their city, and estimates the cost of over-the-counter relief medicines in their local currency.</p>
+  <div class="disclaimer">
+    <strong>⚠ Disclaimer —</strong> The platform is explicitly framed as a <em>triage and educational tool</em>, and not a replacement for professional medical advice.
+  </div>
+
+  <!-- 2 -->
+  <h2 id="sec2"><span class="num">02</span>Target Audience</h2>
+  <ul>
+    <li><strong>General Public</strong> — individuals seeking a quick, preliminary understanding of their symptoms.</li>
+    <li><strong>Patients in Remote Areas</strong> — people who need immediate guidance on whether to see a doctor, and exactly <em>which kind</em> of doctor to visit locally.</li>
+    <li><strong>Students &amp; Academics</strong> — a working demonstration of practical, applied AI in the healthcare domain.</li>
+  </ul>
+
+  <!-- 3 -->
+  <h2 id="sec3"><span class="num">03</span>Technology Stack</h2>
+  <p>Every component of this project is open-source or built on a free service tier, keeping the system cost-effective and scalable:</p>
+  <table>
+    <tr><th>Layer</th><th>Technology</th></tr>
+    <tr><td>Frontend Framework</td><td>Next.js &amp; React (TypeScript) for a fast, responsive user interface</td></tr>
+    <tr><td>Styling</td><td>Pure Vanilla CSS in a modern <strong>"Glassmorphism"</strong> design language — translucent frosted-glass panels, dynamic gradients, and CSS micro-animations</td></tr>
+    <tr><td>Backend Infrastructure</td><td>Next.js Serverless API routes</td></tr>
+    <tr><td>AI Provider</td><td>Hugging Face Serverless Inference API</td></tr>
+    <tr><td>AI Model</td><td><code>Qwen/Qwen2.5-72B-Instruct</code> — a 72-billion-parameter open-source reasoning model</td></tr>
+    <tr><td>SDK</td><td>Official <code>@huggingface/inference</code> Node.js SDK</td></tr>
+  </table>
+
+  <!-- 4 -->
+  <h2 id="sec4"><span class="num">04</span>System Architecture — How It Works</h2>
+  <ol class="steps">
+    <li><strong>User Input</strong> — the user types their symptoms and location into the React frontend.</li>
+    <li><strong>Secure Transmission</strong> — the data is sent securely to the Next.js backend; API keys are never exposed in the browser.</li>
+    <li><strong>Prompt Engineering</strong> — the backend wraps the user's data inside a strict "System Prompt," instructing the 72B model to act as a medical expert, localize its reasoning to the user's city, and respond strictly in a rigid JSON format.</li>
+    <li><strong>AI Inference</strong> — the Hugging Face inference router processes the request and returns the diagnosis, recommended local doctors, and estimated medicine prices.</li>
+    <li><strong>Dynamic Rendering</strong> — the frontend parses this JSON object and dynamically generates a tabbed results interface without crashing.</li>
+  </ol>
+
+  <!-- 5 -->
+  <h2 id="sec5"><span class="num">05</span>Major Problems Faced &amp; Technical Solutions</h2>
+  <p>During development, four significant technical hurdles emerged. Each was diagnosed methodically and engineered around successfully:</p>
+
+  <div class="problem-box">
+    <span class="label">PROBLEM 1</span>
+    <h3>Hard ISP DNS Blocks</h3>
+    <p><strong>The Issue —</strong> the standard Hugging Face API domain (<code>api-inference.huggingface.co</code>) was globally unreachable, producing <code>ERR_NAME_NOT_RESOLVED</code> network failures, as though local ISPs or DNS root zones had blocked or deprecated the domain.</p>
+    <span class="solution-label">SOLUTION</span>
+    <p>We migrated the architecture to the official <code>@huggingface/inference</code> Node SDK on the server side. This SDK contains internal routing logic that automatically bypasses blocked domains by directing traffic through <code>router.huggingface.co</code> to third-party serverless providers (such as Novita) — completely resolving the connectivity blackout.</p>
+  </div>
+
+  <div class="problem-box">
+    <span class="label">PROBLEM 2</span>
+    <h3>Model Capability Restrictions (HTTP 400 Errors)</h3>
+    <p><strong>The Issue —</strong> due to the new routing infrastructure, smaller models (such as Mistral 7B) returned <code>400 Bad Request</code> errors, since free-tier providers no longer supported the <code>chatCompletions</code> task for them.</p>
+    <span class="solution-label">SOLUTION</span>
+    <p>We upgraded the application to <code>Qwen2.5-72B-Instruct</code>, a 72-billion-parameter model natively supported by the new free-tier infrastructure — eliminating the crash while substantially improving medical reasoning accuracy.</p>
+  </div>
+
+  <div class="problem-box">
+    <span class="label">PROBLEM 3</span>
+    <h3>Complex JSON React Rendering Crashes</h3>
+    <p><strong>The Issue —</strong> because the 72B model is highly capable, it occasionally returned deeply nested JSON objects and arrays (e.g. <code>[{condition: "Flu", explanation: "..."}]</code>) instead of simple flat strings. When React attempted to render these objects directly as text, it triggered the fatal <em>"Objects are not valid as a React child"</em> crash.</p>
+    <span class="solution-label">SOLUTION</span>
+    <p>We engineered a recursive <code>renderContent</code> mapping function on the frontend. When the AI returns complex nested objects, this function detects them and maps them into styled <code>&lt;ul&gt;</code> / <code>&lt;li&gt;</code> HTML lists — converting a potential crash into a polished "Diagnostic Card" UI feature.</p>
+  </div>
+
+  <div class="problem-box">
+    <span class="label">PROBLEM 4</span>
+    <h3>Terminal Encoding Corrupting Code</h3>
+    <p><strong>The Issue —</strong> while injecting CSS for the Tabbed UI through the Windows PowerShell terminal, its text encoding inserted literal <code>\n</code> characters in place of real line breaks, causing a fatal CSS syntax error that broke the styling engine.</p>
+    <span class="solution-label">SOLUTION</span>
+    <p>The file system was accessed directly through secure code-replacement tools to rewrite the CSS blocks correctly — completely bypassing the terminal's encoding issue.</p>
+  </div>
+
+  <!-- 6 -->
+  <h2 id="sec6"><span class="num">06</span>Exhibition Talking Points</h2>
+  <div class="talking-points">
+    <ul>
+      <li>Emphasize that <strong>zero dollars</strong> were spent building or running this — AI inference runs entirely on Hugging Face's open-source free tier.</li>
+      <li>Highlight the <strong>Glassmorphism UI</strong> — it presents like a premium product rather than a typical lab assignment.</li>
+      <li>Point out the <strong>Localization Feature</strong> — the AI calculates medicine prices in PKR (or the relevant local currency) and recommends real hospital names in the user's city, requiring genuine LLM reasoning.</li>
+      <li>Mention the <strong>Resilient Architecture</strong> — explain how the application safely handles complex nested JSON from the AI and maps it dynamically to the UI without crashing.</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    MedCore AI — AI Lab Report &nbsp;&middot;&nbsp; Hashir Junaid (2023F-BCS-358) &nbsp;&middot;&nbsp; Taha Haider (2023F-BCS-079) &nbsp;&middot;&nbsp; Abdul Rahman Baig (2023F-BCS-100) &nbsp;&middot;&nbsp; SSUET, June 2026
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('dlPdfBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.print();
+  });
+</script>
+</body>
+</html>

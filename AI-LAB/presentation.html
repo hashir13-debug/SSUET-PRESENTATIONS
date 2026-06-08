@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MedCore AI — AI Lab Presentation</title>
+<style>
+  @page { size: landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', 'Segoe UI', Calibri, Arial, sans-serif;
+    color: #2b2f3a;
+  }
+  .slide {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 54px 80px;
+    display: none;
+    flex-direction: column;
+    page-break-after: always;
+  }
+  .slide.active { display: flex; }
+  .slide:last-child { page-break-after: auto; }
+
+  /* ===== Top nav bar (back to hub / report) ===== */
+  .topnav {
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 50;
+    display: flex; gap: 10px; align-items: center;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 30px;
+    padding: 8px 14px;
+    box-shadow: 0 10px 28px rgba(80,70,150,0.14);
+  }
+  .topnav a {
+    text-decoration: none; font-size: 13px; font-weight: 700;
+    color: #5b3fae; padding: 8px 16px; border-radius: 20px;
+    transition: background 0.15s ease;
+  }
+  .topnav a:hover { background: #efe7fd; }
+  .topnav a.primary { background: linear-gradient(135deg, #8a6fe0, #4f8fe0); color: #fff; }
+  .topnav .navsep { width: 1px; height: 20px; background: rgba(138,111,224,0.25); margin: 0 2px; }
+  .topnav a#dlPdfBtn, .topnav a#dlPptxBtn { font-size: 12px; color: #4f8fe0; }
+  .topnav a#dlPdfBtn:hover, .topnav a#dlPptxBtn:hover { background: #eaf2fb; }
+
+  /* ===== Bottom slideshow controls ===== */
+  .slidenav {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 50;
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 30px;
+    padding: 10px 22px;
+    box-shadow: 0 10px 28px rgba(80,70,150,0.14);
+  }
+  .slidenav button {
+    border: none; cursor: pointer;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #8a6fe0, #4f8fe0);
+    color: #fff; font-size: 16px; font-weight: 800;
+    box-shadow: 0 6px 16px rgba(90,80,200,0.30);
+    transition: transform 0.12s ease;
+  }
+  .slidenav button:hover { transform: scale(1.08); }
+  .slidenav button:disabled { opacity: 0.35; cursor: default; transform: none; }
+  .slidenav .counter { font-size: 13.5px; font-weight: 700; color: #5b6372; min-width: 56px; text-align: center; }
+  .slidenav .dots { display: flex; gap: 6px; }
+  .slidenav .dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #d8d4ec; display: inline-block; cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .slidenav .dots span.active { background: linear-gradient(135deg, #8a6fe0, #4f8fe0); transform: scale(1.3); }
+  .hint {
+    position: fixed; bottom: 78px; left: 50%; transform: translateX(-50%);
+    z-index: 50; font-size: 12px; color: #9aa0b4;
+    background: rgba(255,255,255,0.7); padding: 5px 14px; border-radius: 14px;
+  }
+
+  @media print {
+    .topnav, .slidenav, .hint { display: none !important; }
+    .slide { display: flex !important; height: auto; min-height: 100vh; }
+  }
+  .content { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+  /* ===== Color themes (all light, print-safe) ===== */
+  .theme-violet  { background: linear-gradient(135deg, #f1ecfc 0%, #e6f0fb 55%, #fdeefb 100%); }
+  .theme-blue    { background: linear-gradient(135deg, #e8f3ff 0%, #eef9f6 100%); }
+  .theme-mint    { background: linear-gradient(135deg, #eafaf1 0%, #e9f3fd 100%); }
+  .theme-peach   { background: linear-gradient(135deg, #fff2e9 0%, #fdeef6 60%, #eef3fd 100%); }
+  .theme-sun     { background: linear-gradient(135deg, #fff8e6 0%, #ffeef0 55%, #eef6ff 100%); }
+  .theme-rose    { background: linear-gradient(135deg, #fdeef3 0%, #f0eefd 100%); }
+
+  /* decorative blobs */
+  .blob { position: absolute; border-radius: 50%; filter: blur(6px); z-index: 1; }
+  .blob.tr { width: 360px; height: 360px; top: -140px; right: -120px; }
+  .blob.bl { width: 260px; height: 260px; bottom: -110px; left: -90px; }
+  .blob.mid { width: 180px; height: 180px; }
+
+  .c-violet1 { background: #d8c9f7; opacity: .55; }
+  .c-violet2 { background: #c7e0fb; opacity: .5; }
+  .c-blue1   { background: #bfe0fb; opacity: .55; }
+  .c-blue2   { background: #c8f0e0; opacity: .5; }
+  .c-mint1   { background: #bfeed1; opacity: .55; }
+  .c-mint2   { background: #c4dff9; opacity: .5; }
+  .c-peach1  { background: #ffd9bd; opacity: .5; }
+  .c-peach2  { background: #f9cfe8; opacity: .45; }
+  .c-sun1    { background: #ffe7ad; opacity: .5; }
+  .c-sun2    { background: #ffd2d8; opacity: .45; }
+  .c-rose1   { background: #f6cfe0; opacity: .5; }
+  .c-rose2   { background: #d6cdf7; opacity: .45; }
+
+  /* kicker chip */
+  .kicker {
+    display: inline-flex; align-items: center; gap: 9px;
+    align-self: flex-start;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(6px);
+    color: #5b3fae;
+    font-size: 12.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    padding: 8px 18px; border-radius: 22px; margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow: 0 4px 16px rgba(91,63,174,0.10);
+  }
+  .kicker .dot { width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(135deg,#8a6fe0,#5b3fae); }
+
+  h1 { font-size: 50px; font-weight: 800; letter-spacing: -1px; margin: 0 0 10px 0; color: #2c2750; }
+  h2 { font-size: 34px; font-weight: 800; letter-spacing: -0.8px; margin: 0 0 26px 0; color: #2c2750; }
+  h2 .accent { background: linear-gradient(135deg,#8a6fe0,#3f86d6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: 19px; color: #5b6372; margin: 0 0 8px 0; max-width: 760px; line-height: 1.6; }
+  strong { color: #2c2750; }
+  code {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(138,111,224,0.25);
+    border-radius: 5px; padding: 2px 7px; font-size: 0.9em; color: #5b3fae; font-weight: 600;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; font-size: 18.5px; line-height: 1.7; }
+  ul.bullets li { position: relative; padding-left: 34px; margin-bottom: 16px; color: #45506a; }
+  ul.bullets li::before {
+    content: "✦";
+    position: absolute; left: 0; top: 0;
+    color: #8a6fe0; font-size: 18px;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .card {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 18px;
+    padding: 24px 28px;
+    box-shadow: 0 12px 32px rgba(80,70,150,0.10);
+  }
+  .card .icon {
+    font-size: 30px; width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px; margin-bottom: 14px;
+    background: linear-gradient(135deg, #efe7fd, #e3eefb);
+  }
+  .card h3 { margin: 0 0 8px 0; color: #2c2750; font-size: 19px; font-weight: 800; }
+  .card p { font-size: 15.5px; margin: 4px 0; color: #5b6372; line-height: 1.65; }
+
+  .tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 14px; margin-bottom: 12px; }
+  .tag-problem { background: #ffe1e6; color: #c8425a; }
+  .tag-solution { background: #d9f5e6; color: #1f8a55; }
+
+  .pill-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
+  .pill {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.95);
+    color: #3c3470; border-radius: 26px; padding: 13px 24px;
+    font-size: 16px; font-weight: 700;
+    box-shadow: 0 8px 22px rgba(80,70,150,0.10);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .flow { display: flex; flex-direction: column; gap: 13px; margin-top: 4px; }
+  .flow-step {
+    display: flex; align-items: center; gap: 22px;
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 16px; padding: 17px 26px;
+    font-size: 17px; color: #444f66;
+    box-shadow: 0 8px 26px rgba(80,70,150,0.08);
+  }
+  .flow-step b { color: #2c2750; }
+  .flow-num {
+    flex: none; width: 42px; height: 42px;
+    background: linear-gradient(135deg, #8a6fe0, #4f8fe0);
+    color: #fff; border-radius: 50%;
+    text-align: center; line-height: 42px; font-weight: 800; font-size: 17px;
+    box-shadow: 0 6px 16px rgba(90,80,200,0.35);
+  }
+
+  .info-box {
+    margin-top: auto;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-left: 6px solid #f0b94f;
+    padding: 18px 24px; border-radius: 14px;
+    font-size: 16px; color: #6b5a23;
+    box-shadow: 0 8px 24px rgba(80,70,150,0.08);
+  }
+  .info-box.green { border-left-color: #36b37e; color: #1f6e4d; }
+
+  .footer {
+    margin-top: auto; padding-top: 18px;
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: #8b93a7;
+  }
+
+  /* title slide */
+  .title-slide .content { align-items: center; justify-content: center; text-align: center; }
+  .title-slide h1 { font-size: 60px; }
+  .badge-course {
+    display: inline-block;
+    background: linear-gradient(135deg, #8a6fe0, #4f8fe0);
+    color: #fff; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    font-size: 14px; padding: 10px 28px; border-radius: 26px; margin-bottom: 24px;
+    box-shadow: 0 10px 28px rgba(90,80,200,0.30);
+  }
+  .team-box {
+    margin-top: 38px;
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 20px; padding: 26px 44px;
+    box-shadow: 0 14px 36px rgba(80,70,150,0.12);
+  }
+  .team-box .team-title { font-size: 12.5px; letter-spacing: 3px; text-transform: uppercase; color: #9aa0b4; font-weight: 800; margin-bottom: 16px; }
+  .team-row { display: flex; gap: 34px; justify-content: center; }
+  .member { text-align: left; min-width: 220px; padding: 6px 0; }
+  .member .name { font-size: 18px; font-weight: 800; color: #2c2750; }
+  .member .roll {
+    font-size: 13.5px; font-weight: 700; letter-spacing: 0.5px;
+    display: inline-block; margin-top: 4px;
+    background: linear-gradient(135deg, #efe7fd, #e3eefb);
+    color: #5b3fae; border-radius: 10px; padding: 3px 10px;
+  }
+
+  /* agenda */
+  .agenda-list { list-style: none; padding: 0; margin: 0; counter-reset: agenda; }
+  .agenda-list li {
+    counter-increment: agenda;
+    display: flex; align-items: center; gap: 24px;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 16px; padding: 19px 28px; margin-bottom: 15px;
+    font-size: 19px; font-weight: 700; color: #3a4255;
+    box-shadow: 0 8px 24px rgba(80,70,150,0.08);
+  }
+  .agenda-list li::before {
+    content: counter(agenda, decimal-leading-zero);
+    font-size: 22px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #8a6fe0, #4f8fe0);
+    border-radius: 10px; padding: 7px 16px;
+    box-shadow: 0 6px 16px rgba(90,80,200,0.30);
+  }
+
+  .stat-row { display: flex; gap: 22px; margin-top: 24px; }
+  .stat {
+    flex: 1; text-align: center;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.95);
+    border-radius: 18px; padding: 22px 16px;
+    box-shadow: 0 10px 28px rgba(80,70,150,0.08);
+  }
+  .stat .num { font-size: 34px; font-weight: 800; background: linear-gradient(135deg,#8a6fe0,#3f86d6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stat .label { font-size: 13.5px; color: #6b7286; font-weight: 600; margin-top: 6px; }
+
+  @media print {
+    .slide { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">🏠 Hub</a>
+  <a href="report.html">📄 Report</a>
+  <a class="primary" href="presentation.html">▶ Presentation</a>
+  <span class="navsep"></span>
+  <a href="#" id="dlPdfBtn" title="Print this slideshow to PDF">⬇ PDF</a>
+  <a href="#" id="dlPptxBtn" title="Download as a PowerPoint file">⬇ PPTX</a>
+</nav>
+
+<div class="hint">Use ← → arrow keys to navigate</div>
+
+<!-- Slide 1: Title -->
+<section class="slide theme-violet title-slide">
+  <div class="blob tr c-violet1"></div>
+  <div class="blob bl c-violet2"></div>
+  <div class="content">
+    <span class="badge-course">Artificial Intelligence &middot; AI Lab &middot; 2026</span>
+    <h1>MedCore AI</h1>
+    <p class="lead" style="font-size:21px; text-align:center;">Universal Health Diagnostic Platform — an AI assistant that reads your symptoms, finds the right local specialist, and prices your medicine, instantly.</p>
+    <div class="team-box">
+      <div class="team-title">Presented By</div>
+      <div class="team-row">
+        <div class="member"><div class="name">Hashir Junaid</div><div class="roll">2023F-BCS-358</div></div>
+        <div class="member"><div class="name">Taha Haider</div><div class="roll">2023F-BCS-079</div></div>
+        <div class="member"><div class="name">Abdul Rahman Baig</div><div class="roll">2023F-BCS-100</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Agenda -->
+<section class="slide theme-blue">
+  <div class="blob tr c-blue1"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>Agenda</span>
+    <h2>What We'll <span class="accent">Walk You Through</span></h2>
+    <ul class="agenda-list">
+      <li>The Idea — What MedCore AI Does &amp; Who It's For</li>
+      <li>The Technology Stack Behind It</li>
+      <li>System Architecture — From Symptom to Diagnosis</li>
+      <li>Real Engineering Challenges We Faced (and Solved)</li>
+      <li>Why It Matters — Key Highlights &amp; Takeaways</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Slide 3: Overview -->
+<section class="slide theme-mint">
+  <div class="blob tr c-mint1"></div>
+  <div class="blob bl c-mint2"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>01 &middot; The Idea</span>
+    <h2>What is <span class="accent">MedCore AI?</span></h2>
+    <ul class="bullets">
+      <li><strong>MedCore AI</strong> is a fully working, localized, AI-powered health diagnostic web app — built as a hands-on exploration of applied AI.</li>
+      <li>It's an accessible <strong>first step</strong> for anyone feeling unwell — no appointment, no waiting room, available instantly.</li>
+      <li>The user describes how they feel and where they live; the system replies with a <strong>preliminary diagnosis</strong>, the <strong>right specialist type</strong> nearby, and the <strong>estimated medicine cost</strong> in their own currency.</li>
+    </ul>
+    <div class="info-box">
+      ⚠ &nbsp;<strong>Important:</strong> MedCore AI positions itself strictly as a <em>triage and educational tool</em> — guiding decisions, never replacing a real doctor.
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Target Audience -->
+<section class="slide theme-peach">
+  <div class="blob tr c-peach1"></div>
+  <div class="blob bl c-peach2"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>01 &middot; The Idea</span>
+    <h2>Who Is It <span class="accent">Built For?</span></h2>
+    <div class="grid3">
+      <div class="card">
+        <span class="icon">🌐</span>
+        <h3>General Public</h3>
+        <p>Anyone who wants a quick, judgment-free first read on their symptoms before deciding what to do next.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📍</span>
+        <h3>Patients in Remote Areas</h3>
+        <p>People with limited access to specialists, who need clarity on whether — and exactly <em>which kind</em> of doctor — to see locally.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🎓</span>
+        <h3>Students &amp; Academics</h3>
+        <p>A real, working demonstration of how modern LLMs can be engineered into practical, localized tools.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 5: Tech Stack -->
+<section class="slide theme-blue">
+  <div class="blob tr c-blue2"></div>
+  <div class="blob bl c-blue1"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>02 &middot; Technology Stack</span>
+    <h2>Built Entirely on <span class="accent">Open-Source &amp; Free Tier</span></h2>
+    <p class="lead">Every layer of MedCore AI runs on free, open technology — proof that powerful AI products don't need a big budget to come alive.</p>
+    <div class="pill-row">
+      <span class="pill">⚛️ Next.js &amp; React (TypeScript)</span>
+      <span class="pill">🎨 Vanilla CSS — Glassmorphism UI</span>
+      <span class="pill">🛰️ Next.js Serverless API Routes</span>
+      <span class="pill">🤗 Hugging Face Inference API</span>
+      <span class="pill">🧠 Qwen2.5-72B-Instruct</span>
+      <span class="pill">📦 @huggingface/inference SDK</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num">$0</div><div class="label">Total cost to build &amp; run</div></div>
+      <div class="stat"><div class="num">72B</div><div class="label">Parameter reasoning model</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">Open-source stack</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 6: Architecture -->
+<section class="slide theme-violet">
+  <div class="blob tr c-violet2"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>03 &middot; System Architecture</span>
+    <h2>From Symptom to <span class="accent">Diagnosis — In 5 Steps</span></h2>
+    <div class="flow">
+      <div class="flow-step"><span class="flow-num">1</span><span><b>User Input</b> — symptoms and location are typed into the React frontend.</span></div>
+      <div class="flow-step"><span class="flow-num">2</span><span><b>Secure Transmission</b> — data travels safely to the Next.js backend; no API keys ever touch the browser.</span></div>
+      <div class="flow-step"><span class="flow-num">3</span><span><b>Prompt Engineering</b> — the backend wraps the data in a strict "System Prompt," instructing the 72B model to act as a medical expert and reply in rigid JSON.</span></div>
+      <div class="flow-step"><span class="flow-num">4</span><span><b>AI Inference</b> — the Hugging Face router returns the diagnosis, local doctor recommendations, and medicine price estimates.</span></div>
+      <div class="flow-step"><span class="flow-num">5</span><span><b>Dynamic Rendering</b> — the frontend parses the JSON and builds a polished, tabbed results UI on the fly.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 7: Problems 1 & 2 -->
+<section class="slide theme-rose">
+  <div class="blob tr c-rose1"></div>
+  <div class="blob bl c-rose2"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>04 &middot; Real Engineering Challenges</span>
+    <h2>Obstacle <span class="accent">#1 &amp; #2</span> — and How We Beat Them</h2>
+    <div class="grid2">
+      <div class="card">
+        <span class="tag tag-problem">Problem</span>
+        <h3>🚫 Hard ISP DNS Blocks</h3>
+        <p>The official Hugging Face API domain was completely unreachable — every call failed with <code>ERR_NAME_NOT_RESOLVED</code>, as if blocked at the DNS level.</p>
+        <span class="tag tag-solution">Our Fix</span>
+        <p>Switched to the official <code>@huggingface/inference</code> SDK, which auto-reroutes traffic through <code>router.huggingface.co</code> to alternate providers — bypassing the blackout entirely.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-problem">Problem</span>
+        <h3>⚠️ Model Rejected (HTTP 400)</h3>
+        <p>Smaller models like Mistral 7B kept failing with <code>400 Bad Request</code> — the new routing infrastructure no longer supported chat-completion for them on the free tier.</p>
+        <span class="tag tag-solution">Our Fix</span>
+        <p>Upgraded to <code>Qwen2.5-72B-Instruct</code> — natively supported, which fixed the crash and made the diagnoses noticeably sharper.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 8: Problems 3 & 4 -->
+<section class="slide theme-sun">
+  <div class="blob tr c-sun1"></div>
+  <div class="blob bl c-sun2"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>04 &middot; Real Engineering Challenges</span>
+    <h2>Obstacle <span class="accent">#3 &amp; #4</span> — and How We Beat Them</h2>
+    <div class="grid2">
+      <div class="card">
+        <span class="tag tag-problem">Problem</span>
+        <h3>💥 React Crashed on AI Output</h3>
+        <p>The 72B model sometimes returned deeply nested JSON (objects inside arrays) instead of plain text — triggering React's fatal "Objects are not valid as a React child" error.</p>
+        <span class="tag tag-solution">Our Fix</span>
+        <p>Wrote a recursive <code>renderContent</code> function that detects nested data and turns it into clean, styled lists — converting a guaranteed crash into a polished "Diagnostic Card" feature.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-problem">Problem</span>
+        <h3>⌨️ Terminal Was Corrupting Code</h3>
+        <p>Pasting CSS through Windows PowerShell silently replaced real line breaks with literal <code>\n</code> text, breaking the stylesheet with hidden syntax errors.</p>
+        <span class="tag tag-solution">Our Fix</span>
+        <p>Bypassed the terminal entirely — edited the CSS files directly through safe, structured file-editing tools, restoring clean formatting instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 9: Highlights -->
+<section class="slide theme-mint">
+  <div class="blob tr c-mint2"></div>
+  <div class="blob bl c-mint1"></div>
+  <div class="content">
+    <span class="kicker"><span class="dot"></span>05 &middot; Why It Matters</span>
+    <h2>Key <span class="accent">Highlights</span></h2>
+    <ul class="bullets">
+      <li><strong>Zero cost</strong> — the entire AI pipeline runs on Hugging Face's free-tier inference; nothing was paid for.</li>
+      <li><strong>Premium design</strong> — a Glassmorphism UI (frosted-glass panels, soft gradients, micro-animations) gives it a polished, professional feel.</li>
+      <li><strong>Real localization</strong> — the AI reasons about the user's actual city to suggest realistic hospitals and convert medicine prices into local currency.</li>
+      <li><strong>Resilient by design</strong> — even when the AI returns messy, nested data, the app gracefully turns it into a clean, readable interface instead of crashing.</li>
+    </ul>
+    <div class="info-box green">
+      🚀 &nbsp;A small student project that quietly solves real infrastructure problems — DNS blackouts, model limits, rendering crashes — the same way production teams do.
+    </div>
+  </div>
+</section>
+
+<!-- Slide 10: Closing -->
+<section class="slide theme-violet title-slide">
+  <div class="blob tr c-violet1"></div>
+  <div class="blob bl c-violet2"></div>
+  <div class="content">
+    <span class="badge-course">Thank You</span>
+    <h1 style="font-size:50px;">Questions &amp; Discussion</h1>
+    <p class="lead" style="font-size:18.5px; text-align:center;">MedCore AI — built by Hashir Junaid, Taha Haider &amp; Abdul Rahman Baig for the AI Lab.</p>
+  </div>
+</section>
+
+<div class="slidenav">
+  <button id="prevBtn" aria-label="Previous slide">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1 / 10</span>
+  <button id="nextBtn" aria-label="Next slide">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsEl = document.getElementById('dots');
+  const counterEl = document.getElementById('counter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+  const dots = dotsEl.querySelectorAll('span');
+
+  function render() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    counterEl.textContent = (current + 1) + ' / ' + slides.length;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+  }
+  function goTo(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { goTo(current + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { goTo(current - 1); e.preventDefault(); }
+    if (e.key === 'Home') { goTo(0); e.preventDefault(); }
+    if (e.key === 'End') { goTo(slides.length - 1); e.preventDefault(); }
+  });
+
+  render();
+
+  // ===== Download: PDF (print to PDF) =====
+  document.getElementById('dlPdfBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.print();
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script>
+  // ===== Download: PowerPoint (.pptx) via PptxGenJS =====
+  const deckData = [
+    { theme: 'F1ECFC', title: 'MedCore AI', sub: 'Universal Health Diagnostic Platform',
+      bullets: ['An AI assistant that reads your symptoms, finds the right local specialist, and prices your medicine — instantly.',
+                'Presented by: Hashir Junaid (2023F-BCS-358), Taha Haider (2023F-BCS-079), Abdul Rahman Baig (2023F-BCS-100)',
+                'Artificial Intelligence · AI Lab · SSUET 2026'] },
+    { theme: 'E8F3FF', title: "Agenda — What We'll Walk You Through",
+      bullets: ["The Idea — What MedCore AI Does & Who It's For", 'The Technology Stack Behind It',
+                'System Architecture — From Symptom to Diagnosis', 'Real Engineering Challenges We Faced (and Solved)',
+                'Why It Matters — Key Highlights & Takeaways'] },
+    { theme: 'EAFAF1', title: 'What is MedCore AI?',
+      bullets: ['A fully working, localized, AI-powered health diagnostic web app — built as a hands-on exploration of applied AI.',
+                "An accessible first step for anyone feeling unwell — no appointment, no waiting room, available instantly.",
+                'User describes symptoms & location → system replies with a preliminary diagnosis, the right specialist type nearby, and the estimated medicine cost in local currency.',
+                'Disclaimer: positioned strictly as a triage and educational tool — guiding decisions, never replacing a real doctor.'] },
+    { theme: 'FFF2E9', title: 'Who Is It Built For?',
+      bullets: ['General Public — a quick, judgment-free first read on symptoms before deciding what to do next.',
+                'Patients in Remote Areas — clarity on whether, and exactly which kind of doctor, to see locally.',
+                'Students & Academics — a real, working demonstration of how modern LLMs become practical, localized tools.'] },
+    { theme: 'E8F3FF', title: 'Technology Stack — Open-Source & Free Tier',
+      bullets: ['Next.js & React (TypeScript)', 'Vanilla CSS — Glassmorphism UI', 'Next.js Serverless API Routes',
+                'Hugging Face Inference API', 'Qwen2.5-72B-Instruct model', '@huggingface/inference SDK',
+                'Stats: $0 total cost · 72B parameter model · 100% open-source stack'] },
+    { theme: 'F1ECFC', title: 'From Symptom to Diagnosis — In 5 Steps',
+      bullets: ['1. User Input — symptoms and location typed into the React frontend',
+                '2. Secure Transmission — data sent safely to the Next.js backend; no API keys exposed',
+                '3. Prompt Engineering — strict "System Prompt" instructs the 72B model to act as a medical expert and reply in rigid JSON',
+                '4. AI Inference — Hugging Face router returns diagnosis, local doctor recommendations, and medicine prices',
+                '5. Dynamic Rendering — frontend parses the JSON and builds a polished, tabbed results UI'] },
+    { theme: 'FDEEF3', title: 'Engineering Challenges — Obstacle #1 & #2',
+      bullets: ['PROBLEM 1 — Hard ISP DNS Blocks: the Hugging Face API domain was unreachable (ERR_NAME_NOT_RESOLVED).',
+                'FIX 1 — Switched to the official @huggingface/inference SDK, which auto-reroutes through router.huggingface.co to alternate providers.',
+                'PROBLEM 2 — Model Rejected (HTTP 400): smaller models like Mistral 7B failed on the new free-tier routing infrastructure.',
+                'FIX 2 — Upgraded to Qwen2.5-72B-Instruct, natively supported, fixing the crash and sharpening the diagnoses.'] },
+    { theme: 'FFF8E6', title: 'Engineering Challenges — Obstacle #3 & #4',
+      bullets: ['PROBLEM 3 — React crashed on AI output: deeply nested JSON triggered "Objects are not valid as a React child".',
+                'FIX 3 — Built a recursive renderContent function that converts nested data into clean, styled "Diagnostic Card" lists.',
+                'PROBLEM 4 — Terminal corrupting code: PowerShell replaced real line breaks with literal \\n in CSS, breaking the stylesheet.',
+                'FIX 4 — Bypassed the terminal entirely; edited CSS files directly with safe, structured file-editing tools.'] },
+    { theme: 'EAFAF1', title: 'Key Highlights',
+      bullets: ['Zero cost — the entire AI pipeline runs on Hugging Face\'s free-tier inference.',
+                'Premium design — Glassmorphism UI (frosted-glass panels, gradients, micro-animations).',
+                "Real localization — AI reasons about the user's actual city for hospitals and currency-converted prices.",
+                'Resilient by design — gracefully turns messy nested AI data into a clean interface instead of crashing.',
+                'A small student project that quietly solves real infrastructure problems the way production teams do.'] },
+    { theme: 'F1ECFC', title: 'Thank You — Questions & Discussion',
+      bullets: ['MedCore AI — built by Hashir Junaid, Taha Haider & Abdul Rahman Baig for the AI Lab.',
+                'SSUET · BCS-2023F · June 2026'] },
+  ];
+
+  document.getElementById('dlPptxBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const original = btn.textContent;
+    btn.textContent = '⏳ Building...';
+    try {
+      const pptx = new PptxGenJS();
+      pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
+      pptx.layout = 'WIDE';
+
+      deckData.forEach((s) => {
+        const slide = pptx.addSlide();
+        slide.background = { color: s.theme };
+        slide.addText(s.title, {
+          x: 0.6, y: 0.45, w: 12.1, h: 1.1,
+          fontFace: 'Segoe UI', fontSize: 28, bold: true, color: '2C2750',
+        });
+        if (s.sub) {
+          slide.addText(s.sub, {
+            x: 0.6, y: 1.35, w: 12.1, h: 0.6,
+            fontFace: 'Segoe UI', fontSize: 17, italic: true, color: '5B6372',
+          });
+        }
+        slide.addText(
+          s.bullets.map(b => ({ text: b, options: { bullet: { code: '25A0', indentLevel: 0 }, breakLine: true, paraSpaceAfter: 10 } })),
+          { x: 0.6, y: s.sub ? 2.1 : 1.7, w: 12.1, h: 5.0, fontFace: 'Segoe UI', fontSize: 15, color: '3A4154', valign: 'top', lineSpacingMultiple: 1.15 }
+        );
+        slide.addText('MedCore AI · AI Lab · SSUET 2026', {
+          x: 0.6, y: 7.05, w: 12.1, h: 0.35,
+          fontFace: 'Segoe UI', fontSize: 10, color: '9AA0B4',
+        });
+      });
+
+      await pptx.writeFile({ fileName: 'MedCore-AI-Presentation.pptx' });
+    } catch (err) {
+      alert('Could not generate PowerPoint file: ' + err.message);
+    } finally {
+      btn.textContent = original;
+    }
+  });
+</script>
+
+</body>
+</html>
