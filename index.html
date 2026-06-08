@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSUET Presentations — Sir Syed University</title>
+<style>
+:root{
+  --bg:#07091a;--cyan:#00d9ff;--green:#00ff88;--purple:#9b50e1;
+  --text:#e2e8f0;--muted:#94a3b8;--border:rgba(0,217,255,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,217,255,.07) 0,transparent 55%),radial-gradient(circle at 80% 70%,rgba(155,80,225,.06) 0,transparent 55%);pointer-events:none;z-index:-1}
+.badge{display:inline-block;padding:7px 22px;background:rgba(0,217,255,.1);border:1px solid var(--border);border-radius:50px;color:var(--cyan);font-size:.78em;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:24px}
+h1{font-size:clamp(2em,5vw,3.4em);font-weight:900;line-height:1.1;margin-bottom:14px;
+  background:linear-gradient(135deg,#fff 0%,var(--cyan) 50%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+p.sub{color:var(--muted);max-width:520px;margin-bottom:46px;line-height:1.6}
+.grid{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;max-width:920px}
+.card{flex:1 1 260px;max-width:300px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;
+  padding:28px 24px;text-decoration:none;color:inherit;transition:all .25s;text-align:left}
+.card:hover{transform:translateY(-4px);border-color:var(--cyan);background:rgba(0,217,255,.06)}
+.card .tag{font-size:.72em;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px}
+.card h2{font-size:1.25em;font-weight:800;margin-bottom:8px;color:#fff}
+.card p{font-size:.88em;color:var(--muted);line-height:1.5}
+.card .go{margin-top:16px;font-size:.8em;font-weight:700;color:var(--green)}
+footer{margin-top:54px;color:var(--muted);font-size:.8em}
+</style>
+</head>
+<body>
+<span class="badge">Sir Syed University of Engineering &amp; Technology</span>
+<h1>SSUET Presentations</h1>
+<p class="sub">A collection of class projects and presentations — explore each below.</p>
+<div class="grid">
+  <a class="card" href="Secure-Virtual-Enterprise-Lab/">
+    <div class="tag">Cybersecurity</div>
+    <h2>Secure Virtual Enterprise Lab</h2>
+    <p>Hands-on virtual enterprise network lab covering AD, pfSense, ESXi and more.</p>
+    <div class="go">Open presentation →</div>
+  </a>
+  <a class="card" href="Graphics-n-Multimedia/">
+    <div class="tag">Graphics &amp; Multimedia</div>
+    <h2>Animation — Group 3</h2>
+    <p>Principles and techniques of animation in multimedia, presented interactively.</p>
+    <div class="go">Open presentation →</div>
+  </a>
+  <a class="card" href="AI-LAB/">
+    <div class="tag">Artificial Intelligence</div>
+    <h2>MedCore-AI</h2>
+    <p>AI lab project exploring applied machine learning in healthcare.</p>
+    <div class="go">Open presentation →</div>
+  </a>
+</div>
+<footer>SSUET Presentations · hosted on GitHub Pages</footer>
+</body>
+</html>
