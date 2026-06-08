@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presenter Guide — Animation Group 3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#04041a;--card:#0d0d30;--card2:#13133f;--cy:#00D7FF;--pu:#9B50E1;--gn:#2EDC73;--or:#FF9400;--yl:#FFD700;--wh:#fff;--mu:#697898;--pk:#FF5AA2;--rd:#FF4444}
+body{background:var(--bg);color:var(--wh);font-family:'Segoe UI',system-ui,sans-serif;padding:14px;max-width:960px;margin:0 auto}
+a{color:inherit;text-decoration:none}
+
+/* ── HEADER ── */
+.site-header{text-align:center;padding:20px 0 16px;border-bottom:1px solid #1a1a45;margin-bottom:22px}
+.site-header h1{font-size:clamp(22px,5vw,36px);color:var(--cy);letter-spacing:2px;margin-bottom:4px}
+.site-header p{color:var(--mu);font-size:clamp(11px,2.5vw,14px)}
+.pres-link{display:inline-block;margin-top:12px;padding:10px 24px;background:linear-gradient(135deg,var(--cy),var(--pu));color:var(--bg);font-weight:900;border-radius:8px;font-size:clamp(12px,3vw,15px);letter-spacing:.5px}
+.pres-link:hover{opacity:.9}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:14px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:7px;font-size:clamp(10px,2.5vw,13px)}
+.ld{width:13px;height:13px;border-radius:3px}
+
+/* ── PRESENTER BLOCKS ── */
+.pb{border-radius:12px;margin-bottom:26px;overflow:hidden;border:1.5px solid}
+.h-block{border-color:var(--cy)}.t-block{border-color:var(--pu)}.a-block{border-color:var(--gn)}
+.ph{padding:14px 18px;display:flex;align-items:center;gap:14px}
+.h-block .ph{background:linear-gradient(135deg,#001525,var(--bg))}
+.t-block .ph{background:linear-gradient(135deg,#150a28,var(--bg))}
+.a-block .ph{background:linear-gradient(135deg,#061a0e,var(--bg))}
+.av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:900;flex-shrink:0}
+.h-block .av{background:var(--cy);color:var(--bg)}.t-block .av{background:var(--pu);color:#fff}.a-block .av{background:var(--gn);color:var(--bg)}
+.pi h2{font-size:clamp(14px,3.5vw,19px);letter-spacing:.5px}
+.h-block .pi h2{color:var(--cy)}.t-block .pi h2{color:var(--pu)}.a-block .pi h2{color:var(--gn)}
+.pi .roll{color:var(--mu);font-size:11px;margin-top:2px}
+.stag{font-size:11px;margin-top:5px;padding:3px 10px;border-radius:20px;display:inline-block}
+.h-block .stag{background:#001c2e;color:var(--cy);border:1px solid var(--cy)}
+.t-block .stag{background:#130a22;color:var(--pu);border:1px solid var(--pu)}
+.a-block .stag{background:#051207;color:var(--gn);border:1px solid var(--gn)}
+
+/* ── SLIDE GRID ── */
+.sg{padding:12px 14px 16px;display:grid;gap:13px}
+.sg.c2{grid-template-columns:1fr 1fr}
+.sc{background:var(--card2);border-radius:8px;padding:14px;border-left:4px solid}
+.h-block .sc{border-color:var(--cy)}.t-block .sc{border-color:var(--pu)}.a-block .sc{border-color:var(--gn)}
+.snum{font-size:10px;color:var(--mu);margin-bottom:3px}
+.stitle{font-size:clamp(12px,3vw,15px);font-weight:700;margin-bottom:10px}
+.h-block .stitle{color:var(--cy)}.t-block .stitle{color:var(--pu)}.a-block .stitle{color:var(--gn)}
+
+/* ── OPEN BUTTON ── */
+.open-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;border:none;margin-bottom:12px;letter-spacing:.3px;transition:opacity .2s}
+.h-block .open-btn{background:var(--cy);color:var(--bg)}.t-block .open-btn{background:var(--pu);color:#fff}.a-block .open-btn{background:var(--gn);color:var(--bg)}
+.open-btn:hover{opacity:.8}
+
+/* ── TALKING POINTS ── */
+ul.tp{list-style:none;margin-bottom:10px}
+ul.tp li{padding:5px 0;font-size:clamp(10.5px,2.5vw,12.5px);color:#c0cce8;border-bottom:1px solid #0d1535;display:flex;gap:8px;line-height:1.45}
+ul.tp li:last-child{border-bottom:none}
+.tp-arrow{flex-shrink:0;font-size:.65em;margin-top:4px}
+.h-block .tp-arrow{color:var(--cy)}.t-block .tp-arrow{color:var(--pu)}.a-block .tp-arrow{color:var(--gn)}
+
+/* ── EXAMPLE BOX ── */
+.example{background:#050518;border:1px solid #1a1a55;border-radius:8px;padding:10px 13px;margin-top:10px;margin-bottom:8px}
+.example-label{font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.example-label span{font-size:14px}
+.example-line{font-size:clamp(10px,2.3vw,12px);color:#a8b8d8;line-height:1.5;padding:3px 0}
+.example-line b{color:var(--yl)}
+.example-line i{color:var(--mu)}
+
+/* ── KEY / CUE ── */
+.key{background:#08082a;border:1px solid #1a1a55;border-radius:6px;padding:8px 12px;margin-top:9px;font-size:clamp(10px,2.2vw,12px);line-height:1.45}
+.key strong{color:var(--yl)}
+.cue{border-radius:6px;padding:8px 12px;margin-top:8px;font-size:clamp(10px,2.2vw,12px);line-height:1.45}
+.h-block .cue{background:#001020;border:1px dashed var(--cy);color:var(--cy)}
+.t-block .cue{background:#100820;border:1px dashed var(--pu);color:var(--pu)}
+.a-block .cue{background:#051007;border:1px dashed var(--gn);color:var(--gn)}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,#1a1a55,transparent);margin:10px 0}
+
+/* ── TIPS ── */
+.tips{background:var(--card);border:1.5px solid var(--yl);border-radius:10px;padding:18px 20px;margin-top:20px}
+.tips h3{color:var(--yl);margin-bottom:13px;font-size:clamp(14px,3vw,17px)}
+.tips ul{list-style:none}
+.tips li{padding:6px 0;font-size:clamp(10.5px,2.4vw,13px);color:#c0cce8;border-bottom:1px solid #1a1a45;line-height:1.4}
+.tips li:last-child{border-bottom:none}
+.tips li::before{content:"★ ";color:var(--yl);font-size:.85em}
+
+/* ── IMAGES LIST ── */
+.img-box{background:#08081e;border:1px solid rgba(0,215,255,.25);border-radius:8px;padding:13px 16px;margin-top:16px}
+.img-box h4{color:var(--cy);font-size:clamp(12px,2.5vw,14px);margin-bottom:10px}
+.tags{display:flex;gap:7px;flex-wrap:wrap}
+.tag{background:var(--card2);color:#c0cce8;font-size:clamp(9px,2vw,11px);padding:3px 9px;border-radius:20px;border:1px solid #1a2050}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){.sg.c2{grid-template-columns:1fr}.ph{gap:10px}.av{width:46px;height:46px}}
+</style>
+</head>
+<body>
+
+<!-- ── SITE HEADER ── -->
+<div class="site-header">
+  <h1>🎬 PRESENTER GUIDE</h1>
+  <p>Animation — Group 3 &nbsp;·&nbsp; Graphics &amp; Multimedia &nbsp;·&nbsp; SMIT<br>
+  Guide se presentation seedha open hoti hai — har "Open Slide" button dabao</p>
+  <a class="pres-link" href="Animation_Presentation.html" target="_blank">▶ Open Full Presentation</a>
+</div>
+
+<!-- ── LEGEND ── -->
+<div class="legend">
+  <div class="li"><div class="ld" style="background:var(--cy)"></div>Hashir Junaid — Slides 1–5</div>
+  <div class="li"><div class="ld" style="background:var(--pu)"></div>Taha Haider — Slides 6–9</div>
+  <div class="li"><div class="ld" style="background:var(--gn)"></div>Abdul Rahman Baig — Slides 10–13</div>
+</div>
+
+<!-- ══════════════════════ HASHIR ══════════════════════ -->
+<div class="pb h-block">
+  <div class="ph">
+    <div class="av">H</div>
+    <div class="pi">
+      <h2>HASHIR JUNAID &nbsp;·&nbsp; 2023F-BCS-358</h2>
+      <div class="roll">Presents: Introduction · Usage · Techniques</div>
+      <span class="stag">Slides 1 – 5 &nbsp;(~10 min)</span>
+    </div>
+  </div>
+
+  <div class="sg c2">
+
+    <!-- SLIDE 1 -->
+    <div class="sc">
+      <div class="snum">SLIDE 1</div>
+      <div class="stitle">TITLE SLIDE</div>
+      <a class="open-btn" href="Animation_Presentation.html#s1" target="_blank"><span>↗</span> Open Slide 1</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span>Say: <em>"Assalam o alaikum, I'm Hashir Junaid — and this is our Group 3 presentation on Animation."</em></span></li>
+        <li><span class="tp-arrow">▶</span><span>Point to each name card: introduce Taha and Abdul Rahman briefly</span></li>
+        <li><span class="tp-arrow">▶</span><span>Say: <em>"Today we cover 9 complete topics — from what animation is, to how it's made professionally."</em></span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--cy)"><span>💡</span> OPENING HOOK — say this to grab attention:</div>
+        <div class="example-line"><b>"Animation is not just cartoons."</b></div>
+        <div class="example-line">The Marvel Avengers VFX, NASA mission previews, the Boeing 787 pilot training simulator, Khan Academy lessons — <b>all of these run on animation.</b></div>
+        <div class="example-line"><i>Then say: "Let me show you how it all works."</i></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="sc">
+      <div class="snum">SLIDE 2</div>
+      <div class="stitle">OVERVIEW — 9 TOPICS</div>
+      <a class="open-btn" href="Animation_Presentation.html#s2" target="_blank"><span>↗</span> Open Slide 2</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span>Point to each box one by one as you name the topic</span></li>
+        <li><span class="tp-arrow">▶</span><span>Say: <em>"I'll cover topics 1–3, Taha covers 4–6, and Abdul Rahman covers 7–9."</em></span></li>
+        <li><span class="tp-arrow">▶</span><span>Keep this UNDER 30 seconds — just a quick map, then move on</span></li>
+      </ul>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="sc" style="grid-column:1/-1">
+      <div class="snum">SLIDE 3</div>
+      <div class="stitle">01 · INTRODUCTION TO ANIMATION</div>
+      <a class="open-btn" href="Animation_Presentation.html#s3" target="_blank"><span>↗</span> Open Slide 3</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>Frame diagram at top:</b> "See these 5 boxes — each one is a single photograph. Show them at 24 per second and your brain sees smooth motion. That's animation."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Definition card:</b> "Still images + rapid display = illusion of motion. Two brain effects make this work."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Persistence of Vision (purple box):</b> "Physical effect in your eye — when you see a bright image, your retina holds it for about 50 milliseconds AFTER it disappears. The next frame arrives before the first one fades."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Phi Phenomenon (green box):</b> "Psychological effect — your brain INFERS motion between two still objects. Even if your eye has no retention, your brain fills in the gap."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>FPS badges:</b> "24 fps = cinema gold standard since the 1920s. 30 = TV. 60 = modern gaming. Below 12 fps and you start seeing flicker — your brain can no longer fake the motion."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--cy)"><span>📖</span> REAL EXAMPLES TO MENTION:</div>
+        <div class="example-line"><b>Persistence of Vision:</b> Stare at a bright light, then look away — you still see it for a moment. That's POV.</div>
+        <div class="example-line"><b>Phi Phenomenon:</b> A neon sign showing an arrow "flowing" left — it's just 3 static bulbs turning on and off. Your brain creates the motion.</div>
+        <div class="example-line"><b>FPS in real life:</b> Old Indian films were shot at 24fps. Pakistani PTV dramas were 30fps. PUBG Mobile runs at 60fps. If your phone drops below 12fps during a game, it starts "lagging" — you see the individual frames.</div>
+        <div class="example-line"><b>First ever animation:</b> Muybridge (1878) took 12 photos of a horse galloping. Played back fast — first animation in history.</div>
+      </div>
+      <div class="cue">🎯 POINT AT: The 5 colored frame boxes at the top — "each box is ONE photograph, shown 24 times per second"</div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="sc">
+      <div class="snum">SLIDE 4</div>
+      <div class="stitle">02 · USAGE OF ANIMATION</div>
+      <a class="open-btn" href="Animation_Presentation.html#s4" target="_blank"><span>↗</span> Open Slide 4</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>ARTISTIC:</b> "Spider-Man: Into the Spider-Verse won the Oscar in 2018. Every frame was hand-crafted to look like a comic book. Pure art."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>STORYTELLING:</b> "Pixar's Toy Story made $362 million on a $30 million budget. Studio Ghibli's Spirited Away is the highest-grossing Japanese film ever."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>SCIENTIFIC:</b> "You cannot put a camera inside a DNA molecule. You cannot film inside a human heart during surgery. Animation makes the invisible visible."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>INSTRUCTIONAL:</b> "Boeing trains pilots using animated simulators BEFORE they ever touch a real plane — crashes in simulation cost nothing."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--cy)"><span>🌍</span> MEMORABLE EXAMPLES:</div>
+        <div class="example-line"><b>Artistic:</b> Spider-Verse used 140+ unique animation styles. Different characters literally animate at different frame rates in the same scene.</div>
+        <div class="example-line"><b>Scientific:</b> The COVID-19 virus spike protein — every 3D visualization you saw on the news was animation. No one has ever photographed a virus binding to a cell.</div>
+        <div class="example-line"><b>Instructional:</b> Pakistan Air Force pilots train on flight simulators (animated cockpits) for 100+ hours before flying real jets.</div>
+      </div>
+      <div class="cue">🎯 POINT AT: Each box one by one — top-left (Artistic), top-right (Storytelling), bottom-left (Scientific), bottom-right (Instructional)</div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="sc">
+      <div class="snum">SLIDE 5</div>
+      <div class="stitle">03 · ANIMATION TECHNIQUES</div>
+      <a class="open-btn" href="Animation_Presentation.html#s5" target="_blank"><span>↗</span> Open Slide 5</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>CEL column:</b> "1910s — every frame hand-painted on transparent plastic. Tom &amp; Jerry (1940–1958): over 120,000 individual cel sheets painted."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>PATH column:</b> "1970s — you draw a path, the object follows automatically. Every button hover animation on a website today is path animation."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>COMPUTER column:</b> "1980s — Pixar's Toy Story (1995) ended cel animation. Today even cartoons that look hand-drawn are made digitally."</span></li>
+        <li><span class="tp-arrow">▶</span><span>Point at the timeline SVG: "Cel → Path → Computer. Each one built on the previous."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--cy)"><span>📌</span> KEY EXAMPLES:</div>
+        <div class="example-line"><b>Cel:</b> Tom &amp; Jerry, Snow White (1937 — first full-length animated film), Bambi, Akira (1988)</div>
+        <div class="example-line"><b>Path:</b> The spinning loader on your phone, CSS menu animations, After Effects logo reveals</div>
+        <div class="example-line"><b>Computer:</b> Every Pixar and DreamWorks film, Fortnite, COD — and even "Demon Slayer" (looks hand-drawn, but it's digital)</div>
+      </div>
+      <div class="cue">🎯 HANDOFF LINE: "Now Taha will go deeper into each type and show you how computer animation actually works."</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════ TAHA ══════════════════════ -->
+<div class="pb t-block">
+  <div class="ph">
+    <div class="av">T</div>
+    <div class="pi">
+      <h2>TAHA HAIDER &nbsp;·&nbsp; 2023F-BCS-079</h2>
+      <div class="roll">Presents: Cel Types · Path · Computer Anim · FK/IK · Levels</div>
+      <span class="stag">Slides 6 – 9 &nbsp;(~10 min)</span>
+    </div>
+  </div>
+
+  <div class="sg c2">
+
+    <!-- SLIDE 6 -->
+    <div class="sc">
+      <div class="snum">SLIDE 6</div>
+      <div class="stitle">04A · CEL ANIMATION TYPES</div>
+      <a class="open-btn" href="Animation_Presentation.html#s6" target="_blank"><span>↗</span> Open Slide 6</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>Stack diagram:</b> "Background stays still — mountains, a room, a street. Then transparent CEL 1 goes on top with the character base. CEL 2 adds detail. CEL 3 adds expressions. All stacked = 1 frame."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>KEYFRAMES:</b> "Senior animators draw ONLY the most important poses. Character standing still — that's keyframe 1. Peak of the jump — keyframe 12. Landed — keyframe 24."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>TWEENING:</b> "Junior animators fill the 22 frames between those 3 keyframes. More tweening = smoother. Software like Adobe Animate does this automatically today."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>PENCIL TEST:</b> "Before spending 3 weeks painting 500 cel sheets, they quickly film rough pencil sketches to check if the timing is right. Saves enormous cost."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--pu)"><span>🎨</span> CEL ANIMATION FACTS:</div>
+        <div class="example-line"><b>Tom &amp; Jerry (1940s):</b> Background artists repainted the SAME kitchen background hundreds of times — just changing the angle. Characters were on separate cels.</div>
+        <div class="example-line"><b>Cost:</b> Snow White (1937) cost $1.4 million — equivalent to ~$30 million today. Most of the cost was painting 2 million cel frames by hand.</div>
+        <div class="example-line"><b>Keyframe example:</b> A character throwing a ball: Frame 1 = arm back (keyframe). Frame 8 = arm at peak (keyframe). Frame 16 = arm forward, ball released (keyframe). Everything in between = tweening.</div>
+      </div>
+      <div class="cue">🎯 DEMO: Hold your hands flat on top of each other like stacked papers — "this is how cels were physically stacked and photographed"</div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="sc">
+      <div class="snum">SLIDE 7</div>
+      <div class="stitle">04B · PATH ANIMATION</div>
+      <a class="open-btn" href="Animation_Presentation.html#s7" target="_blank"><span>↗</span> Open Slide 7</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span>"Path animation — you define a route, the software moves the object along it. You don't draw every frame."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Straight line (left SVG):</b> "Text revealing left to right on a website — straight path, constant speed."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Bezier curve (right SVG):</b> "A ball thrown through the air follows a curve. The orange dots are control points — they shape the curve."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>EASING (gold box):</b> "Slow in + slow out. A car doesn't instantly hit 100 km/h — it accelerates. It doesn't stop instantly — it decelerates. Same in animation."</span></li>
+        <li><span class="tp-arrow">▶</span><span>Walk through 6 steps on the left — 5 seconds each</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--pu)"><span>📱</span> PATH ANIMATION IN DAILY LIFE:</div>
+        <div class="example-line"><b>WhatsApp:</b> When a message appears, it slides in from the bottom — that's path animation on a straight vertical path.</div>
+        <div class="example-line"><b>Instagram Like:</b> The red heart that "bounces" when you double-tap — path animation with Bezier easing.</div>
+        <div class="example-line"><b>YouTube loading spinner:</b> Circular path animation with ease in/out.</div>
+        <div class="example-line"><b>Game projectile:</b> A bullet in PUBG follows a Bezier curve path with gravity effect — path animation with physics.</div>
+      </div>
+      <div class="cue">🎯 POINT AT: The pink ball on the Bezier curve SVG — "this ball is at this position right now, following this exact curved path to the end"</div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="sc">
+      <div class="snum">SLIDE 8</div>
+      <div class="stitle">05 · COMPUTER ANIMATION + FK/IK</div>
+      <a class="open-btn" href="Animation_Presentation.html#s8" target="_blank"><span>↗</span> Open Slide 8</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>Table, row by row:</b> "Hand-drawn vs digital. Manual frame-by-frame vs auto-tweening. Physical film cans in a warehouse vs a digital file on Google Drive. Months per minute vs real-time preview."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>FK diagram (left):</b> "Forward Kinematics — move the shoulder joint, elbow automatically follows, then wrist, then fingers. Like controlling a puppet — you move the top, everything below follows."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>IK diagram (right):</b> "Inverse Kinematics — you just PLACE the hand where you want it, and the software automatically figures out where the elbow and shoulder need to be. Like reaching for a cup — you aim your hand, your brain calculates the rest."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Morphing box:</b> "Map 50 points on face A, same 50 points on face B — software interpolates. Michael Jackson's Black or White video (1991) — 8 different people morphing into each other. First time the world saw morphing."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--pu)"><span>🎮</span> FK vs IK — REAL WORLD:</div>
+        <div class="example-line"><b>FK Example:</b> A robot arm in a factory — you move each joint precisely. A puppet show — control the top joints manually. Flag waving in wind — FK because the pole drives the cloth below.</div>
+        <div class="example-line"><b>IK Example:</b> Your arm right now — reach for your phone without thinking about your shoulder angle. That's IK. Spider-Man climbing a wall — animator places his hands on the wall, IK calculates the body pose automatically.</div>
+        <div class="example-line"><b>Morphing:</b> T-1000 in Terminator 2 (liquid metal). Logo reveals. Face filters on Snapchat = realtime morphing using IK + morphing together.</div>
+      </div>
+      <div class="cue">🎯 DEMO: Physically demonstrate IK — reach for your water bottle and say "I aimed for the bottle, my brain calculated all the joint angles — that's exactly how IK works in software."</div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="sc">
+      <div class="snum">SLIDE 9</div>
+      <div class="stitle">06 · LEVELS OF ANIMATION</div>
+      <a class="open-btn" href="Animation_Presentation.html#s9" target="_blank"><span>↗</span> Open Slide 9</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>BASIC ⭐:</b> "GIFs, CSS, PowerPoint. You've all made this in presentations. Days to learn. Used for social media, marketing."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>INTERMEDIATE ⭐⭐:</b> "After Effects, Adobe Animate. YouTube explainer channels like Kurzgesagt use After Effects. Takes months. Used for 2D games, music visualizers."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>ADVANCED ⭐⭐⭐:</b> "Autodesk Maya, Houdini, Unreal. This makes Marvel movies. Takes years. Houdini was used for the Thanos snap in Avengers."</span></li>
+        <li><span class="tp-arrow">▶</span><span>"As CS engineers — basic CSS animation in web dev makes your portfolio look 10x better. Intermediate opens game dev. Advanced is a dedicated career path."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--pu)"><span>💼</span> TOOLS YOU KNOW vs TOOLS PROS USE:</div>
+        <div class="example-line"><b>Basic:</b> Every CSS website animation you've seen → PowerPoint → TikTok's built-in effects. <i>Salary: Entry level</i></div>
+        <div class="example-line"><b>Intermediate:</b> Kurzgesagt (YouTube, 22M subs) uses After Effects. Every WhatsApp sticker was made with Animate or Spine. <i>Salary: Mid-level designer</i></div>
+        <div class="example-line"><b>Advanced:</b> Houdini was used for the destruction in every DC/Marvel movie. Maya is the standard at Pixar, ILM, Weta. <i>Salary: $80k–$150k USD at studios</i></div>
+        <div class="example-line"><b>FREE tip:</b> Blender is 100% free and can do advanced 3D animation. The Spider-Man: No Way Home VFX team used Blender for some shots.</div>
+      </div>
+      <div class="cue">🎯 HANDOFF LINE: "Now Abdul Rahman will take us through the Disney Principles that every professional animator uses, plus Animation Space and the Process pipeline."</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════ ABDUL RAHMAN ══════════════════════ -->
+<div class="pb a-block">
+  <div class="ph">
+    <div class="av">A</div>
+    <div class="pi">
+      <h2>ABDUL RAHMAN BAIG &nbsp;·&nbsp; 2023F-BCS-100</h2>
+      <div class="roll">Presents: 12 Principles · Animation Space · Process · Summary</div>
+      <span class="stag">Slides 10 – 13 &nbsp;(~10 min)</span>
+    </div>
+  </div>
+
+  <div class="sg c2">
+
+    <!-- SLIDE 10 -->
+    <div class="sc" style="grid-column:1/-1">
+      <div class="snum">SLIDE 10</div>
+      <div class="stitle">07A · 12 PRINCIPLES — PART 1 (1–6)</div>
+      <a class="open-btn" href="Animation_Presentation.html#s10" target="_blank"><span>↗</span> Open Slide 10</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span>Start: "These 12 principles were documented by Disney animators Ollie Johnston &amp; Frank Thomas in their 1981 book 'The Illusion of Life'. Every professional animator on Earth still uses them."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>01 Squash &amp; Stretch:</b> "Deform for weight and life. Ball SQUASHES flat when it hits the ground — because it has mass, it can't be rigid. Ball STRETCHES tall when it's moving fast — because of velocity. Golden rule: VOLUME stays constant. A squashed ball gets wider as it gets flatter."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>02 Anticipation:</b> "Small OPPOSITE action before main action. A baseball pitcher WINDS UP before throwing. A character CROUCHES before jumping. It mentally prepares the audience for what's coming."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>03 Staging:</b> "One clear idea at a time. Use a clear silhouette the audience can read instantly. Camera angle serves the story."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>04 Straight Ahead vs Pose-to-Pose:</b> "SA = draw every single frame from start to finish — spontaneous but hard to control. PtP = draw key poses first (like sketching the checkpoints), then fill in — controlled and planned."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>05 Follow Through &amp; Overlap:</b> "When a character stops running, their hair, coat, and scarf keep moving for a moment. Different parts stop at different times."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>06 Ease In/Out:</b> "Nothing in nature starts at full speed or stops instantly. A car accelerates, then decelerates. This single principle makes the biggest difference between amateur and professional animation."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--gn)"><span>🏀</span> EXAMPLES FOR EACH PRINCIPLE:</div>
+        <div class="example-line"><b>Squash &amp; Stretch:</b> A bouncing ball. A cat landing from a jump. A face making an extreme expression — cheeks puffing out (stretch), eyes squinting (squash).</div>
+        <div class="example-line"><b>Anticipation:</b> Bowler in cricket winds arm back first. Tom &amp; Jerry — Tom raises fist back before slamming. Looney Tunes character runs off a cliff but pauses (anticipation) before falling.</div>
+        <div class="example-line"><b>Staging:</b> In drama, a villain is shown from a low angle (looking up at them = powerful). Hero shown from above = vulnerable. Black silhouette against white background = instantly readable.</div>
+        <div class="example-line"><b>Ease In/Out:</b> Drag a window in Windows — notice how it slows when you drop it? That's ease out. Apps opening on iPhone? Ease in then ease out. Remove it and everything feels "robotic."</div>
+      </div>
+      <div class="cue">🎯 DEMO: Physically squash your fist against your palm — show squash. Then do a "throwing" motion with your arm — show anticipation winding up. The audience will NEVER forget these two principles.</div>
+    </div>
+
+    <!-- SLIDE 11 -->
+    <div class="sc" style="grid-column:1/-1">
+      <div class="snum">SLIDE 11</div>
+      <div class="stitle">07B · 12 PRINCIPLES — PART 2 (7–12)</div>
+      <a class="open-btn" href="Animation_Presentation.html#s11" target="_blank"><span>↗</span> Open Slide 11</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>07 Arcs:</b> "All natural motion follows curved paths. Swing your arm right now — it follows an arc. Eyes moving left to right follow a tiny arc. Throw a ball — parabola arc. ONLY robots and machines move in perfect straight lines — that's how you tell a badly animated robot from a good one."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>08 Secondary Action:</b> "Walking is the main action. Arms swinging is secondary. Hair bouncing is secondary. Talking is main — eyebrows moving is secondary. The secondary enriches the main but must NEVER overpower it."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>09 Timing:</b> "Number of frames = weight and personality. Eye blink = 6 frames (very fast). Head turn = 12 frames (medium). Heavy object falling = very few frames (fast). A feather falling = many frames (slow). Wrong timing and nothing else matters."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>10 Exaggeration:</b> "Not about being unrealistic — about making the TRUTH more visible. A sad person cries a little. A SAD cartoon character cries a RIVER. Same emotion, exaggerated for impact."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>11 Solid Drawing:</b> "Characters must feel like 3D objects even in 2D. Think in cubes and spheres. Avoid 'twinning' — where both arms do the exact same thing mirrored — it looks unnatural."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>12 Appeal:</b> "A CHARACTER must be interesting to WATCH. Not just cute — a powerful villain has appeal. A complex anti-hero has appeal. Strong silhouette + personality + readable expression = appeal."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--gn)"><span>🎬</span> REAL FILM EXAMPLES:</div>
+        <div class="example-line"><b>Arcs:</b> In every Pixar film, if you pause on any arm swing you'll see a perfect arc. Remove arcs — instant robot look. That's why badly-made games feel "stiff."</div>
+        <div class="example-line"><b>Timing:</b> Wile E. Coyote runs off a cliff, hangs in mid-air (pause = timing comedy), THEN looks down, THEN falls. The pause is 12 frames of "timing" — that pause IS the joke.</div>
+        <div class="example-line"><b>Exaggeration:</b> Tom &amp; Jerry — when Tom is hit, his eyes pop out of his skull. His teeth fly out. That's exaggerated PAIN — more fun to watch than realistic pain.</div>
+        <div class="example-line"><b>Appeal:</b> Darth Vader is a villain but has MASSIVE appeal — iconic silhouette, imposing movement, distinctive sound. Thanos in Avengers — Marvel spent years making him feel weighty and purposeful.</div>
+      </div>
+      <div class="cue">🎯 POINT AT: The 12-number counter visible on the slide — "all 12 principles covered. These were written in 1981 and are STILL the global standard."</div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="sc">
+      <div class="snum">SLIDE 12</div>
+      <div class="stitle">08 · ANIMATION SPACE</div>
+      <a class="open-btn" href="Animation_Presentation.html#s12" target="_blank"><span>↗</span> Open Slide 12</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span><b>SVG diagrams at top:</b> "Left — 2D has only X and Y. Middle — 2.5D looks 3D but is really 2D layers. Right — 3D has X, Y AND Z — true depth."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>2D:</b> "Flat, like drawing on paper. Tom &amp; Jerry, original Super Mario, Clash of Clans — all 2D. Simple to create, low hardware requirement."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>2.5D:</b> "Technically still 2D sprites, but parallax scrolling makes it feel 3D. When you scroll in Paper Mario — foreground moves faster than background, tricking your brain into seeing depth."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>3D:</b> "True depth, real volume, any camera angle. Toy Story, Frozen, Fortnite, COD. The camera can orbit 360° around any object — impossible in 2D."</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--gn)"><span>🎮</span> GAMES YOU KNOW — WHICH SPACE?</div>
+        <div class="example-line"><b>2D:</b> Angry Birds, Clash Royale, Subway Surfers (2D sprites on 3D rail), old Pokémon games, Street Fighter</div>
+        <div class="example-line"><b>2.5D:</b> Paper Mario, Ori and the Blind Forest, Little Big Planet, Hollow Knight, Cuphead</div>
+        <div class="example-line"><b>3D:</b> PUBG, Fortnite, Call of Duty, FIFA, every Pixar/DreamWorks film, GTA</div>
+        <div class="example-line"><b>Fun fact:</b> Clash of Clans uses 2.5D — the buildings look 3D but are actually 2D sprites drawn from an angle. That's why you can't rotate the map.</div>
+      </div>
+      <div class="cue">🎯 POINT AT: The three axis diagrams — hold up 1, 2, then 3 fingers as you go through each space</div>
+    </div>
+
+    <!-- SLIDE 13 -->
+    <div class="sc">
+      <div class="snum">SLIDE 13</div>
+      <div class="stitle">09 · PROCESS + SUMMARY + CLOSE</div>
+      <a class="open-btn" href="Animation_Presentation.html#s13" target="_blank"><span>↗</span> Open Slide 13</a>
+      <ul class="tp">
+        <li><span class="tp-arrow">▶</span><span>"Every animation project follows this same 4-stage pipeline — from a 10-second Instagram ad to a 2-hour Pixar film."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Step 1 — Organize:</b> "Define goals, assign team roles, create the style guide and storyboard. Pixar spent 5 YEARS in pre-production for Inside Out before animating a single scene."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Step 2 — Choose Tool:</b> "2D project → Toon Boom. 3D film → Maya or Blender. Motion graphics → After Effects. Game → Unity or Unreal."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Step 3 — Build &amp; Tweak (🔄 ITERATIVE):</b> "Keyframes, apply the 12 principles, team review, improve, repeat. Pixar does 100+ review cycles. This step is never done just once."</span></li>
+        <li><span class="tp-arrow">▶</span><span><b>Step 4 — Post-Process:</b> "Render final frames, color grade, add sound design, QA test, export as MP4 or MOV."</span></li>
+        <li><span class="tp-arrow">▶</span><span>Point at the green bar: "Step 3 is ITERATIVE — this is the most important concept in the process."</span></li>
+        <li><span class="tp-arrow">▶</span><span>Quickly point to each summary item — 1 sentence per topic</span></li>
+      </ul>
+      <div class="example">
+        <div class="example-label" style="color:var(--gn)"><span>🏭</span> REAL STUDIO PIPELINE NUMBERS:</div>
+        <div class="example-line"><b>Pixar's Soul (2020):</b> 5 years in development. 900+ artists. Step 3 (Build &amp; Tweak) took 3 of those 5 years.</div>
+        <div class="example-line"><b>Render time:</b> One frame of Monsters University = 100 hours to render on a single computer. Pixar used 2,000 computers rendering in parallel.</div>
+        <div class="example-line"><b>Team size example:</b> A YouTube animator (Kurzgesagt video) = 1–5 people, 2–3 months. Avengers Endgame VFX = 3,000 artists, 3 years.</div>
+        <div class="example-line"><b>For our project:</b> We followed a mini version of this same pipeline — organized topics, chose our tools (HTML/PPTX), built and tweaked, and now delivering the final output.</div>
+      </div>
+      <div class="key"><strong>CLOSING LINE:</strong> "Animation is not just a visual technique — it's how humans communicate complex ideas, tell stories, and understand science. From a flip-book in 1878 to a 3,000-person Marvel VFX team in 2024 — the principles remain the same. JazakAllah Khair — we're open for questions."</div>
+      <div class="cue">🎯 All three stand together at the Thank You screen — Hashir, Taha, Abdul Rahman all answer questions from their topics</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── PRESENTATION TIPS ── -->
+<div class="tips">
+  <h3>GOLDEN RULES — All Three Presenters</h3>
+  <ul>
+    <li><b>Don't read the slide</b> — the slide is your visual aid. You talk to the AUDIENCE, not the screen. If you're reading, you've lost them.</li>
+    <li><b>Point at specific parts</b> while talking — use your finger or a pointer. It directs the audience's eye exactly where you want it.</li>
+    <li><b>2–3 minutes per slide</b> — don't rush (you'll look nervous), don't drag (they'll get bored).</li>
+    <li><b>Use the "Open Slide" buttons</b> above to jump directly to any slide during your presentation</li>
+    <li><b>Phone navigation:</b> Swipe left/right on the presentation to go between slides</li>
+    <li><b>Use real examples from daily life</b> — WhatsApp animations, PUBG, Instagram, Clash of Clans. Audience connects to what they know.</li>
+    <li><b>Physical demos work:</b> Squash your fist (principle 1), swing your arm in an arc (principle 7), reach for something (show IK). These visual demos are remembered for days.</li>
+    <li><b>Handoff lines matter:</b> "Now Taha will explain..." and "Abdul Rahman will take us deeper..." — smooth handoffs make you look professional.</li>
+    <li><b>Unknown question?</b> Say: <em>"Good question — let me check / that's outside my section, [name] can answer that"</em>. Never guess.</li>
+    <li><b>Replace [IMAGE] placeholders</b> in the presentation file before the day — Google Images, save, and insert.</li>
+  </ul>
+</div>
+
+<!-- ── IMAGES LIST ── -->
+<div class="img-box">
+  <h4>IMAGES TO ADD — Search on Google Images and replace the placeholders in Animation_Presentation.html</h4>
+  <div class="tags">
+    <span class="tag">rubber ball squash stretch animation</span>
+    <span class="tag">persistence of vision eye diagram</span>
+    <span class="tag">flip book animation sequence</span>
+    <span class="tag">Disney cel animation sheet layers</span>
+    <span class="tag">Tom and Jerry cel sheet original</span>
+    <span class="tag">bezier curve path animation diagram</span>
+    <span class="tag">forward kinematics arm chain diagram</span>
+    <span class="tag">inverse kinematics character rig Blender</span>
+    <span class="tag">morphing face transformation Michael Jackson</span>
+    <span class="tag">Spider-Man Into Spider-Verse animation style</span>
+    <span class="tag">Blender 3D software interface screenshot</span>
+    <span class="tag">ease in ease out curve animation graph</span>
+    <span class="tag">2D vs 3D animation comparison</span>
+    <span class="tag">Toy Story Pixar 3D animation scene</span>
+    <span class="tag">Paper Mario 2.5D parallax gameplay</span>
+    <span class="tag">After Effects motion graphics timeline</span>
+    <span class="tag">Khan Academy lesson animation screenshot</span>
+    <span class="tag">NASA Mars mission animation visualization</span>
+    <span class="tag">Clash of Clans 2.5D isometric view</span>
+    <span class="tag">Autodesk Maya character animation</span>
+  </div>
+</div>
+
+<div style="text-align:center;color:var(--mu);font-size:11px;margin-top:20px;padding-bottom:20px;border-top:1px solid #1a1a45;padding-top:14px">
+  Group 3 &nbsp;·&nbsp; Hashir Junaid &nbsp;·&nbsp; Taha Haider &nbsp;·&nbsp; Abdul Rahman Baig &nbsp;·&nbsp; SMIT Graphics &amp; Multimedia
+</div>
+
+</body>
+</html>

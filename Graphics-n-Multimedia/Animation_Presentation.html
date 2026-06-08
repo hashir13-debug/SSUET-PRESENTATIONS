@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Animation — Group 3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#04041a;--card:#0d0d30;--card2:#13133f;
+  --cy:#00D7FF;--pu:#9B50E1;--or:#FF9400;--gn:#2EDC73;
+  --pk:#FF5AA2;--yl:#FFD700;--rd:#FF4444;
+  --wh:#ffffff;--mu:#697898;
+}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--wh);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;touch-action:none}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--cy),var(--pu));z-index:999;transition:width .3s}
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden}
+.slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transform:translateX(60px);transition:opacity .35s,transform .35s;pointer-events:none;display:flex;flex-direction:column}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.gone{opacity:0;transform:translateX(-60px)}
+.sh{padding:10px 14px 8px;background:rgba(8,8,35,.97);border-bottom:1px solid #1a1a45;display:flex;align-items:center;gap:10px;flex-shrink:0;min-height:54px}
+.sbadge{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;color:var(--bg)}
+.sh-info{flex:1;min-width:0}
+.sh-title{font-size:clamp(13px,3.8vw,20px);font-weight:700;letter-spacing:.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-sub{font-size:clamp(9px,2vw,11px);color:var(--mu);margin-top:1px}
+.ptag{font-size:10px;color:var(--mu);text-align:right;flex-shrink:0;line-height:1.3}
+.sb{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 4px;-webkit-overflow-scrolling:touch}
+.sb::-webkit-scrollbar{width:3px}
+.sb::-webkit-scrollbar-thumb{background:#1a1a45;border-radius:2px}
+#nav{position:fixed;bottom:0;left:0;right:0;height:46px;background:rgba(4,4,26,.97);border-top:1px solid #1a1a45;display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:999}
+.nb{background:var(--card2);border:1px solid #1a1a55;color:var(--wh);padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;user-select:none;touch-action:manipulation}
+.nb:active{opacity:.6}
+.nb:disabled{opacity:.3;cursor:default}
+#dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:180px}
+.dot{width:7px;height:7px;border-radius:50%;background:#1a1a45;cursor:pointer;transition:background .2s,transform .2s}
+.dot.on{transform:scale(1.4)}
+#ctr{font-size:10px;color:var(--mu);text-align:center;margin-top:2px}
+/* Cards */
+.card{background:var(--card);border-radius:8px;padding:11px 13px;margin-bottom:9px;border-left:3px solid}
+.card-t{font-size:clamp(12px,3vw,15px);font-weight:700;margin-bottom:6px}
+.card li,.card p{font-size:clamp(10.5px,2.5vw,13px);color:#c0cce8;padding:2.5px 0;padding-left:14px;position:relative;line-height:1.4}
+.card li{list-style:none}
+.card li::before{content:"•";position:absolute;left:2px;font-size:9px;top:4px}
+/* Grids */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px}
+/* Principle box */
+.pbox{background:var(--card);border-radius:8px;padding:10px;border-top:2px solid}
+.pnum{font-size:10px;font-weight:700;margin-bottom:2px;opacity:.75}
+.pname{font-size:clamp(10.5px,2.8vw,13px);font-weight:700;margin-bottom:4px}
+.pdesc{font-size:clamp(9.5px,2.2vw,11.5px);color:#a0b0cc;line-height:1.35}
+.pex{font-size:9px;color:var(--mu);margin-top:4px;font-style:italic}
+/* Image placeholder */
+.iph{border:1.5px dashed;border-radius:8px;padding:12px 8px;text-align:center;margin-bottom:9px;background:#080820}
+.iph-lbl{font-size:11px;font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px}
+.iph-desc{font-size:9.5px;color:var(--mu)}
+/* Table */
+.ctable{width:100%;border-collapse:collapse;font-size:clamp(9.5px,2.2vw,12px);margin-bottom:9px}
+.ctable th{padding:7px 8px;font-weight:700;background:var(--card2)}
+.ctable td{padding:5px 8px;border-bottom:1px solid #0d1235;color:#c0cce8}
+.ctable tr:nth-child(even) td{background:#0a0a25}
+/* Steps */
+.steps{display:flex;gap:5px;margin-bottom:9px;align-items:stretch}
+.step{flex:1;background:var(--card);border-radius:8px;padding:9px 7px;text-align:center;border-top:2px solid;min-width:0}
+.step-n{font-size:clamp(18px,5vw,26px);font-weight:900;display:block;margin-bottom:3px}
+.step-t{font-size:clamp(9px,2.2vw,12px);font-weight:700;margin-bottom:4px}
+.step-d{font-size:clamp(8.5px,1.8vw,10.5px);color:var(--mu);line-height:1.4;text-align:left}
+.sarrow{font-size:16px;color:var(--mu);display:flex;align-items:center;padding-bottom:4px;flex-shrink:0}
+/* Levels */
+.lvl{background:var(--card);border-radius:8px;padding:11px 10px;border-top:3px solid}
+.lvl-stars{font-size:14px;margin-bottom:4px}
+.lvl-t{font-size:clamp(12px,3vw,15px);font-weight:700;margin-bottom:4px}
+.lvl-time{font-size:9px;padding:2px 8px;border-radius:10px;display:inline-block;border:1px solid;margin-bottom:6px}
+.lvl-d{font-size:clamp(9.5px,2.2vw,11.5px);color:#c0cce8;line-height:1.45}
+/* Summary */
+.sum-item{background:var(--card);border-radius:6px;padding:8px;border-left:3px solid;display:flex;gap:7px;margin-bottom:6px}
+.sum-n{font-size:11px;font-weight:700;opacity:.8;flex-shrink:0}
+.sum-t{font-size:clamp(10px,2.5vw,12px);font-weight:700;display:block;margin-bottom:2px}
+.sum-d{font-size:clamp(9px,2vw,11px);color:#c0cce8;line-height:1.35}
+/* Space boxes */
+.spbox{background:var(--card);border-radius:8px;padding:11px 10px;border-top:3px solid}
+.sp-t{font-size:clamp(12px,3vw,15px);font-weight:700;margin-bottom:2px}
+.sp-s{font-size:10px;color:var(--mu);margin-bottom:6px}
+.sp-d{font-size:clamp(9.5px,2.2vw,11.5px);color:#c0cce8;line-height:1.45}
+/* FPS row */
+.fps-row{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.fps{flex:1;min-width:65px;background:var(--card2);border-radius:6px;padding:7px 4px;text-align:center;border:1px solid}
+.fps-n{font-size:clamp(14px,4vw,20px);font-weight:900}
+.fps-l{font-size:9px;color:var(--mu);margin-top:1px}
+/* Technique box */
+.tbox{background:var(--card);border-radius:8px;padding:11px;border-top:3px solid}
+.t-era{font-size:9px;border:1px solid;padding:1px 7px;border-radius:10px;display:inline-block;margin-bottom:5px}
+.t-title{font-size:clamp(12px,3vw,14px);font-weight:700;margin-bottom:6px}
+.t-pts{font-size:clamp(9.5px,2.2vw,11.5px);color:#c0cce8;line-height:1.5}
+.t-ex{font-size:9.5px;color:var(--mu);margin-top:5px}
+/* Usage */
+.ubox{background:var(--card);border-radius:8px;padding:11px;border-top:2px solid}
+.u-t{font-size:clamp(12px,3vw,14px);font-weight:700;margin-bottom:6px}
+.u-d{font-size:clamp(9.5px,2.2vw,11.5px);color:#c0cce8;line-height:1.45}
+.u-ex{font-size:9.5px;color:var(--mu);margin-top:5px;border-top:1px solid #1a1a45;padding-top:4px;font-style:italic}
+/* Kin */
+.kbox{background:var(--card);border-radius:8px;padding:11px;border-top:2px solid}
+.k-t{font-size:clamp(11px,2.8vw,14px);font-weight:700;margin-bottom:6px}
+.k-d{font-size:clamp(9.5px,2.2vw,11.5px);color:#c0cce8;line-height:1.4}
+.k-ex{font-size:9.5px;color:var(--mu);margin-top:4px;font-style:italic}
+.ibar{background:var(--card2);border-radius:6px;padding:7px 11px;font-size:clamp(10px,2.5vw,12px);color:#c0cce8;margin-bottom:8px;border-left:3px solid}
+/* Topic grid */
+.topics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:9px}
+.topic{background:var(--card);border-radius:8px;padding:10px;border-left:3px solid}
+.t-num{font-size:clamp(18px,5vw,24px);font-weight:900;opacity:.85;line-height:1}
+.t-name{font-size:clamp(9px,2.2vw,12px);color:#c0cce8;margin-top:3px;line-height:1.3}
+/* SVG wrap */
+.svg-wrap{width:100%;margin-bottom:9px}
+/* Title slide */
+.title-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,#0a1030 0%,var(--bg) 75%)}
+.title-cnt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:16px;padding-bottom:56px;text-align:center;gap:6px}
+.big-title{font-size:clamp(48px,15vw,100px);font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.nrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ncard{background:rgba(13,13,48,.9);border-radius:8px;padding:9px 12px;border:1px solid;text-align:center;min-width:130px}
+.nname{font-size:clamp(11px,3vw,14px);font-weight:700}
+.nroll{font-size:9px;color:var(--mu);margin-top:2px}
+/* Responsive */
+@media(max-width:480px){
+  .g3{grid-template-columns:1fr 1fr}
+  .topics{grid-template-columns:1fr 1fr}
+  .steps{flex-wrap:wrap}
+  .sarrow{display:none}
+  .step{min-width:calc(50% - 4px)}
+}
+@media(max-width:360px){
+  .g2{grid-template-columns:1fr}
+  .nrow{flex-direction:column;align-items:center}
+  .fps-row .fps{min-width:55px}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="deck">
+
+<!-- S1: TITLE -->
+<div class="slide active" id="s1">
+<div class="title-bg"></div>
+<div class="title-cnt">
+  <div style="font-size:clamp(9px,2.5vw,12px);color:var(--mu);letter-spacing:2px">GROUP 3 · GRAPHICS &amp; MULTIMEDIA · SMIT</div>
+  <div class="big-title">ANIMATION</div>
+  <div style="height:3px;width:55%;background:linear-gradient(90deg,var(--cy),var(--pu));border-radius:2px"></div>
+  <div style="font-size:clamp(11px,3vw,16px);color:var(--cy);font-style:italic">The Art &amp; Science of Bringing Images to Life</div>
+  <div class="iph" style="border-color:var(--cy);max-width:300px;margin:4px auto 0">
+    <div class="iph-lbl" style="color:var(--cy)">[ Add Animation Image Here ]</div>
+    <div class="iph-desc">Insert a cool animation/movie poster image</div>
+  </div>
+  <div class="nrow">
+    <div class="ncard" style="border-color:var(--cy)"><div class="nname" style="color:var(--cy)">Hashir Junaid</div><div class="nroll">2023F-BCS-358</div></div>
+    <div class="ncard" style="border-color:var(--pu)"><div class="nname" style="color:var(--pu)">Taha Haider</div><div class="nroll">2023F-BCS-079</div></div>
+    <div class="ncard" style="border-color:var(--gn)"><div class="nname" style="color:var(--gn)">Abdul Rahman Baig</div><div class="nroll">2023F-BCS-100</div></div>
+  </div>
+</div>
+</div>
+
+<!-- S2: OVERVIEW -->
+<div class="slide" id="s2">
+<div class="sh">
+  <div class="sbadge" style="background:var(--cy)">00</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--cy)">WHAT WE'LL COVER TODAY</div><div class="sh-sub">9 Topics · Complete Foundation</div></div>
+  <div class="ptag" style="color:var(--cy)">Hashir<br>Slide 2</div>
+</div>
+<div class="sb">
+<div class="topics">
+  <div class="topic" style="border-color:var(--cy)"><div class="t-num" style="color:var(--cy)">01</div><div class="t-name">Introduction to Animation</div></div>
+  <div class="topic" style="border-color:var(--pu)"><div class="t-num" style="color:var(--pu)">02</div><div class="t-name">Usage of Animation</div></div>
+  <div class="topic" style="border-color:var(--gn)"><div class="t-num" style="color:var(--gn)">03</div><div class="t-name">Animation Techniques</div></div>
+  <div class="topic" style="border-color:var(--or)"><div class="t-num" style="color:var(--or)">04</div><div class="t-name">Types of Animation</div></div>
+  <div class="topic" style="border-color:var(--pk)"><div class="t-num" style="color:var(--pk)">05</div><div class="t-name">Computer Animation</div></div>
+  <div class="topic" style="border-color:var(--yl)"><div class="t-num" style="color:var(--yl)">06</div><div class="t-name">Levels of Animation</div></div>
+  <div class="topic" style="border-color:var(--cy)"><div class="t-num" style="color:var(--cy)">07</div><div class="t-name">12 Basic Principles</div></div>
+  <div class="topic" style="border-color:var(--pu)"><div class="t-num" style="color:var(--pu)">08</div><div class="t-name">Animation Space</div></div>
+  <div class="topic" style="border-color:var(--gn)"><div class="t-num" style="color:var(--gn)">09</div><div class="t-name">Animation Process</div></div>
+</div>
+<div class="ibar" style="border-color:var(--cy)">Hashir → Topics 1–3 &nbsp;|&nbsp; Taha → Topics 4–6 &nbsp;|&nbsp; Abdul Rahman → Topics 7–9</div>
+<div class="iph" style="border-color:var(--mu)">
+  <div class="iph-lbl" style="color:var(--mu)">[ IMAGE: Animation collage — Toy Story, Tom &amp; Jerry, Arcane ]</div>
+  <div class="iph-desc">Show famous animations from different categories</div>
+</div>
+</div>
+</div>
+
+<!-- S3: INTRO TO ANIMATION -->
+<div class="slide" id="s3">
+<div class="sh">
+  <div class="sbadge" style="background:var(--cy)">01</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--cy)">INTRODUCTION TO ANIMATION</div><div class="sh-sub">Definition · Brain Effects · FPS Standards</div></div>
+  <div class="ptag" style="color:var(--cy)">Hashir<br>Slide 3</div>
+</div>
+<div class="sb">
+<!-- SVG: Frame sequence -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 75" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="75" rx="8" fill="#0d0d30"/>
+  <rect x="8" y="12" width="42" height="50" rx="4" fill="#13133f" stroke="#00D7FF" stroke-width="1.5"/>
+  <text x="29" y="41" text-anchor="middle" fill="#00D7FF" font-size="10" font-weight="bold">f1</text>
+  <text x="29" y="55" text-anchor="middle" fill="#697898" font-size="7">frame</text>
+  <text x="56" y="40" fill="#697898" font-size="12">→</text>
+  <rect x="62" y="12" width="42" height="50" rx="4" fill="#13133f" stroke="#9B50E1" stroke-width="1.5"/>
+  <text x="83" y="41" text-anchor="middle" fill="#9B50E1" font-size="10" font-weight="bold">f2</text>
+  <text x="83" y="55" text-anchor="middle" fill="#697898" font-size="7">frame</text>
+  <text x="110" y="40" fill="#697898" font-size="12">→</text>
+  <rect x="116" y="12" width="42" height="50" rx="4" fill="#13133f" stroke="#2EDC73" stroke-width="1.5"/>
+  <text x="137" y="41" text-anchor="middle" fill="#2EDC73" font-size="10" font-weight="bold">f3</text>
+  <text x="137" y="55" text-anchor="middle" fill="#697898" font-size="7">frame</text>
+  <text x="164" y="40" fill="#697898" font-size="12">→</text>
+  <rect x="168" y="12" width="42" height="50" rx="4" fill="#13133f" stroke="#FF9400" stroke-width="1.5"/>
+  <text x="189" y="41" text-anchor="middle" fill="#FF9400" font-size="10" font-weight="bold">f4</text>
+  <text x="189" y="55" text-anchor="middle" fill="#697898" font-size="7">frame</text>
+  <text x="216" y="40" fill="#697898" font-size="16">→</text>
+  <rect x="228" y="12" width="46" height="50" rx="4" fill="#0a1025" stroke="#FFD700" stroke-width="1.5"/>
+  <text x="251" y="35" text-anchor="middle" fill="#FFD700" font-size="13">👁</text>
+  <text x="251" y="48" text-anchor="middle" fill="#FFD700" font-size="8" font-weight="bold">BRAIN</text>
+  <text x="251" y="58" text-anchor="middle" fill="#697898" font-size="7">at 24fps</text>
+  <text x="280" y="40" fill="#697898" font-size="16">→</text>
+  <rect x="290" y="15" width="42" height="44" rx="4" fill="#001520" stroke="#00D7FF" stroke-width="1.5"/>
+  <text x="311" y="38" text-anchor="middle" fill="#00D7FF" font-size="8" font-weight="bold">MO</text>
+  <text x="311" y="50" text-anchor="middle" fill="#00D7FF" font-size="8" font-weight="bold">TION!</text>
+</svg>
+</div>
+<div class="card" style="border-color:var(--cy)">
+  <div class="card-t" style="color:var(--cy)">DEFINITION</div>
+  <ul>
+    <li>Still images shown rapidly = illusion of motion</li>
+    <li>Brain is "tricked" by two biological effects working together</li>
+    <li>First animation: Muybridge horse gallop (1878)</li>
+  </ul>
+</div>
+<div class="g2">
+  <div class="card" style="border-color:var(--pu);margin-bottom:0">
+    <div class="card-t" style="color:var(--pu)">👁 PERSISTENCE OF VISION</div>
+    <p>Physical eye effect — image stays ~50ms after disappearing. Afterimages overlap → smooth flow.</p>
+    <p style="color:var(--mu);font-size:9px;padding-left:0;margin-top:3px">Peter Roget, 1824</p>
+  </div>
+  <div class="card" style="border-color:var(--gn);margin-bottom:0">
+    <div class="card-t" style="color:var(--gn)">🧠 PHI PHENOMENON</div>
+    <p>Psychological effect — brain INFERS motion between two still objects. Works even without eye retention.</p>
+    <p style="color:var(--mu);font-size:9px;padding-left:0;margin-top:3px">Wertheimer, 1912</p>
+  </div>
+</div>
+<div style="margin-top:8px">
+  <div style="font-size:11px;font-weight:700;color:var(--yl);margin-bottom:6px">FPS STANDARDS:</div>
+  <div class="fps-row">
+    <div class="fps" style="border-color:var(--cy)"><div class="fps-n" style="color:var(--cy)">24</div><div class="fps-l">Cinema</div></div>
+    <div class="fps" style="border-color:var(--pu)"><div class="fps-n" style="color:var(--pu)">30</div><div class="fps-l">TV Broadcast</div></div>
+    <div class="fps" style="border-color:var(--gn)"><div class="fps-n" style="color:var(--gn)">60</div><div class="fps-l">Gaming</div></div>
+    <div class="fps" style="border-color:var(--rd)"><div class="fps-n" style="color:var(--rd)">&lt;12</div><div class="fps-l">Flicker!</div></div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--cy);margin-top:8px">
+  <div class="iph-lbl" style="color:var(--cy)">[ IMAGE: Flip-book being flicked OR eye diagram ]</div>
+  <div class="iph-desc">Show persistence of vision visually</div>
+</div>
+</div>
+</div>
+
+<!-- S4: USAGE -->
+<div class="slide" id="s4">
+<div class="sh">
+  <div class="sbadge" style="background:var(--pu)">02</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--pu)">USAGE OF ANIMATION</div><div class="sh-sub">Where Animation Is Used</div></div>
+  <div class="ptag" style="color:var(--pu)">Hashir<br>Slide 4</div>
+</div>
+<div class="sb">
+<div class="g2">
+  <div class="ubox" style="border-color:var(--cy)">
+    <div class="u-t" style="color:var(--cy)">🎨 ARTISTIC</div>
+    <div class="u-d">• Fine art &amp; experimental films<br>• Music video production<br>• Title sequence design</div>
+    <div class="u-ex">Spider-Verse (Oscar 2018) · Disney Fantasia · Yellow Submarine</div>
+  </div>
+  <div class="ubox" style="border-color:var(--pu)">
+    <div class="u-t" style="color:var(--pu)">🎬 STORYTELLING</div>
+    <div class="u-d">• Feature films &amp; TV series<br>• Video game cutscenes<br>• Character-driven dramas</div>
+    <div class="u-ex">Toy Story · Studio Ghibli · Arcane (Netflix 2021)</div>
+  </div>
+  <div class="ubox" style="border-color:var(--gn)">
+    <div class="u-t" style="color:var(--gn)">🔬 SCIENTIFIC</div>
+    <div class="u-d">• Human anatomy explainers<br>• Weather &amp; climate models<br>• DNA &amp; molecular modeling</div>
+    <div class="u-ex">NASA mission visualizations · Medical surgical training</div>
+  </div>
+  <div class="ubox" style="border-color:var(--or)">
+    <div class="u-t" style="color:var(--or)">📚 INSTRUCTIONAL</div>
+    <div class="u-d">• Educational explainer videos<br>• Military &amp; flight simulators<br>• Safety procedure demos</div>
+    <div class="u-ex">Khan Academy · Boeing pilot simulators · IKEA guides</div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--pu)">
+  <div class="iph-lbl" style="color:var(--pu)">[ IMAGE: Spider-Verse / NASA / Khan Academy / Boeing — collage ]</div>
+  <div class="iph-desc">One screenshot from each category — point to each while explaining</div>
+</div>
+</div>
+</div>
+
+<!-- S5: TECHNIQUES -->
+<div class="slide" id="s5">
+<div class="sh">
+  <div class="sbadge" style="background:var(--gn)">03</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--gn)">ANIMATION TECHNIQUES</div><div class="sh-sub">3 Core Methods</div></div>
+  <div class="ptag" style="color:var(--gn)">Hashir<br>Slide 5</div>
+</div>
+<div class="sb">
+<div class="g3">
+  <div class="tbox" style="border-color:var(--cy)">
+    <div class="t-era" style="border-color:var(--cy);color:var(--cy)">1910s–1990s</div>
+    <div class="t-title" style="color:var(--cy)">CEL ANIMATION</div>
+    <div class="t-pts">• Draw on transparent plastic sheets<br>• Each sheet = 1 frame<br>• Layer over background<br>• Hand-filmed, frame by frame</div>
+    <div class="t-ex">Tom &amp; Jerry · Snow White · Bambi</div>
+  </div>
+  <div class="tbox" style="border-color:var(--pu)">
+    <div class="t-era" style="border-color:var(--pu);color:var(--pu)">1970s–Now</div>
+    <div class="t-title" style="color:var(--pu)">PATH ANIMATION</div>
+    <div class="t-pts">• Draw path first<br>• Object follows automatically<br>• Straight or curved paths<br>• Add easing (slow in/out)</div>
+    <div class="t-ex">CSS · After Effects · Unity</div>
+  </div>
+  <div class="tbox" style="border-color:var(--gn)">
+    <div class="t-era" style="border-color:var(--gn);color:var(--gn)">1980s–Now</div>
+    <div class="t-title" style="color:var(--gn)">COMPUTER ANIMATION</div>
+    <div class="t-pts">• All digital creation<br>• Simulates cel &amp; path<br>• Physics simulation built-in<br>• Real-time or pre-rendered</div>
+    <div class="t-ex">Pixar · DreamWorks · Fortnite</div>
+  </div>
+</div>
+<!-- Timeline SVG -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 45" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="45" rx="6" fill="#0d0d30"/>
+  <line x1="20" y1="22" x2="320" y2="22" stroke="#1a1a55" stroke-width="2"/>
+  <circle cx="60" cy="22" r="7" fill="#00D7FF"/>
+  <text x="60" y="40" text-anchor="middle" fill="#00D7FF" font-size="8">1910s CEL</text>
+  <circle cx="175" cy="22" r="7" fill="#9B50E1"/>
+  <text x="175" y="40" text-anchor="middle" fill="#9B50E1" font-size="8">1970s PATH</text>
+  <circle cx="270" cy="22" r="7" fill="#2EDC73"/>
+  <text x="270" y="40" text-anchor="middle" fill="#2EDC73" font-size="8">1980s COMPUTER</text>
+  <text x="322" y="26" fill="#697898" font-size="10">→</text>
+</svg>
+</div>
+<div class="iph" style="border-color:var(--gn)">
+  <div class="iph-lbl" style="color:var(--gn)">[ IMAGE: Tom &amp; Jerry (cel) vs Toy Story (computer) — side by side ]</div>
+  <div class="iph-desc">Visual evolution from hand-drawn to digital animation</div>
+</div>
+</div>
+</div>
+
+<!-- S6: CEL ANIMATION -->
+<div class="slide" id="s6">
+<div class="sh">
+  <div class="sbadge" style="background:var(--or)">4A</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--or)">TYPES: CEL ANIMATION</div><div class="sh-sub">Keyframes · Tweening · Pencil Test</div></div>
+  <div class="ptag" style="color:var(--or)">Taha<br>Slide 6</div>
+</div>
+<div class="sb">
+<!-- SVG: Cel stack -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="100" rx="8" fill="#0d0d30"/>
+  <text x="12" y="16" fill="#FF9400" font-size="10" font-weight="bold">HOW CEL LAYERS STACK:</text>
+  <rect x="12" y="76" width="130" height="20" rx="3" fill="#0a1525" stroke="#2EDC73" stroke-width="1.5"/>
+  <text x="77" y="90" text-anchor="middle" fill="#2EDC73" font-size="8" font-weight="bold">BACKGROUND (static, reused)</text>
+  <rect x="20" y="58" width="130" height="20" rx="3" fill="#13133f" stroke="#9B50E1" stroke-width="1.5" opacity=".9"/>
+  <text x="85" y="72" text-anchor="middle" fill="#9B50E1" font-size="8" font-weight="bold">CEL 1 — Character Base</text>
+  <rect x="28" y="40" width="130" height="20" rx="3" fill="#13133f" stroke="#00D7FF" stroke-width="1.5" opacity=".9"/>
+  <text x="93" y="54" text-anchor="middle" fill="#00D7FF" font-size="8" font-weight="bold">CEL 2 — Character Detail</text>
+  <rect x="36" y="22" width="130" height="20" rx="3" fill="#13133f" stroke="#FF5AA2" stroke-width="1.5" opacity=".9"/>
+  <text x="101" y="36" text-anchor="middle" fill="#FF5AA2" font-size="8" font-weight="bold">CEL 3 — Top Layer</text>
+  <text x="188" y="62" fill="#697898" font-size="20">→</text>
+  <rect x="210" y="28" width="118" height="64" rx="5" fill="#0a1525" stroke="#FF9400" stroke-width="2"/>
+  <text x="269" y="56" text-anchor="middle" fill="#FF9400" font-size="11" font-weight="bold">1 FRAME</text>
+  <text x="269" y="70" text-anchor="middle" fill="#697898" font-size="8">All layers combined</text>
+  <text x="269" y="84" text-anchor="middle" fill="#697898" font-size="7">= one photo of film</text>
+</svg>
+</div>
+<div class="g2">
+  <div class="card" style="border-color:var(--or);margin-bottom:0">
+    <div class="card-t" style="color:var(--or)">KEYFRAMES</div>
+    <ul>
+      <li>Most extreme/important poses</li>
+      <li>Drawn by SENIOR animators</li>
+      <li>Like checkpoints in the action</li>
+    </ul>
+  </div>
+  <div class="card" style="border-color:var(--yl);margin-bottom:0">
+    <div class="card-t" style="color:var(--yl)">TWEENING</div>
+    <ul>
+      <li>Frames BETWEEN keyframes</li>
+      <li>Done by JUNIOR animators</li>
+      <li>Software auto-tweens now!</li>
+    </ul>
+  </div>
+</div>
+<div style="height:8px"></div>
+<div class="card" style="border-color:var(--gn)">
+  <div class="card-t" style="color:var(--gn)">PENCIL TEST</div>
+  <ul>
+    <li>Rough sketches filmed &amp; played back FIRST</li>
+    <li>Check timing before expensive inking &amp; painting</li>
+    <li>Every major studio still does this</li>
+  </ul>
+</div>
+<div class="iph" style="border-color:var(--or)">
+  <div class="iph-lbl" style="color:var(--or)">[ IMAGE: Actual cel sheet with character — Tom &amp; Jerry or Disney ]</div>
+  <div class="iph-desc">Physical transparent celluloid sheet showing how characters were painted</div>
+</div>
+</div>
+</div>
+
+<!-- S7: PATH ANIMATION -->
+<div class="slide" id="s7">
+<div class="sh">
+  <div class="sbadge" style="background:var(--pu)">4B</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--pu)">TYPES: PATH ANIMATION</div><div class="sh-sub">Object follows a predefined trajectory automatically</div></div>
+  <div class="ptag" style="color:var(--pu)">Taha<br>Slide 7</div>
+</div>
+<div class="sb">
+<!-- SVG: path curve -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="80" rx="8" fill="#0d0d30"/>
+  <text x="12" y="14" fill="#9B50E1" font-size="9" font-weight="bold">STRAIGHT LINE:</text>
+  <line x1="12" y1="35" x2="110" y2="35" stroke="#00D7FF" stroke-width="2" stroke-dasharray="4,3"/>
+  <circle cx="12" cy="35" r="5" fill="#00D7FF"/>
+  <circle cx="110" cy="35" r="5" fill="#2EDC73"/>
+  <text x="12" y="50" fill="#697898" font-size="7">START</text>
+  <text x="90" y="50" fill="#697898" font-size="7">END</text>
+  <text x="125" y="40" fill="#1a1a55" font-size="12">|</text>
+  <text x="135" y="14" fill="#9B50E1" font-size="9" font-weight="bold">BEZIER CURVE:</text>
+  <path d="M 140 65 Q 195 10 250 65" stroke="#9B50E1" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
+  <circle cx="140" cy="65" r="5" fill="#00D7FF"/>
+  <circle cx="250" cy="65" r="5" fill="#2EDC73"/>
+  <circle cx="195" cy="10" r="3" fill="#FF9400" opacity=".7"/>
+  <line x1="140" y1="65" x2="195" y2="10" stroke="#FF9400" stroke-width="1" opacity=".4"/>
+  <line x1="195" y1="10" x2="250" y2="65" stroke="#FF9400" stroke-width="1" opacity=".4"/>
+  <circle cx="195" cy="28" r="7" fill="#FF5AA2" opacity=".85"/>
+  <text x="195" y="75" text-anchor="middle" fill="#697898" font-size="7">natural, organic path</text>
+  <rect x="262" y="15" width="68" height="50" rx="5" fill="#13133f" stroke="#FFD700" stroke-width="1.5"/>
+  <text x="296" y="33" text-anchor="middle" fill="#FFD700" font-size="9" font-weight="bold">EASING</text>
+  <text x="296" y="46" text-anchor="middle" fill="#697898" font-size="7">slow→fast</text>
+  <text x="296" y="58" text-anchor="middle" fill="#697898" font-size="7">→slow end</text>
+</svg>
+</div>
+<div style="font-size:11px;font-weight:700;color:var(--pu);margin-bottom:7px">6 STEPS TO CREATE PATH ANIMATION:</div>
+<div class="g2">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="ibar" style="border-color:var(--cy)"><span style="color:var(--cy);font-weight:700">1.</span> Draw the PATH — straight or curved</div>
+    <div class="ibar" style="border-color:var(--pu)"><span style="color:var(--pu);font-weight:700">2.</span> Set START and END points</div>
+    <div class="ibar" style="border-color:var(--gn)"><span style="color:var(--gn);font-weight:700">3.</span> Set DURATION (how long)</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="ibar" style="border-color:var(--or)"><span style="color:var(--or);font-weight:700">4.</span> Apply EASING — slow in / slow out</div>
+    <div class="ibar" style="border-color:var(--pk)"><span style="color:var(--pk);font-weight:700">5.</span> Set orientation — does it face direction?</div>
+    <div class="ibar" style="border-color:var(--yl)"><span style="color:var(--yl);font-weight:700">6.</span> Preview, adjust &amp; render</div>
+  </div>
+</div>
+<div class="ibar" style="border-color:var(--mu);color:var(--mu)">Used in: CSS animations · After Effects · Unity · SVG paths · Game projectiles</div>
+<div class="iph" style="border-color:var(--pu)">
+  <div class="iph-lbl" style="color:var(--pu)">[ IMAGE: Ball bouncing along a Bezier path with easing curve ]</div>
+  <div class="iph-desc">Show an object following a curved path</div>
+</div>
+</div>
+</div>
+
+<!-- S8: COMPUTER ANIMATION + FK/IK -->
+<div class="slide" id="s8">
+<div class="sh">
+  <div class="sbadge" style="background:var(--pk)">05</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--pk)">COMPUTER ANIMATION</div><div class="sh-sub">Cel vs Computer · FK / IK · Morphing</div></div>
+  <div class="ptag" style="color:var(--pk)">Taha<br>Slide 8</div>
+</div>
+<div class="sb">
+<table class="ctable">
+  <tr>
+    <th style="color:var(--or)">CEL ANIMATION</th>
+    <th style="color:var(--pk)">COMPUTER ANIMATION</th>
+  </tr>
+  <tr><td>Hand-drawn on plastic sheets</td><td>Created in digital software</td></tr>
+  <tr><td>Every frame drawn manually — slow</td><td>Auto-tweening &amp; physics built-in</td></tr>
+  <tr><td>Physical film — expensive &amp; fragile</td><td>Digital files — share instantly</td></tr>
+  <tr><td>Months per 1 minute of film</td><td>Real-time preview — much faster</td></tr>
+</table>
+<!-- FK/IK SVG -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 75" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="75" rx="6" fill="#0d0d30"/>
+  <text x="12" y="13" fill="#00D7FF" font-size="9" font-weight="bold">FK — Move parent → children follow:</text>
+  <circle cx="28" cy="38" r="7" fill="#00D7FF" opacity=".8"/><text x="28" y="60" text-anchor="middle" fill="#697898" font-size="7">Shoulder</text>
+  <line x1="35" y1="38" x2="75" y2="52" stroke="#00D7FF" stroke-width="2"/>
+  <circle cx="75" cy="52" r="6" fill="#9B50E1" opacity=".8"/><text x="75" y="68" text-anchor="middle" fill="#697898" font-size="7">Elbow</text>
+  <line x1="81" y1="52" x2="115" y2="42" stroke="#9B50E1" stroke-width="2"/>
+  <circle cx="115" cy="42" r="5" fill="#2EDC73" opacity=".8"/><text x="115" y="58" text-anchor="middle" fill="#697898" font-size="7">Wrist</text>
+  <text x="135" y="40" fill="#1a1a55" font-size="14">|</text>
+  <text x="148" y="13" fill="#9B50E1" font-size="9" font-weight="bold">IK — Move hand → joints auto-adjust:</text>
+  <circle cx="168" cy="50" r="7" fill="#00D7FF" opacity=".8"/><text x="168" y="68" text-anchor="middle" fill="#697898" font-size="7">Shoulder</text>
+  <line x1="175" y1="50" x2="220" y2="35" stroke="#00D7FF" stroke-width="2"/>
+  <circle cx="220" cy="35" r="6" fill="#9B50E1" opacity=".8"/><text x="220" y="68" text-anchor="middle" fill="#697898" font-size="7">Elbow ↑ auto</text>
+  <line x1="226" y1="35" x2="265" y2="50" stroke="#9B50E1" stroke-width="2"/>
+  <circle cx="265" cy="50" r="8" fill="#FF5AA2" opacity=".9"/><text x="265" y="68" text-anchor="middle" fill="#FF5AA2" font-size="7">HAND ← you</text>
+  <rect x="282" y="20" width="50" height="35" rx="4" fill="#13133f" stroke="#2EDC73" stroke-width="1.5"/>
+  <text x="307" y="35" text-anchor="middle" fill="#2EDC73" font-size="8" font-weight="bold">MORPHING</text>
+  <text x="307" y="47" text-anchor="middle" fill="#697898" font-size="7">face A → face B</text>
+</svg>
+</div>
+<div class="g3">
+  <div class="kbox" style="border-color:var(--cy)">
+    <div class="k-t" style="color:var(--cy)">FK (Forward)</div>
+    <div class="k-d">Move parent → children follow. Like a puppet.</div>
+    <div class="k-ex">Best for: robots, flags, tails</div>
+  </div>
+  <div class="kbox" style="border-color:var(--pu)">
+    <div class="k-t" style="color:var(--pu)">IK (Inverse)</div>
+    <div class="k-d">Move end point → joints auto-calculate. Like reaching for a cup.</div>
+    <div class="k-ex">Best for: walking, grabbing, games</div>
+  </div>
+  <div class="kbox" style="border-color:var(--gn)">
+    <div class="k-t" style="color:var(--gn)">Morphing</div>
+    <div class="k-d">Map points on source &amp; target → smooth shape transformation.</div>
+    <div class="k-ex">MJ Black or White · T-1000</div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--pk)">
+  <div class="iph-lbl" style="color:var(--pk)">[ IMAGE: Blender/Maya character rig showing FK/IK bones ]</div>
+  <div class="iph-desc">3D software with skeleton rig visible</div>
+</div>
+</div>
+</div>
+
+<!-- S9: LEVELS -->
+<div class="slide" id="s9">
+<div class="sh">
+  <div class="sbadge" style="background:var(--yl)">06</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--yl)">LEVELS OF COMPUTER ANIMATION</div><div class="sh-sub">Basic → Intermediate → Advanced</div></div>
+  <div class="ptag" style="color:var(--yl)">Taha<br>Slide 9</div>
+</div>
+<div class="sb">
+<div class="g3">
+  <div class="lvl" style="border-color:var(--gn)">
+    <div class="lvl-stars">⭐</div>
+    <div class="lvl-t" style="color:var(--gn)">BASIC</div>
+    <div class="lvl-time" style="border-color:var(--gn);color:var(--gn)">Days – Weeks</div>
+    <div class="lvl-d">• Animated GIFs<br>• CSS transitions<br>• PowerPoint<br>• Simple logos<br><br><span style="color:var(--mu)">Tools: PowerPoint, Canva, CSS</span><br><br><span style="color:var(--gn);font-weight:700;font-size:10px">Career: Social media</span></div>
+  </div>
+  <div class="lvl" style="border-color:var(--cy)">
+    <div class="lvl-stars">⭐⭐</div>
+    <div class="lvl-t" style="color:var(--cy)">INTERMEDIATE</div>
+    <div class="lvl-time" style="border-color:var(--cy);color:var(--cy)">Several Months</div>
+    <div class="lvl-d">• 2D character animation<br>• Motion graphics<br>• Basic 3D objects<br>• Game movement<br><br><span style="color:var(--mu)">Tools: After Effects, Animate, Blender</span><br><br><span style="color:var(--cy);font-weight:700;font-size:10px">Career: Motion designer</span></div>
+  </div>
+  <div class="lvl" style="border-color:var(--pu)">
+    <div class="lvl-stars">⭐⭐⭐</div>
+    <div class="lvl-t" style="color:var(--pu)">ADVANCED</div>
+    <div class="lvl-time" style="border-color:var(--pu);color:var(--pu)">Multiple Years</div>
+    <div class="lvl-d">• Full CG feature films<br>• Physics simulations<br>• Motion capture<br>• Real-time VFX<br><br><span style="color:var(--mu)">Tools: Maya, Houdini, Unreal</span><br><br><span style="color:var(--pu);font-weight:700;font-size:10px">Career: VFX artist, TD</span></div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--yl)">
+  <div class="iph-lbl" style="color:var(--yl)">[ IMAGE: Software logos — Canva, After Effects, Maya, Houdini ]</div>
+  <div class="iph-desc">Show progression of tools at each level</div>
+</div>
+</div>
+</div>
+
+<!-- S10: 12 PRINCIPLES PART 1 -->
+<div class="slide" id="s10">
+<div class="sh">
+  <div class="sbadge" style="background:var(--cy)">7A</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--cy)">12 PRINCIPLES — PART 1 (1–6)</div><div class="sh-sub">Disney (1981) · Still the Universal Gold Standard</div></div>
+  <div class="ptag" style="color:var(--cy)">Abdul<br>Slide 10</div>
+</div>
+<div class="sb">
+<div class="g2">
+  <div class="pbox" style="border-color:var(--cy)">
+    <div class="pnum" style="color:var(--cy)">01</div>
+    <div class="pname" style="color:var(--cy)">SQUASH &amp; STRETCH</div>
+    <div class="pdesc">Squash on IMPACT, stretch when moving FAST. Volume always stays constant!</div>
+    <div class="pex">Rubber ball bounce. Most fundamental.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--pu)">
+    <div class="pnum" style="color:var(--pu)">02</div>
+    <div class="pname" style="color:var(--pu)">ANTICIPATION</div>
+    <div class="pdesc">Small OPPOSITE action before the main action. Crouches before jump. Winds up before throw.</div>
+    <div class="pex">Without it, actions feel sudden.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--gn)">
+    <div class="pnum" style="color:var(--gn)">03</div>
+    <div class="pname" style="color:var(--gn)">STAGING</div>
+    <div class="pdesc">One clear idea at a time. Clear silhouette, camera serves story, direct viewer's eye.</div>
+    <div class="pex">Theater staging, not crowded photo.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--or)">
+    <div class="pnum" style="color:var(--or)">04</div>
+    <div class="pname" style="color:var(--or)">STRAIGHT AHEAD vs POSE-TO-POSE</div>
+    <div class="pdesc">SA = draw every frame → fluid (fire/water). PtP = key poses first → controlled (character acting).</div>
+    <div class="pex">Best work combines both.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--pk)">
+    <div class="pnum" style="color:var(--pk)">05</div>
+    <div class="pname" style="color:var(--pk)">FOLLOW THROUGH &amp; OVERLAP</div>
+    <div class="pdesc">Parts keep moving AFTER main stops. Hair swings after head stops. Different parts, different rates.</div>
+    <div class="pex">Makes motion feel organic &amp; alive.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--yl)">
+    <div class="pnum" style="color:var(--yl)">06</div>
+    <div class="pname" style="color:var(--yl)">EASE IN &amp; EASE OUT</div>
+    <div class="pdesc">Slow start + slow end. Nothing in nature starts at full speed. Linear = robotic. Ease = natural.</div>
+    <div class="pex">Most impactful for 'weight' feel.</div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--cy)">
+  <div class="iph-lbl" style="color:var(--cy)">[ IMAGE: Rubber ball showing squash on landing &amp; stretch in air ]</div>
+  <div class="iph-desc">Classic squash and stretch example</div>
+</div>
+</div>
+</div>
+
+<!-- S11: 12 PRINCIPLES PART 2 -->
+<div class="slide" id="s11">
+<div class="sh">
+  <div class="sbadge" style="background:var(--pu)">7B</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--pu)">12 PRINCIPLES — PART 2 (7–12)</div><div class="sh-sub">"Exaggeration of truth" — Walt Disney</div></div>
+  <div class="ptag" style="color:var(--pu)">Abdul<br>Slide 11</div>
+</div>
+<div class="sb">
+<div class="g2">
+  <div class="pbox" style="border-color:var(--gn)">
+    <div class="pnum" style="color:var(--gn)">07</div>
+    <div class="pname" style="color:var(--gn)">ARCS</div>
+    <div class="pdesc">All natural motion follows ARC paths. Arms, heads, eyes all move in arcs. Parabola for thrown objects.</div>
+    <div class="pex">Exception: robots move in straight lines.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--or)">
+    <div class="pnum" style="color:var(--or)">08</div>
+    <div class="pname" style="color:var(--or)">SECONDARY ACTION</div>
+    <div class="pdesc">Supporting actions enrich main movement. Walking + arms swing. Running + hair flows. Must NOT overpower main.</div>
+    <div class="pex">Supports — never steals focus.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--cy)">
+    <div class="pnum" style="color:var(--cy)">09</div>
+    <div class="pname" style="color:var(--cy)">TIMING</div>
+    <div class="pdesc">More frames = slower, heavier. Fewer = faster, lighter. Blink: 6f. Head turn: 12f. Heavy punch: 3f.</div>
+    <div class="pex">Wrong timing = nothing else matters.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--pk)">
+    <div class="pnum" style="color:var(--pk)">10</div>
+    <div class="pname" style="color:var(--pk)">EXAGGERATION</div>
+    <div class="pdesc">Push beyond realistic limits. NOT unrealistic — making TRUTH more visible. Sad = cries buckets, not small tears.</div>
+    <div class="pex">Exaggerate the ESSENCE.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--yl)">
+    <div class="pnum" style="color:var(--yl)">11</div>
+    <div class="pname" style="color:var(--yl)">SOLID DRAWING</div>
+    <div class="pdesc">Characters must feel 3D even in 2D. Understand cubes, spheres, cylinders. Avoid "twinning" (mirror poses).</div>
+    <div class="pex">Strong line of action in every pose.</div>
+  </div>
+  <div class="pbox" style="border-color:var(--gn)">
+    <div class="pnum" style="color:var(--gn)">12</div>
+    <div class="pname" style="color:var(--gn)">APPEAL</div>
+    <div class="pdesc">Character must be interesting to WATCH. Not just cuteness — villains have appeal too! Clear design, strong silhouette.</div>
+    <div class="pex">Would audience want to keep watching?</div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--pu)">
+  <div class="iph-lbl" style="color:var(--pu)">[ IMAGE: Strong character silhouettes + exaggerated expressions ]</div>
+  <div class="iph-desc">Disney / Pixar characters showing appeal, timing, and exaggeration</div>
+</div>
+</div>
+</div>
+
+<!-- S12: ANIMATION SPACE -->
+<div class="slide" id="s12">
+<div class="sh">
+  <div class="sbadge" style="background:var(--yl)">08</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--yl)">ANIMATION SPACE</div><div class="sh-sub">2D · 2½D · 3D — Three Types of Spatial Dimensions</div></div>
+  <div class="ptag" style="color:var(--yl)">Abdul<br>Slide 12</div>
+</div>
+<div class="sb">
+<!-- SVG: axes -->
+<div class="svg-wrap">
+<svg viewBox="0 0 340 88" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+  <rect width="340" height="88" rx="8" fill="#0d0d30"/>
+  <!-- 2D -->
+  <text x="50" y="14" text-anchor="middle" fill="#00D7FF" font-size="11" font-weight="bold">2D</text>
+  <rect x="18" y="20" width="64" height="60" rx="3" fill="#08082a" stroke="#00D7FF" stroke-width="1.5"/>
+  <line x1="32" y1="72" x2="76" y2="72" stroke="#00D7FF" stroke-width="1.5"/>
+  <line x1="32" y1="72" x2="32" y2="26" stroke="#00D7FF" stroke-width="1.5"/>
+  <text x="80" y="75" fill="#00D7FF" font-size="9">X</text>
+  <text x="25" y="24" fill="#00D7FF" font-size="9">Y</text>
+  <text x="50" y="82" text-anchor="middle" fill="#697898" font-size="7">Flat surface</text>
+  <!-- 2.5D -->
+  <text x="175" y="14" text-anchor="middle" fill="#9B50E1" font-size="11" font-weight="bold">2½D</text>
+  <rect x="143" y="24" width="52" height="58" rx="3" fill="#08082a" stroke="#9B50E1" stroke-width="1.5" opacity=".35"/>
+  <rect x="149" y="29" width="52" height="58" rx="3" fill="#08082a" stroke="#9B50E1" stroke-width="1.5" opacity=".6"/>
+  <rect x="155" y="34" width="52" height="54" rx="3" fill="#08082a" stroke="#9B50E1" stroke-width="1.5"/>
+  <text x="181" y="63" text-anchor="middle" fill="#9B50E1" font-size="8">layers</text>
+  <text x="175" y="82" text-anchor="middle" fill="#697898" font-size="7">Depth illusion</text>
+  <!-- 3D -->
+  <text x="295" y="14" text-anchor="middle" fill="#2EDC73" font-size="11" font-weight="bold">3D</text>
+  <rect x="264" y="38" width="50" height="44" rx="2" fill="#08082a" stroke="#2EDC73" stroke-width="1.5"/>
+  <rect x="276" y="24" width="50" height="44" rx="2" fill="#0d1535" stroke="#2EDC73" stroke-width="1" opacity=".7"/>
+  <line x1="264" y1="38" x2="276" y2="24" stroke="#2EDC73" stroke-width="1"/>
+  <line x1="314" y1="38" x2="326" y2="24" stroke="#2EDC73" stroke-width="1"/>
+  <text x="275" y="65" fill="#2EDC73" font-size="8">X</text><text x="256" y="58" fill="#2EDC73" font-size="8">Y</text><text x="278" y="30" fill="#2EDC73" font-size="8">Z</text>
+  <text x="295" y="82" text-anchor="middle" fill="#697898" font-size="7">Full depth</text>
+</svg>
+</div>
+<div class="g3">
+  <div class="spbox" style="border-color:var(--cy)">
+    <div class="sp-t" style="color:var(--cy)">2D SPACE</div>
+    <div class="sp-s">X + Y axes only</div>
+    <div class="sp-d">• Flat — like paper<br>• Simple to create<br>• Low hardware needs<br>• Classic cartoon look<br><br><span style="color:var(--mu)">Tom &amp; Jerry · Mario · Mobile games</span><br><br><span style="color:var(--mu);font-size:9px">Adobe Animate, Toon Boom</span></div>
+  </div>
+  <div class="spbox" style="border-color:var(--pu)">
+    <div class="sp-t" style="color:var(--pu)">2½D SPACE</div>
+    <div class="sp-s">2D + depth illusion</div>
+    <div class="sp-d">• Parallax scrolling<br>• Layers fake depth<br>• Still technically 2D<br>• "Pseudo-3D"<br><br><span style="color:var(--mu)">Paper Mario · Ori · South Park</span><br><br><span style="color:var(--mu);font-size:9px">After Effects Z-depth</span></div>
+  </div>
+  <div class="spbox" style="border-color:var(--gn)">
+    <div class="sp-t" style="color:var(--gn)">3D SPACE</div>
+    <div class="sp-s">X + Y + Z axes</div>
+    <div class="sp-d">• True depth &amp; volume<br>• Any camera angle<br>• Realistic lighting<br>• Needs powerful GPU<br><br><span style="color:var(--mu)">Toy Story · Frozen · Fortnite</span><br><br><span style="color:var(--mu);font-size:9px">Blender, Maya, Unreal</span></div>
+  </div>
+</div>
+<div class="iph" style="border-color:var(--yl)">
+  <div class="iph-lbl" style="color:var(--yl)">[ IMAGE: Tom &amp; Jerry (2D) vs Paper Mario (2.5D) vs Toy Story (3D) ]</div>
+  <div class="iph-desc">Side by side comparison of all three spatial types</div>
+</div>
+</div>
+</div>
+
+<!-- S13: PROCESS + SUMMARY -->
+<div class="slide" id="s13">
+<div class="sh">
+  <div class="sbadge" style="background:var(--gn)">09</div>
+  <div class="sh-info"><div class="sh-title" style="color:var(--gn)">ANIMATION PROCESS + SUMMARY</div><div class="sh-sub">4-Stage Pipeline · Key Takeaways</div></div>
+  <div class="ptag" style="color:var(--gn)">Abdul<br>Slide 13</div>
+</div>
+<div class="sb">
+<div style="font-size:11px;font-weight:700;color:var(--gn);margin-bottom:7px">THE 4-STAGE PIPELINE:</div>
+<div class="steps">
+  <div class="step" style="border-color:var(--cy)"><span class="step-n" style="color:var(--cy)">1</span><div class="step-t" style="color:var(--cy)">ORGANIZE</div><div class="step-d">Goals · Team · Deadlines · Style guide · Storyboard</div></div>
+  <div class="sarrow">▶</div>
+  <div class="step" style="border-color:var(--pu)"><span class="step-n" style="color:var(--pu)">2</span><div class="step-t" style="color:var(--pu)">CHOOSE TOOL</div><div class="step-d">2D: Toon Boom · 3D: Maya · MG: After Effects · Game: Unity</div></div>
+  <div class="sarrow">▶</div>
+  <div class="step" style="border-color:var(--gn)"><span class="step-n" style="color:var(--gn)">3</span><div class="step-t" style="color:var(--gn)">BUILD &amp; TWEAK 🔄</div><div class="step-d">Keyframes · 12 Principles · Team review · REPEAT many times!</div></div>
+  <div class="sarrow">▶</div>
+  <div class="step" style="border-color:var(--or)"><span class="step-n" style="color:var(--or)">4</span><div class="step-t" style="color:var(--or)">POST-PROCESS</div><div class="step-d">Render · Color grade · Sound · QA · Export MP4</div></div>
+</div>
+<div class="ibar" style="border-color:var(--gn);font-weight:700;color:var(--gn)">KEY: Step 3 is ITERATIVE — repeated many times before Post-Processing!</div>
+<div style="font-size:11px;font-weight:700;color:var(--cy);margin:8px 0 6px">QUICK SUMMARY:</div>
+<div class="g2">
+  <div class="sum-item" style="border-color:var(--cy)"><div class="sum-n" style="color:var(--cy)">01</div><div><span class="sum-t">Intro</span><span class="sum-d">Still frames + Persistence of Vision + Phi = motion illusion</span></div></div>
+  <div class="sum-item" style="border-color:var(--pu)"><div class="sum-n" style="color:var(--pu)">02</div><div><span class="sum-t">Usage</span><span class="sum-d">Art · Storytelling · Science · Education</span></div></div>
+  <div class="sum-item" style="border-color:var(--gn)"><div class="sum-n" style="color:var(--gn)">03</div><div><span class="sum-t">Techniques</span><span class="sum-d">Cel (hand-drawn) → Path (trajectory) → Computer</span></div></div>
+  <div class="sum-item" style="border-color:var(--or)"><div class="sum-n" style="color:var(--or)">04</div><div><span class="sum-t">Types</span><span class="sum-d">Cel: keyframes + tweening. Path: preset route</span></div></div>
+  <div class="sum-item" style="border-color:var(--pk)"><div class="sum-n" style="color:var(--pk)">05</div><div><span class="sum-t">Computer</span><span class="sum-d">FK/IK chains for rigs. Morphing for shape transforms</span></div></div>
+  <div class="sum-item" style="border-color:var(--yl)"><div class="sum-n" style="color:var(--yl)">06</div><div><span class="sum-t">Levels</span><span class="sum-d">Basic (GIFs) → Intermediate (AE) → Advanced (Maya)</span></div></div>
+  <div class="sum-item" style="border-color:var(--cy)"><div class="sum-n" style="color:var(--cy)">07</div><div><span class="sum-t">12 Principles</span><span class="sum-d">Disney's gold standard — every professional uses them</span></div></div>
+  <div class="sum-item" style="border-color:var(--pu)"><div class="sum-n" style="color:var(--pu)">08</div><div><span class="sum-t">Space</span><span class="sum-d">2D (flat) → 2.5D (parallax) → 3D (any angle)</span></div></div>
+</div>
+<div style="text-align:center;padding:10px;margin-top:6px;background:var(--card);border-radius:8px;border:1px solid #1a1a45">
+  <div style="font-size:clamp(16px,5vw,24px);font-weight:900;background:linear-gradient(90deg,var(--cy),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">THANK YOU — JazakAllah Khair</div>
+  <div style="font-size:10px;color:var(--mu);margin-top:3px">Hashir Junaid · Taha Haider · Abdul Rahman Baig · Group 3 · SMIT</div>
+</div>
+</div>
+</div>
+
+</div><!-- end deck -->
+
+<div id="nav">
+  <button class="nb" id="prevBtn" onclick="go(-1)">◀ Prev</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+    <div id="dots"></div>
+    <div id="ctr">1 / 13</div>
+  </div>
+  <button class="nb" id="nextBtn" onclick="go(1)">Next ▶</button>
+</div>
+
+<script>
+const TOTAL = 13;
+let cur = 0;
+
+window.addEventListener('load', () => {
+  const h = location.hash;
+  if (h && h.startsWith('#s')) {
+    const n = parseInt(h.slice(2));
+    if (n >= 1 && n <= TOTAL) cur = n - 1;
+  }
+  render();
+});
+
+window.addEventListener('hashchange', () => {
+  const h = location.hash;
+  if (h && h.startsWith('#s')) {
+    const n = parseInt(h.slice(2));
+    if (n >= 1 && n <= TOTAL) { cur = n - 1; render(); }
+  }
+});
+
+function render() {
+  document.querySelectorAll('.slide').forEach((s,i) => {
+    s.classList.remove('active','gone');
+    if (i===cur) s.classList.add('active');
+    else if (i<cur) s.classList.add('gone');
+  });
+  document.getElementById('prog').style.width = ((cur+1)/TOTAL*100)+'%';
+  document.getElementById('ctr').textContent = (cur+1)+' / '+TOTAL;
+  const dc = document.getElementById('dots');
+  dc.innerHTML = '';
+  const cols = ['#00D7FF','#00D7FF','#00D7FF','#9B50E1','#2EDC73','#FF9400','#FF5AA2','#FFD700','#00D7FF','#9B50E1','#9B50E1','#FFD700','#2EDC73'];
+  for (let i=0;i<TOTAL;i++) {
+    const d = document.createElement('div');
+    d.className = 'dot'+(i===cur?' on':'');
+    d.style.background = i===cur ? cols[cur] : '#1a1a45';
+    d.onclick = () => { cur=i; render(); };
+    dc.appendChild(d);
+  }
+  document.getElementById('prevBtn').disabled = cur===0;
+  document.getElementById('nextBtn').disabled = cur===TOTAL-1;
+  history.replaceState(null,'','#s'+(cur+1));
+  const sb = document.querySelector('.slide.active .sb');
+  if (sb) sb.scrollTop = 0;
+}
+
+function go(d) { const n=cur+d; if(n>=0&&n<TOTAL){cur=n;render();} }
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if (e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+
+let tx=0, ty=0;
+document.addEventListener('touchstart', e => { tx=e.touches[0].clientX; ty=e.touches[0].clientY; }, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx = tx - e.changedTouches[0].clientX;
+  const dy = ty - e.changedTouches[0].clientY;
+  if (Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>40) {
+    const el = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    const sb = el && el.closest('.sb');
+    if (!sb || sb.scrollHeight<=sb.clientHeight) go(dx>0?1:-1);
+  }
+}, {passive:true});
+
+render();
+</script>
+</body>
+</html>

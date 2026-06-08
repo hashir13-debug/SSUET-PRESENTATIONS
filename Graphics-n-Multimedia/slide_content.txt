@@ -1,0 +1,896 @@
+﻿=== SLIDE 1 ===
+  ●
+  f1
+  ▶
+  ●
+  f2
+  ▶
+  ●
+  f3
+  ▶
+  ●
+  f4
+  Still frames  →  Illusion of Motion  →  ANIMATION
+  ANIM
+  ANIMATION
+  The Art & Science of Bringing Images to Life
+  Graphics & Multimedia  •  SMIT  •  Group 3
+  Topics 1 — 9
+  Hashir Junaid
+  2023F-BCS-358
+  Taha Haider
+  2023F-BCS-079
+  Abdul Rahman Baig
+  2023F-BCS-100
+
+=== SLIDE 2 ===
+  WHAT WE'LL COVER TODAY
+  9 Topics  •  Animation: Complete Foundation  •  Group 3
+  01
+  Introduction to Animation
+  02
+  Usage of Animation
+  03
+  Animation Techniques
+  04
+  Types of Animation
+  05
+  Computer Animation
+  06
+  Levels of Computer Animation
+  07
+  12 Basic Principles
+  08
+  Animation Space
+  09
+  Animation Process
+  From hand-drawn cels to AI-powered 3D — 9 complete topics await.
+
+=== SLIDE 3 ===
+  01
+  INTRODUCTION TO ANIMATION
+  ●
+  f1
+  ▶
+  ●
+  f2
+  ▶
+  ●
+  f3
+  ▶
+  ●
+  f4
+  ▶
+  ●
+  f5
+  Still frames  →  Illusion of Motion  →  ANIMATION
+  "Animation: Rapidly displaying STATIC images to create the ILLUSION of
+ MOVEMENT — exploiting the brain's own perception against itself."
+  DEFINITION
+  From Latin 'anima' — to give soul
+
+• Series of still frames shown rapidly
+• 24 fps = cinema gold standard
+• 30 fps = TV broadcast
+• 60 fps = modern gaming
+• Below 12 fps = visible flicker
+
+HISTORY:
+First animation: Eadweard Muybridge
+horse gallop sequence (1878)
+  PERSISTENCE OF VISION
+  Physical effect in the human eye
+
+• Retina keeps image ~50ms after
+  stimulus disappears
+• Afterimage overlaps next frame
+• Creates a seamless visual flow
+• Discovered: Peter Roget (1824)
+
+WHY: Brain cannot distinguish
+individual frames at 24+ fps
+— sees continuous motion instead
+  PHI PHENOMENON
+  Purely PSYCHOLOGICAL motion effect
+
+• Brain infers motion between two
+  stationary objects in sequence
+• Does NOT need retinal retention
+• Discovered: Wertheimer (1912)
+
+CLASSIC EXAMPLES:
+• Flip-book animation
+• Neon sign arrows 'flowing'
+• Traffic light direction arrows
+  ILLUSION OF MOVEMENT
+  Combined result of BOTH effects
+
+• Persistence of Vision alone = NOT enough
+• Phi Phenomenon alone = NOT enough
+• BOTH together = seamless motion!
+
+The brain WANTS to see motion.
+Animators exploit this biological
+'glitch' in human perception.
+
+This is WHY animation feels REAL
+even though it is 100% artificial
+
+=== SLIDE 4 ===
+  02
+  USAGE OF ANIMATION
+  ARTISTIC
+  Fine Art / Music Videos
+  STORYTELLING
+  Films / Games / Series
+  SCIENTIFIC
+  Research / Medicine / NASA
+  INSTRUCTIONAL
+  Education / Training / Sims
+  ARTISTIC PURPOSES
+  • Fine art & experimental films
+• Music video production
+• Abstract visual compositions
+• Title sequence design
+• Gallery art installations
+
+ICONIC EXAMPLES:
+  Disney Fantasia (1940)
+  Yellow Submarine (1968)
+  Spider-Man: Into the Spider-Verse
+  (2018) — Oscar winner
+  STORYTELLING
+  • Narrative feature films
+• TV series & streaming shows
+• Video game cutscenes
+• Interactive web comics
+• Character-driven dramas
+
+ICONIC EXAMPLES:
+  Pixar Toy Story series
+  Studio Ghibli classics
+  Arcane — Netflix (2021)
+  Attack on Titan
+  SCIENTIFIC VISUALIZATION
+  • Human anatomy explainers
+• Weather & climate models
+• DNA & molecular modeling
+• Physics fluid simulations
+• Engineering CAD previews
+
+ICONIC EXAMPLES:
+  NASA mission visualizations
+  Medical surgical training
+  Climate change simulations
+  Molecular biology videos
+  INSTRUCTIONAL
+  • Educational explainer videos
+• Military & flight simulators
+• Safety procedure demos
+• Product assembly guides
+• Corporate onboarding modules
+
+ICONIC EXAMPLES:
+  Khan Academy lessons
+  Boeing pilot simulators
+  IKEA assembly guides
+  YouTube tutorial channels
+
+=== SLIDE 5 ===
+  03
+  ANIMATION TECHNIQUES
+  CEL ANIMATION  •  1910s – 1990s
+  PATH ANIMATION  •  1970s – Now
+  COMPUTER ANIM  •  1980s – Now
+  CEL ANIMATION
+  Traditional hand-drawn technique
+
+• Drawings on transparent celluloid sheets
+• Each sheet = one frame of animation
+• Cels layered over static backgrounds
+• Allows background reuse (cost saving)
+• Photographed frame-by-frame on film
+
+WORKFLOW:
+  Story → Storyboard → Key Animation
+  → In-Betweening → Ink → Paint → Photo
+
+STUDIOS: Disney, Hanna-Barbera,
+          Warner Bros, Toei Animation
+  PATH ANIMATION
+  Object follows a predefined trajectory
+
+• Animator defines the path shape first
+• Object moves along it automatically
+• Supports straight lines & Bezier curves
+• Object can resize/reshape along path
+• Easing controls speed variation
+
+COMMON USES:
+  Logo reveals, camera fly-throughs,
+  UI transitions, game projectiles
+
+TOOLS: After Effects, CSS, SVG paths,
+        Unity, Unreal Engine
+  COMPUTER ANIMATION
+  Digital creation of moving images
+
+• Can simulate both Cel & Path techniques
+• PLUS: physics, particles, simulation
+• 2D digital, 3D CG, or hybrid mix
+• Real-time OR pre-rendered output
+• Procedural & AI-assisted animation
+
+ADVANTAGES:
+  Unlimited camera angles
+  Easy to iterate & fix errors
+  Physics simulation built-in
+  Automatic in-betweening
+
+STUDIOS: Pixar, DreamWorks, ILM
+  ▶
+  ▶
+
+=== SLIDE 6 ===
+  04
+  TYPES OF ANIMATION — CEL ANIMATION
+  Named after CELLULOID — transparent plastic sheets invented in 1869. Raoul Barré & John Bray developed the cel technique ~1914. Dominated animation for 80 years.
+  CEL
+STACK
+  CEL ANIMATION
+  • Transparent sheet per frame of film
+• Character on cel; background separate
+• Cels stacked = final composite frame
+• Background reuse saves huge cost
+• Colors applied to BACK of cel sheet
+• 12–24 unique cels per second of film
+
+USED IN:
+Tom & Jerry, Looney Tunes,
+Snow White, Bambi, Akira, Pinocchio
+  KEYFRAMES
+  • The 'anchor' frames of an action
+• Show most extreme or critical poses
+• Drawn by SENIOR animators
+• Define the timing & structure
+• Think of them as checkpoints
+
+EXAMPLE:
+Frame 1 = character standing still
+Frame 12 = peak of jump (keyframe)
+Frame 24 = character landed
+
+Modern software uses identical
+keyframe concept in timelines
+  TWEENING (In-Betweening)
+  • Frames drawn BETWEEN keyframes
+• Creates smooth motion transition
+• Done by JUNIOR animators
+• More tweens = smoother motion
+• At 24fps: ~22 tweens per action
+
+MODERN EQUIVALENT:
+Software AUTO-tweens between
+keyframes — no manual drawing!
+
+Tools: Adobe Animate, Flash,
+Toon Boom Harmony, After Effects
+  PENCIL TEST
+  • Quick pre-production validation test
+• Rough pencil sketches filmed first
+• Played back to check timing & flow
+• Catches errors BEFORE expensive
+  inking & painting stages
+• Saves significant time and money
+
+MODERN EQUIVALENT:
+Animatic / rough cut preview
+played in editing software
+
+Standard practice at EVERY
+major animation studio worldwide
+
+=== SLIDE 7 ===
+  04
+  TYPES OF ANIMATION — PATH ANIMATION
+  PATH ANIMATION: Object follows a predefined trajectory. Animator draws the path; software handles movement along it automatically.
+  KEY CONCEPTS
+  START
+  END
+  Bezier curve path
+(object follows this route)
+  PREDETERMINED PATH
+  Route defined BEFORE animation. Like a roller-coaster — object follows exactly what's laid out.
+  STRAIGHT LINES
+  Linear movement for mechanical objects, text reveals, UI animations.
+  BEZIER CURVES
+  Smooth organic paths via control points. Natural feel for balls, flying objects, camera.
+  RESIZING & RESHAPING
+  Object scales or deforms as it travels the path — adds dynamism (e.g. ball squash on bounce).
+  HOW PATH ANIMATION WORKS
+  1
+  Draw the PATH — straight line, Bezier curve, or freehand
+  2
+  Set START and END points along the path
+  3
+  Define DURATION — how long the journey takes
+  4
+  Apply EASING — slow in / slow out for natural feel
+  5
+  Set ORIENTATION — does object face direction of travel?
+  6
+  Preview, adjust, repeat — render when satisfied
+  Used in: CSS animations  •  After Effects motion paths  •  Unity NavMesh  •  SVG paths  •  Game projectiles
+
+=== SLIDE 8 ===
+  05
+  COMPUTER ANIMATION
+  Computer animation uses software to create motion — simulating traditional techniques or producing entirely new effects impossible by hand.
+  CEL  vs  COMPUTER  ANIMATION
+  CEL ANIMATION
+  COMPUTER ANIMATION
+  VS
+  Hand-drawn on physical celluloid sheets
+  Created entirely within digital software
+  Every frame drawn manually — very slow
+  Automation handles tweens, physics, rendering
+  Physical storage: film cans, warehouses
+  Digital files — backup & share instantly
+  Expensive: cels, paint, camera, lab fees
+  One-time software cost; no consumables
+  Difficult to modify any finished frame
+  Copy, adjust, modify any frame instantly
+  Organic, hand-crafted visual warmth
+  Any style: toon to photorealistic
+  Months per 1 minute of finished film
+  Real-time previews; faster iterations
+
+=== SLIDE 9 ===
+  05
+  KINEMATICS, INVERSE KINEMATICS & MORPHING
+  SHOULDER
+  ELBOW
+  WRIST
+  FINGER
+  FK: Parent → Child
+  FORWARD KINEMATICS (FK)
+  Animating from PARENT → CHILD joint
+
+HOW IT WORKS:
+  Move SHOULDER →
+  Elbow follows automatically →
+  Wrist follows →
+  Finger follows
+
+ANALOGY: A puppet — control
+the parent; all children follow.
+
+BEST FOR:
+  Mechanical/robotic arms
+  Waving & swinging motions
+  Tail & tentacle animation
+  Flag ripples in wind
+
+Tools: Maya rigs, Blender
+  INVERSE KINEMATICS (IK)
+  Move END POINT; chain auto-adjusts
+
+HOW IT WORKS:
+  Move HAND position →
+  Software calculates elbow →
+  And shoulder automatically
+
+ANALOGY: Reaching for a cup —
+you aim the hand; your body
+figures out the joints itself.
+
+BEST FOR:
+  Character walking & running
+  Reaching & grabbing actions
+  Real-time game characters
+  Interactive VR animation
+  MORPHING
+  Smooth shape/image transformation
+
+HOW IT WORKS:
+  Map points on source image
+  Map matching points on target
+  Interpolate all points together
+  Creates seamless in-betweens
+
+TYPES:
+  2D: image-to-image morph
+  3D: mesh deformation morph
+  Shape: vector path morphing
+
+FAMOUS EXAMPLES:
+  MJ 'Black or White' (1991)
+  T-1000 — Terminator 2
+  Logo reveal animations
+
+=== SLIDE 10 ===
+  06
+  LEVELS OF COMPUTER ANIMATION
+  ★☆☆
+  ★★☆
+  ★★★
+  BASIC  ★☆☆
+  Entry-level animation tools
+
+WHAT YOU CREATE:
+  • Animated GIFs
+  • CSS / JS transitions
+  • PowerPoint animations
+  • Simple 2D sprites
+  • Basic logo animations
+
+TOOLS:
+  MS PowerPoint, Canva,
+  GIMP, basic CSS/JS
+
+SKILL: Beginner
+TIME TO LEARN: Days to weeks
+
+CAREER: Social media content,
+marketing materials
+  INTERMEDIATE  ★★☆
+  Deeper control over animation
+
+WHAT YOU CREATE:
+  • 2D character animation
+  • Motion graphics
+  • Complex path animations
+  • Basic 3D object animation
+  • Game character movement
+
+TOOLS:
+  Adobe After Effects,
+  Adobe Animate,
+  Blender (basics), Spine
+
+SKILL: Intermediate
+TIME TO LEARN: Months
+
+CAREER: Motion designer,
+2D animator, game developer
+  ADVANCED  ★★★
+  Studio-level production quality
+
+WHAT YOU CREATE:
+  • Full CG feature films
+  • Realistic physics simulations
+  • Procedural animation
+  • Motion capture integration
+  • Real-time VFX in games
+  • AI-assisted animation
+
+TOOLS:
+  Autodesk Maya, Houdini,
+  Unreal Engine, Cinema 4D
+
+SKILL: Professional
+TIME TO LEARN: Years
+
+CAREER: VFX artist, 3D animator,
+technical director, TD
+
+=== SLIDE 11 ===
+  07
+  12 BASIC PRINCIPLES OF ANIMATION  •  Part 1 of 3
+  Developed by Disney masters Ollie Johnston & Frank Thomas (The Illusion of Life, 1981). Still the universal GOLD STANDARD — used by every professional animator on Earth.
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+  10
+  11
+  12
+  01  SQUASH & STRETCH
+  Exaggerate deformation for weight & life
+
+• Object SQUASHES on impact
+• Object STRETCHES when moving fast
+• Golden rule: VOLUME stays constant!
+• Shows elasticity, mass, and life
+
+EXAMPLE:
+A rubber ball bounce —
+squash on landing,
+stretch in the air.
+
+Most fundamental principle
+used in almost every shot
+  02  ANTICIPATION
+  Small opposite action BEFORE main action
+
+• Character crouches before jumping
+• Arm swings back before throwing
+• Boxer winds up before punching
+• Prepares the audience mentally
+
+EXAMPLE:
+Bugs Bunny ducking low before
+a massive comedic leap forward.
+
+Without anticipation, actions
+feel sudden and unconvincing
+  03  STAGING
+  Present ONE clear idea at a time
+
+• Use clear, readable silhouettes
+• Camera angle serves the story
+• Avoid distracting backgrounds
+• Direct the audience's eye
+
+EXAMPLE:
+Character in profile making a
+dramatic gesture — instantly
+readable from any distance.
+
+Think: theater staging, not
+crowded photography
+  04  STRAIGHT AHEAD
+& POSE-TO-POSE
+  Two approaches to animation:
+
+STRAIGHT AHEAD:
+• Draw frame by frame start → end
+• Spontaneous, fluid, surprising
+• Great for fire, water, chaos
+
+POSE-TO-POSE:
+• Draw key poses first
+• Fill in betweens after
+• Controlled, planned, consistent
+• Great for character acting
+
+Best work combines BOTH
+
+=== SLIDE 12 ===
+  07
+  12 BASIC PRINCIPLES OF ANIMATION  •  Part 2 of 3
+  These principles govern how objects move AFTER the main action — the details that separate amateur animation from professional studio work.
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+  10
+  11
+  12
+  05  FOLLOW THROUGH
+& OVERLAPPING ACTION
+  FOLLOW THROUGH:
+Parts keep moving after
+main action stops.
+• Hair swings after head stops
+• Coat settles after character stops
+
+OVERLAPPING ACTION:
+Different parts move at
+different rates and with delay.
+• Arms lag behind the torso
+• Secondary elements trail
+
+Makes motion feel ORGANIC
+and physically believable
+  06  EASE IN & EASE OUT
+(Slow In / Slow Out)
+  Acceleration at start, deceleration
+at end of every movement.
+
+• Nothing in nature starts at full
+  speed or stops instantly
+• A car: slow → full speed → brake
+• Gives physical weight & real feel
+
+In software:
+  Bezier easing curves
+  Linear = robotic / artificial
+  Ease = natural / believable
+
+Most impactful principle
+for 'weight' and feel in motion
+  07  ARCS
+  Natural motion follows ARC paths,
+not straight lines.
+
+• Arms swing in arcs
+• Heads nod in arcs
+• Thrown objects: parabola
+• Even eyes dart in arcs
+• Running legs follow arcs
+
+EXCEPTION:
+Mechanical/robot movement is
+intentionally straight — use
+linear paths for machines.
+
+Breaking arcs = instant 'robot'
+  08  SECONDARY ACTION
+  Supporting actions that ENRICH
+the primary movement.
+
+EXAMPLES:
+  Walking (main) + arms swing
+  Running (main) + hair flows
+  Talking (main) + eyebrow moves
+
+CRITICAL RULE:
+Secondary must NEVER overpower
+the main action — it supports,
+it does not steal focus.
+
+Adds richness and believability
+to every scene
+
+=== SLIDE 13 ===
+  07
+  12 BASIC PRINCIPLES OF ANIMATION  •  Part 3 of 3
+  Walt Disney: 'The secret of animation is the exaggeration of the truth.' These final 4 principles deliver exactly that truth.
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+  10
+  11
+  12
+  09  TIMING
+  Number of frames = perceived
+speed, weight, and personality.
+
+MORE frames = slower, heavier
+FEWER frames = faster, lighter
+
+AT 24fps:
+  Eye blink: 6–8 frames
+  Head turn: 10–15 frames
+  Heavy punch: 3–4 frames
+  Gentle wave: 30+ frames
+
+TIMING is the HEARTBEAT
+of animation. Wrong timing =
+nothing else matters.
+  10  EXAGGERATION
+  Push actions BEYOND realistic
+limits for emotional impact.
+
+• Giant cartoon eyes
+• Impossible stretching & squash
+• Over-the-top expressions
+• Massive emotional reactions
+
+KEY INSIGHT:
+NOT about being unrealistic —
+it's making the TRUTH more
+VISIBLE and ENTERTAINING.
+
+Exaggerate the ESSENCE.
+A sad character cries buckets,
+not small tears.
+  11  SOLID DRAWING
+  Characters must feel like 3D
+objects with real weight & form.
+
+PRINCIPLES:
+  • Understand 3D basic shapes
+  • 'Draw through' the form
+  • Consistent character proportions
+  • Avoid 'twinning' (mirror poses)
+  • Strong line of action
+
+Even in 2D — the audience must
+FEEL the three-dimensional volume.
+
+Modern 3D: rigs must deform
+believably under all conditions
+  12  APPEAL
+  Characters must be visually
+interesting to WATCH.
+
+APPEAL is NOT cuteness:
+  • A powerful villain has appeal
+  • A complex anti-hero has appeal
+  • Even monsters can have appeal
+
+HOW TO ACHIEVE:
+  • Clear, readable design
+  • Dynamic, asymmetric poses
+  • Charisma & personality
+  • Strong recognizable silhouette
+
+THE TEST: Would an audience
+want to keep watching this character?
+
+=== SLIDE 14 ===
+  08
+  ANIMATION SPACE
+  Animation can exist in THREE types of spatial dimensions — each with different tools, techniques, rendering requirements, and visual results.
+  X
+  —————————→
+  Y
+|
+|
+↓
+  2D SPACE
+  X-axis (width) + Y-axis (height)
+No depth — completely flat.
+
+CHARACTERISTICS:
+• Flat, like drawing on paper
+• No real depth perception
+• Simple to create & render
+• Low hardware requirements
+• Classic cartoon aesthetic
+
+EXAMPLES:
+Tom & Jerry, classic Disney,
+original Mario & Pac-Man,
+mobile game animations,
+Flash web animations
+
+TOOLS:
+Adobe Animate, Toon Boom,
+Spine, TVPaint, Aseprite
+  2½D SPACE
+(Two-and-a-Half D)
+  2D art + ILLUSION of depth via
+layers, parallax & shadows.
+
+CHARACTERISTICS:
+• Parallax scrolling = depth effect
+• Objects appear on Z-axis visually
+• Still technically 2D sprites
+• 'Pseudo-3D' / 'Layered 2D'
+• Great performance/visual ratio
+
+EXAMPLES:
+Paper Mario, South Park,
+Ori and the Blind Forest,
+Disney multiplane camera
+(Sleeping Beauty, 1959)
+
+TOOLS:
+After Effects (Z-depth layers),
+Unity 2D with parallax
+  3D SPACE
+  X-axis + Y-axis + Z-axis (depth)
+Full volumetric environment.
+
+CHARACTERISTICS:
+• True depth, volume, perspective
+• Viewable from ANY camera angle
+• Realistic lighting & shadows
+• Requires powerful hardware
+• Maximum visual versatility
+
+EXAMPLES:
+Toy Story, Frozen, Moana,
+Fortnite, Call of Duty,
+architectural visualizations,
+medical & surgical simulations
+
+TOOLS:
+Blender, Maya, Cinema 4D,
+Houdini, Unreal Engine
+
+=== SLIDE 15 ===
+  09
+  ANIMATION PROCESS
+  Every animation project — from a 10-second ad to a 2-hour feature film — follows this same 4-stage pipeline.
+  1
+  ORGANIZE
+EXECUTION
+  • Define project goals & scope
+• Assign team roles
+• Set milestones & deadlines
+• Gather reference material
+• Create style guide
+• Budget & risk planning
+
+OUTPUT:
+Project bible, schedule,
+mood boards, storyboard
+  ▶
+  2
+  CHOOSE
+ANIMATION TOOL
+  • Match tool to project type
+• Consider team skill level
+• Account for budget
+
+2D: Adobe Animate,
+     Toon Boom Harmony
+3D: Maya, Blender,
+     Cinema 4D
+MG: After Effects
+Games: Unity, Unreal
+  ▶
+  3
+  BUILD & TWEAK
+SEQUENCES
+  • Create rough blocking
+• Refine with keyframes
+• Apply the 12 Principles
+• Sync with audio/music
+• Team review cycles
+• Iterate until approved
+
+⟳ ITERATIVE STEP —
+repeated many times
+before moving to Step 4
+  ▶
+  4
+  POST-PROCESS
+ANIMATION
+  • Render final frames
+• Color grading & correction
+• Add VFX & overlays
+• Sound design & music mix
+• QA testing & review
+• Format for delivery
+• Archive project files
+
+OUTPUT:
+Final MP4, MOV, WebM
+  KEY INSIGHT: Step 3 is ITERATIVE — you cycle through Build & Tweak many times before Post-Process.
+
+=== SLIDE 16 ===
+  SUMMARY — KEY TAKEAWAYS
+  01
+  Introduction
+  Animation = sequences exploiting Persistence of Vision + Phi Phenomenon to create seamless motion illusion.
+  02
+  Usage
+  Art, storytelling, scientific visualization, instructional. Animation is used across every major industry.
+  03
+  Techniques
+  3 core techniques: Cel (hand-drawn), Path (trajectory), Computer (digital — most versatile today).
+  04
+  Cel Animation
+  Keyframes + tweening = smooth motion. Pencil test validates timing before expensive final production.
+  05
+  Path Animation
+  Object follows predefined path (straight or Bezier) with easing for natural, weighted motion feel.
+  06
+  Computer Anim
+  FK/IK chains for character rigs. Morphing for shape transforms. Faster & more flexible than traditional.
+  07
+  Levels
+  Basic (GIFs/CSS) → Intermediate (motion graphics) → Advanced (feature films, real-time VFX, AI animation).
+  08
+  12 Principles
+  Disney's Squash & Stretch, Anticipation, Timing, Ease, Arcs, and 8 more — still the universal standard.
+  09
+  Anim Space
+  2D (flat) → 2½D (pseudo-depth via parallax) → 3D (full volumetric, any camera angle, photorealism).
+  Process
+  Organize → Choose Tool → Build & Tweak (iterative) → Post-Process. Every project, every studio.
+
+=== SLIDE 17 ===
+  ANIM
+  THANK YOU
+  Animation: Where Imagination Meets Technology
+  Group 3  •  Graphics & Multimedia  •  SMIT
+  Hashir Junaid
+  2023F-BCS-358
+  Taha Haider
+  2023F-BCS-079
+  Abdul Rahman Baig
+  2023F-BCS-100
+  Topics Covered: Introduction  •  Usage  •  Techniques  •  Types  •  Computer Animation  •  Levels  •  12 Principles  •  Space  •  Process
+
